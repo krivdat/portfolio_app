@@ -17,19 +17,24 @@ export async function createAsset(userId, category, name, purchasePrice, purchas
 
 export async function getAssetsByUserId(userId) {
   const result = await query('SELECT id, user_id, category, encrypted_name, encrypted_purchase_price, purchase_date, quantity, currency, ticker FROM assets WHERE user_id = $1', [userId]);
-  return result.rows.map(asset => ({
-    ...asset,
-    name: decrypt(asset.encrypted_name, ENCRYPTION_KEY),
-    purchase_price: parseFloat(decrypt(asset.encrypted_purchase_price, ENCRYPTION_KEY))
-  }));
+  return result.rows.map(asset => {
+    const { encrypted_name, encrypted_purchase_price, ...rest } = asset;
+    const result = {
+      ...rest,
+      name: decrypt(asset.encrypted_name, ENCRYPTION_KEY),
+      purchase_price: parseFloat(decrypt(asset.encrypted_purchase_price, ENCRYPTION_KEY))
+    };
+    return result;
+  });
 }
 
 export async function getAssetById(assetId) {
   const result = await query('SELECT id, user_id, category, encrypted_name, encrypted_purchase_price, purchase_date, quantity, currency, ticker FROM assets WHERE id = $1', [assetId]);
   const asset = result.rows[0];
   if (asset) {
+    const { encrypted_name, encrypted_purchase_price, ...rest } = asset;
     return {
-      ...asset,
+      ...rest,
       name: decrypt(asset.encrypted_name, ENCRYPTION_KEY),
       purchase_price: parseFloat(decrypt(asset.encrypted_purchase_price, ENCRYPTION_KEY))
     };

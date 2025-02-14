@@ -10,6 +10,8 @@ export async function load({ locals }) {
   }
 
   const assets = await getAssetsByUserId(locals.user.id);
+  console.log('In file /routes/assets/page.server.js, assets: ', assets);
+
   return {
     assets
   };
