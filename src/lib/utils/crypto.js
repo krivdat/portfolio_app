@@ -18,6 +18,10 @@ export function encrypt(text, key) {
 }
 
 export function decrypt(buffer, key) {
+  if (!key) {
+    throw new Error("Encryption key is not defined!");
+  }
+
   try {
     if (!buffer || !Buffer.isBuffer(buffer)) {
       console.warn("Attempted to decrypt non-buffer:", buffer);
