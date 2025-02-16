@@ -24,6 +24,7 @@ export const actions = {
     }
 
     const formData = await request.formData();
+    console.log('In file /routes/assets/page.server.js, formdata: ', formData);
     const category = formData.get('category');
     const name = formData.get('name');
     const purchasePrice = parseFloat(formData.get('purchasePrice'));

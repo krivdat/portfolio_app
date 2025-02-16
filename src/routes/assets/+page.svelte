@@ -4,7 +4,7 @@
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
 	import AssetForm from '$lib/components/AssetForm.svelte'; // Import the form
-	import { page } from '$app/stores'; // Import the page store
+	import { page } from '$app/state'; // Import the page store
 
 	export let data;
 	let assets = data.assets;
@@ -16,7 +16,7 @@
 
 <h1>Assets</h1>
 
-{#if $page.data.session}
+{#if page.data.session}
 	<AssetForm /> <!-- Use the AssetForm component (for adding) -->
 {:else}
 	<p>Please <a href="/login">login</a> to manage your assets.</p>
