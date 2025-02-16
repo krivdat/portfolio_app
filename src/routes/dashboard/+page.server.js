@@ -8,8 +8,10 @@ export async function load({ locals }) {
   }
 
   const assets = await getAssetsByUserId(locals.user.id);
+
   return {
-    assets
+    assets,
+    user: locals.user
   };
 }
 

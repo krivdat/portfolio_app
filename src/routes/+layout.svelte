@@ -3,7 +3,7 @@
 	import '../app.css'; // Global styles
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	onMount(() => {
 		invalidateAll();
@@ -18,7 +18,7 @@
 	<nav>
 		<ul>
 			<li><a href="/">Home</a></li>
-			{#if $page.data.session}
+			{#if page.data.session}
 				<li><a href="/dashboard">Dashboard</a></li>
 				<li><a href="/assets">Assets</a></li>
 			{:else}
