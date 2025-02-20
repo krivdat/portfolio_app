@@ -1,71 +1,69 @@
 <script>
-	import * as d3 from 'd3';
-	import { onMount, onDestroy } from 'svelte';
+	import ApexCharts from 'svelte-apexcharts';
 
 	export let data; // Expected format: [{ label: "Category", value: 100 }, ...]
 
-	let svgNode;
-	let width = 300;
-	let height = 300;
-	let radius = Math.min(width, height) / 2;
-	let svg;
+	$: series = data ? data.map((item) => item.value) : [];
+	$: labels = data ? data.map((item) => item.label) : [];
 
-	onMount(() => {
-		if (!data || data.length === 0) return;
-		drawChart();
-	});
-
-	onDestroy(() => {
-		if (svg) {
-			svg.selectAll('*').remove();
+	$: options = {
+		chart: {
+			type: 'donut', // Use 'donut' for a doughnut chart
+			width: '100%' // Make the chart responsive
+		},
+		series: series,
+		labels: labels,
+		responsive: [
+			{
+				breakpoint: 480, // Adjust as needed for your layout
+				options: {
+					chart: {
+						width: '100%' // Adjust as needed
+					},
+					legend: {
+						position: 'bottom'
+					}
+				}
+			}
+		],
+		tooltip: {
+			// Customize tooltips for percentages
+			y: {
+				formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
+					const total = series.reduce((a, b) => a + b, 0);
+					const percentage = ((val / total) * 100).toFixed(1);
+					return `${percentage}%`;
+				}
+			}
+		},
+		plotOptions: {
+			// More options to customize the look
+			pie: {
+				donut: {
+					labels: {
+						show: true, // Show labels inside the donut segments
+						total: {
+							show: true, // Show total in the center
+							label: 'Total',
+							formatter: function (w) {
+								return w.globals.seriesTotals.reduce((a, b) => a + b, 0); // Calculate and show the sum of all values
+							}
+						}
+					}
+				}
+			}
 		}
-	});
-
-	$: if (data) {
-		drawChart();
-	}
-
-	function drawChart() {
-		if (svg) {
-			svg.selectAll('*').remove();
-		}
-
-		const total = d3.sum(data, (d) => d.value); // Calculate the total value
-
-		const color = d3
-			.scaleOrdinal()
-			.domain(data.map((d) => d.label))
-			.range(d3.schemeCategory10);
-
-		const arc = d3.arc().innerRadius(0).outerRadius(radius);
-
-		const pie = d3
-			.pie()
-			.value((d) => d.value)
-			.sort(null);
-
-		svg = d3
-			.select(svgNode)
-			.attr('width', width)
-			.attr('height', height)
-			.append('g')
-			.attr('transform', `translate(${width / 2},${height / 2})`);
-
-		const g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
-
-		g.append('path')
-			.attr('d', arc)
-			.style('fill', (d) => color(d.data.label));
-
-		g.append('text')
-			.attr('transform', (d) => `translate(${arc.centroid(d)})`)
-			.attr('dy', '.35em')
-			.style('text-anchor', 'middle')
-			.text((d) => {
-				const percentage = ((d.data.value / total) * 100).toFixed(1); // Calculate and format percentage
-				return `${d.data.label} (${percentage}%)`; // Display label and percentage
-			});
-	}
+	};
 </script>
 
-<svg bind:this={svgNode}></svg>
+<div class="chart-container">
+	<ApexCharts type="donut" {options} {series} />
+</div>
+
+<style>
+	.chart-container {
+		width: 100%;
+		max-width: 500px; /* Or any desired max width */
+		margin: 0 auto; /* Center the chart */
+	}
+</style>

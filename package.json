@@ -27,12 +27,15 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"apexcharts": "^4.5.0",
 		"bcrypt": "^5.1.1",
+		"chartjs": "^0.3.24",
 		"d3": "^7.9.0",
 		"express-rate": "^0.0.1",
 		"express-rate-limit": "^7.5.0",
 		"limit": "^0.0.1",
-		"pg": "^8.13.1"
+		"pg": "^8.13.1",
+		"svelte-apexcharts": "^1.0.2"
 	},
 	"overrides": {
 		"cookie": "^0.7.2"

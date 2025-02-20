@@ -44,6 +44,6 @@ export const handle = async ({ event, resolve }) => {
   return await resolve(event);
 };
 
-export const getSession = (event) => {
-  return event.locals.user ? { user: event.locals.user } : {};
-};
+// export const getSession = (event) => {
+//   return event.locals.user ? { user: event.locals.user } : {};
+// };
