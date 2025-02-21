@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import PieChart from '$lib/components/PieChartD3.svelte';
+	import PieChart from '$lib/components/PieChart.svelte'; // Import the chart component
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
@@ -18,7 +18,7 @@
 	});
 
 	categoryData = Object.entries(categoryCounts).map(([category, value]) => ({
-		label: category,
+		group: category,
 		value
 	}));
 

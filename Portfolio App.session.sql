@@ -1,0 +1,1 @@
+UPDATE users SET profile_picture = 'https://img.freepik.com/free-vector/mysterious-mafia-man-smoking-cigarette_52683-34828.jpg' WHERE id = 2;
