@@ -12,24 +12,9 @@
 		ticker: ''
 	};
 	export let isUpdate = false; // Flag to indicate create or update mode
-	export let assetId = null; // Only needed for update
-
-	async function handleSubmit() {
-		// Handle submission logic
-		if (isUpdate) {
-			window.location.href = `/assets/${assetId}`;
-		} else {
-			window.location.href = `/assets`;
-		}
-	}
 </script>
 
-<form
-	method="POST"
-	action={isUpdate ? '?/update' : '?/create'}
-	use:enhance
-	on:submit={handleSubmit}
->
+<form method="POST" action={isUpdate ? '?/update' : '?/create'} use:enhance>
 	<label for="category">Category:</label>
 	<input type="text" id="category" name="category" bind:value={asset.category} required />
 

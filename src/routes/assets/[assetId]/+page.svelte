@@ -1,7 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { formatDate, parseDate } from '$lib/utils/date';
 	import { formatCurrency, parseCurrency } from '$lib/utils/currency';
 

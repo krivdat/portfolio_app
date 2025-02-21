@@ -25,6 +25,8 @@ export const actions = {
       return fail(401, { message: 'Unauthorized' });
     }
 
+    console.log('Inside update action in +page.server.js, assetId: ', params.assetId);
+
     const formData = await request.formData();
     const category = formData.get('category');
     const name = formData.get('name');

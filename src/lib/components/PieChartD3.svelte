@@ -3,6 +3,7 @@
 	import { onMount, onDestroy } from 'svelte';
 
 	export let data; // Expected format: [{ label: "Category", value: 100 }, ...]
+	console.log('Inside PieChartD3.svelte, data =', data);
 
 	let svgNode;
 	let width = 300;
@@ -37,7 +38,10 @@
 			.domain(data.map((d) => d.label))
 			.range(d3.schemeCategory10);
 
-		const arc = d3.arc().innerRadius(0).outerRadius(radius);
+		const arc = d3
+			.arc()
+			.innerRadius(radius * 0.4)
+			.outerRadius(radius);
 
 		const pie = d3
 			.pie()

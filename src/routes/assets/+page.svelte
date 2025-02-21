@@ -7,11 +7,7 @@
 	import { page } from '$app/state'; // Import the page store
 
 	export let data;
-	let assets = data.assets;
-
-	async function handleSubmit() {
-		await invalidateAll();
-	}
+	$: assets = data.assets;
 </script>
 
 <h1>Assets</h1>

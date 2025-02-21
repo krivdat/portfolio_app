@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import PieChart from '$lib/components/PieChart.svelte';
+	import PieChart from '$lib/components/PieChartD3.svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';

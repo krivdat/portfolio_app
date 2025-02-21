@@ -1,5 +1,7 @@
 -- Enable the pgcrypto extension (if not already enabled)
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS assets;
 
 -- Create the users table (only email encrypted)
 CREATE TABLE users (
