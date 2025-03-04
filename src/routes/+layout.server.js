@@ -7,6 +7,6 @@ export const load = async ({ cookies }) => {
   // console.log('Inside file /routes/+layout.server.js, session:', session);
 
   return {
-    session
+    session // equals to userId
   };
 }
