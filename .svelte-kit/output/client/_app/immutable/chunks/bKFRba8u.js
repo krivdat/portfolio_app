@@ -1,1 +1,0 @@
-function f(e,r="en-US",n={}){try{let t;if(typeof e=="string"||typeof e=="number")t=new Date(e);else if(e instanceof Date)t=e;else return"";if(isNaN(t.getTime()))return"";const o={...{year:"numeric",month:"long",day:"numeric"},...n};return new Intl.DateTimeFormat(r,o).format(t)}catch(t){return console.error("Error formatting date:",t),""}}export{f};
