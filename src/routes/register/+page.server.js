@@ -2,7 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { createUser, getUserByUsername } from '$lib/db/user';
 
 export const actions = {
-  register: async ({ request }) => {
+  default: async ({ request }) => {
     const formData = await request.formData();
     const username = formData.get('username');
     const password = formData.get('password');

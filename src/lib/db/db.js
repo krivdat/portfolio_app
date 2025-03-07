@@ -4,9 +4,7 @@ import { DATABASE_URL } from '$env/static/private';
 
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false // Remove this line in production if possible for local development.  NEVER IN PRODUCTION.
-  }
+  ssl: false
 });
 
 export async function query(text, params) {

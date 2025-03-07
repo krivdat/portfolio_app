@@ -41,7 +41,14 @@ export const handle = async ({ event, resolve }) => {
     }
   }
 
-  return await resolve(event);
+  const response = await resolve(event);
+
+  response.headers.set('Access-Control-Allow-Origin', 'https://dev.tomaskrivda.online');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  response.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  return response;
+
 };
 
 // export const getSession = (event) => {
