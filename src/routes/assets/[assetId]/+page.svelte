@@ -5,17 +5,17 @@
 	import { formatDate, parseDate } from '$lib/utils/date';
 	import { formatCurrency, parseCurrency } from '$lib/utils/currency';
 
-	export let data;
-	let asset = data.asset;
+	let { data } = $props();
+	let asset = $state(data.asset);
 
-	$: asset = {
+	let formattedAsset = $derived({
 		...asset,
 		purchase_date: formatDate(asset.purchase_date, 'en-CA', {
 			year: 'numeric',
 			month: '2-digit',
 			day: '2-digit'
-		}) // Format for input type="date"
-	};
+		})
+	});
 
 	async function handleDelete() {
 		const confirmed = confirm('Are you sure you want to delete this asset?');
@@ -36,33 +36,39 @@
 
 <form method="POST" action="?/update" use:enhance>
 	<label for="category">Category:</label>
-	<input type="text" id="category" name="category" value={asset.category} required />
+	<input type="text" id="category" name="category" value={formattedAsset.category} required />
 
 	<label for="name">Name:</label>
-	<input type="text" id="name" name="name" value={asset.name} required />
+	<input type="text" id="name" name="name" value={formattedAsset.name} required />
 
 	<label for="purchasePrice">Purchase Price:</label>
 	<input
 		type="number"
 		id="purchasePrice"
 		name="purchasePrice"
-		value={asset.purchase_price}
+		value={formattedAsset.purchase_price}
 		required
 	/>
 
 	<label for="purchaseDate">Purchase Date:</label>
-	<input type="date" id="purchaseDate" name="purchaseDate" value={asset.purchase_date} required />
+	<input
+		type="date"
+		id="purchaseDate"
+		name="purchaseDate"
+		value={formattedAsset.purchase_date}
+		required
+	/>
 
 	<label for="quantity">Quantity:</label>
-	<input type="number" id="quantity" name="quantity" value={asset.quantity} required />
+	<input type="number" id="quantity" name="quantity" value={formattedAsset.quantity} required />
 
 	<label for="currency">Currency:</label>
-	<input type="text" id="currency" name="currency" value={asset.currency} required />
+	<input type="text" id="currency" name="currency" value={formattedAsset.currency} required />
 
 	<label for="ticker">Ticker:</label>
-	<input type="text" id="ticker" name="ticker" value={asset.ticker || ''} />
+	<input type="text" id="ticker" name="ticker" value={formattedAsset.ticker || ''} />
 
 	<button type="submit">Update Asset</button>
 </form>
 
-<button on:click={handleDelete}>Delete Asset</button>
+<button onclick={handleDelete}>Delete Asset</button>

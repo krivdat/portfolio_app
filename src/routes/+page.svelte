@@ -1,13 +1,14 @@
 <script>
-    import { onMount } from 'svelte';
-    import { PUBLIC_APP_NAME } from '$env/static/public';
+	import { page } from '$app/state';
 
-    onMount(() => {
-        console.log("Client-side process.env:", PUBLIC_APP_NAME);
-    });
+	let user = $derived(page.data.user);
 </script>
 
-    
 <h1>Welcome to the Portfolio Tracker</h1>
 
+{#if user}
+	<p>Hello, {user.name}!</p>
+{:else}
+	<p>You are not logged in.</p>
+{/if}
 <p>This is a simple portfolio tracking application built with SvelteKit.</p>

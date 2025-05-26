@@ -1,9 +1,7 @@
 import { getSession } from '$lib/utils/auth';
-import { getUserByUsername, getUserById } from '$lib/db/user';
-import { error, redirect } from '@sveltejs/kit';
+import { getUserById } from '$lib/db/user';
+import { error } from '@sveltejs/kit';
 import rateLimit from 'express-rate-limit';
-// import { createRequestHandler } from '@hattip/adapter-node';
-// import { RequestHandler } from '@sveltejs/kit';
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -14,20 +12,25 @@ const limiter = rateLimit({
 });
 
 export const handle = async ({ event, resolve }) => {
+  console.log('Event pathname:', event.url.pathname); // This will help identify where the problem occurs.
+  // Attempt to get the IP address from the 'x-forwarded-for' header
+  const ip =
+    event.request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+    event.getClientAddress();
+  console.log(`Request from IP: ${ip}`);
 
-  if (event.url.pathname.startsWith('/api/')) {
+  if (event.url.pathname.startsWith('/login')) {
     limiter(event.request, event.response, (err) => {
       if (err) {
         throw error(429, err.message);
       }
     });
   }
-  // console.log('In hooks.server.js, event:', event);
 
-  const userId = getSession(event.cookies);
+  const userId = getSession(event.cookies) || null;
 
   if (userId) {
-    const user = await getUserById(userId); // Use getUserById
+    const user = await getUserById(userId);
     if (user) {
       event.locals.user = {
         id: user.id,
@@ -43,14 +46,5 @@ export const handle = async ({ event, resolve }) => {
 
   const response = await resolve(event);
 
-  response.headers.set('Access-Control-Allow-Origin', 'https://dev.tomaskrivda.online');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  response.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
-  response.headers.set('Access-Control-Allow-Credentials', 'true');
   return response;
-
 };
-
-// export const getSession = (event) => {
-//   return event.locals.user ? { user: event.locals.user } : {};
-// };

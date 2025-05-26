@@ -6,8 +6,8 @@
 	import AssetForm from '$lib/components/AssetForm.svelte'; // Import the form
 	import { page } from '$app/state'; // Import the page store
 
-	export let data;
-	$: assets = data.assets;
+	let { data } = $props();
+	let assets = $state(data.assets);
 </script>
 
 <h1>Assets</h1>

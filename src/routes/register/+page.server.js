@@ -18,6 +18,10 @@ export const actions = {
       return fail(400, { error: 'Passwords do not match.' });
     }
 
+    if (password.length < 8) {
+      return fail(400, { error: 'Password must be at least 8 characters long.' });
+    }
+
     const existingUser = await getUserByUsername(username);
     if (existingUser) {
       return fail(400, { error: 'Username already taken.' });

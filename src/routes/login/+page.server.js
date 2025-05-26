@@ -3,10 +3,11 @@ import { getUserByUsername, comparePassword } from '$lib/db/user';
 import { setSession } from '$lib/utils/auth';
 
 export const actions = {
-  login: async ({ request, cookies }) => {
+  default: async ({ request, cookies }) => {
     if (!cookies) {
       throw new Error("Cookies object is invalid: undefined");
     }
+    console.log('inside default action - login');
 
     const formData = await request.formData();
     const username = formData.get('username');

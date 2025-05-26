@@ -1,24 +1,28 @@
-<!-- src/routes/+layout.svelte -->
 <script>
 	import '../app.css'; // Global styles
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	let { children } = $props();
 
-	onMount(() => {
+	onMount(async () => {
 		invalidateAll();
 	});
+
+	console.log([1, 2]);
+
+	let user = $derived(page.data.user);
 </script>
 
 <svelte:head>
 	<title>Portfolio Tracker</title>
 </svelte:head>
 
-<div class="container">
+<header>
 	<nav>
 		<ul>
 			<li><a href="/">Home</a></li>
-			{#if page.data.session}
+			{#if user}
 				<li><a href="/dashboard">Dashboard</a></li>
 				<li><a href="/assets">Assets</a></li>
 			{:else}
@@ -27,17 +31,28 @@
 			{/if}
 		</ul>
 	</nav>
-	<slot />
-	<!-- This is where the content of each page will be rendered -->
-</div>
+</header>
+
+<main>
+	{@render children()}
+</main>
+
+<!-- This is where the content of each page will be rendered -->
 
 <style>
-	.container {
-		max-width: 1200px; /* Example max-width for a container */
+	main {
+		max-width: 1200px;
 		margin-left: auto;
 		margin-right: auto;
-		padding-top: 1rem; /* Equivalent to py-4 (padding-top and padding-bottom) */
-		padding-bottom: 1rem; /* You can adjust the values as needed */
+		/* background-color: rgb(108, 108, 154); */
+	}
+
+	header {
+		position: sticky;
+		left: 0;
+		top: 0;
+		background-color: #a19b93;
+		padding: 0.5rem;
 	}
 
 	nav a {
@@ -52,8 +67,6 @@
 	nav ul {
 		display: flex;
 		gap: 1rem; /* space-x-4  adjust the value as needed */
-		margin-bottom: 1rem; /* mb-4  adjust the value as needed */
 		list-style: none; /* Remove bullet points from list */
-		padding: 0; /* Remove default padding */
 	}
 </style>

@@ -34,53 +34,64 @@
 	}
 </script>
 
-<h1>Dashboard</h1>
+<div class="container">
+	<h1>Dashboard</h1>
 
-{#if page.data.user}
-	<p>Welcome, {page.data.user.username} ({page.data.user.email})</p>
-	{#if page.data.user.profile_picture}
-		<img src={page.data.user.profile_picture} alt="Profile" width="50" />
+	{#if page.data.user}
+		<p>Welcome, {page.data.user.username} ({page.data.user.email})</p>
+		{#if page.data.user.profile_picture}
+			<img src={page.data.user.profile_picture} alt="Profile" width="50" />
+		{/if}
 	{/if}
-{/if}
 
-<form method="POST" action="?/logout" use:enhance>
-	<button type="submit" on:click={logout}>Logout</button>
-</form>
+	<form method="POST" action="?/logout" use:enhance>
+		<button type="submit" on:click={logout}>Logout</button>
+	</form>
 
-{#if assets && assets.length > 0}
-	<div>
+	{#if assets && assets.length > 0}
 		<div>
-			<h2>Asset Allocation</h2>
-			<PieChart data={categoryData} />
-		</div>
-		<div>
-			<h2>Asset List</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Category</th>
-						<th>Quantity</th>
-						<th>Purchase Price</th>
-						<th>Purchase Date</th>
-						<th>Profit/Loss</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each assets as asset}
+			<div>
+				<h2>Asset Allocation</h2>
+				<PieChart data={categoryData} />
+			</div>
+			<div>
+				<h2>Asset List</h2>
+				<table>
+					<thead>
 						<tr>
-							<td>{asset.name}</td>
-							<td>{asset.category}</td>
-							<td>{asset.quantity}</td>
-							<td>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td>
-							<td>{formatDate(asset.purchase_date)}</td>
-							<td>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td>
+							<th>Name</th>
+							<th>Category</th>
+							<th>Quantity</th>
+							<th>Purchase Price</th>
+							<th>Purchase Date</th>
+							<th>Profit/Loss</th>
 						</tr>
-					{/each}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{#each assets as asset}
+							<tr>
+								<td>{asset.name}</td>
+								<td>{asset.category}</td>
+								<td>{asset.quantity}</td>
+								<td>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td>
+								<td>{formatDate(asset.purchase_date)}</td>
+								<td>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
-{:else}
-	<p>No assets found.</p>
-{/if}
+	{:else}
+		<p>No assets found.</p>
+	{/if}
+</div>
+
+<style>
+	.container {
+		background-color: #fefefe;
+		border-radius: 5px;
+		margin: 0.5rem;
+		padding: 1rem;
+	}
+</style>
