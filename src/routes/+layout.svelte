@@ -3,15 +3,14 @@
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	let { children } = $props();
+	let { data, children } = $props();
+	let user = $derived(data.user);
+
+	console.log('In file routes/layout.svelte. Data:', data);
 
 	onMount(async () => {
 		invalidateAll();
 	});
-
-	console.log([1, 2]);
-
-	let user = $derived(page.data.user);
 </script>
 
 <svelte:head>

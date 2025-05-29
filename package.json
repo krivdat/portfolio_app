@@ -9,7 +9,8 @@
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"convert-icons": "node scripts/convert-icons.js"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -30,11 +31,13 @@
 	"dependencies": {
 		"@carbon/charts-svelte": "^1.22.18",
 		"bcrypt": "^5.1.1",
+		"better-sqlite3": "^11.10.0",
 		"dotenv": "^16.4.7",
 		"express-rate": "^0.0.1",
 		"express-rate-limit": "^7.5.0",
 		"limit": "^0.0.1",
-		"pg": "^8.13.1"
+		"pg": "^8.13.1",
+		"sharp": "^0.34.2"
 	},
 	"overrides": {
 		"cookie": "^0.7.2"

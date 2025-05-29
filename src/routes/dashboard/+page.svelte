@@ -5,22 +5,26 @@
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
-	import { page } from '$app/state';
+	let { data } = $props();
+	let user = $derived(data.user);
 
-	export let data;
-	let assets = data.assets;
-	let categoryData = [];
+	let categoryData = $derived(getCategoryData());
 
-	const categoryCounts = {};
-	assets.forEach((asset) => {
-		categoryCounts[asset.category] =
-			(categoryCounts[asset.category] || 0) + asset.purchase_price * asset.quantity;
-	});
+	function getCategoryData() {
+		const categoryCounts = {};
+		data.assets.forEach((asset) => {
+			categoryCounts[asset.category] =
+				(categoryCounts[asset.category] || 0) + asset.purchase_price * asset.quantity;
+		});
 
-	categoryData = Object.entries(categoryCounts).map(([category, value]) => ({
-		group: category,
-		value
-	}));
+		let result = Object.entries(categoryCounts).map(([category, value]) => ({
+			group: category,
+			value
+		}));
+		console.log('Category Data:', result);
+
+		return result;
+	}
 
 	function calculateProfitLoss(asset) {
 		// TODO: implement getting current price
@@ -37,18 +41,17 @@
 <div class="container">
 	<h1>Dashboard</h1>
 
-	{#if page.data.user}
-		<p>Welcome, {page.data.user.username} ({page.data.user.email})</p>
-		{#if page.data.user.profile_picture}
-			<img src={page.data.user.profile_picture} alt="Profile" width="50" />
+	{#if user}
+		<p>Welcome, {user.username} ({user.email})</p>
+		{#if user.profile_picture}
+			<img src={user.profile_picture} alt="Profile" width="50" />
 		{/if}
 	{/if}
 
 	<form method="POST" action="?/logout" use:enhance>
-		<button type="submit" on:click={logout}>Logout</button>
+		<button type="submit" onclick={logout}>Logout</button>
 	</form>
-
-	{#if assets && assets.length > 0}
+	{#if data.assets && data.assets.length > 0}
 		<div>
 			<div>
 				<h2>Asset Allocation</h2>
@@ -68,7 +71,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each assets as asset}
+						{#each data.assets as asset}
 							<tr>
 								<td>{asset.name}</td>
 								<td>{asset.category}</td>

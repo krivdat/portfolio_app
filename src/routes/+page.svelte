@@ -1,13 +1,13 @@
 <script>
 	import { page } from '$app/state';
-
-	let user = $derived(page.data.user);
+	let { data } = $props();
+	let user = $derived(data.user);
 </script>
 
 <h1>Welcome to the Portfolio Tracker</h1>
 
 {#if user}
-	<p>Hello, {user.name}!</p>
+	<p>Hello, {user.username}!</p>
 {:else}
 	<p>You are not logged in.</p>
 {/if}
