@@ -1,12 +1,12 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/state';
-	import { formatDate, parseDate } from '$lib/utils/date';
-	import { formatCurrency, parseCurrency } from '$lib/utils/currency';
+	import { goto } from '$app/navigation';
+	import { formatDate } from '$lib/utils/date';
 
 	let { data } = $props();
 	let asset = $state(data.asset);
+	let user = $derived(data.user);
 
 	let formattedAsset = $derived({
 		...asset,
@@ -17,19 +17,23 @@
 		})
 	});
 
-	async function handleDelete() {
-		const confirmed = confirm('Are you sure you want to delete this asset?');
-		if (confirmed) {
-			try {
-				await $page.data.delete(); // Trigger the delete action
-				await invalidateAll();
-				window.location.href = '/assets'; // Redirect after successful deletion
-			} catch (error) {
-				console.error('Error deleting asset:', error);
-				// Handle error appropriately (e.g., display an error message)
-			}
-		}
-	}
+	// async function handleDelete() {
+	// 	const confirmed = confirm('Are you sure you want to delete this asset?');
+	// 	if (confirmed) {
+	// 		try {
+	// 			const response = await fetch(`?/delete`, {
+	// 				method: 'POST'
+	// 			});
+	// 			if (!response.ok) throw new Error('Failed to delete asset');
+
+	// 			await invalidateAll();
+	// 			goto('/assets'); // Redirect after successful deletion
+	// 		} catch (error) {
+	// 			console.error('Error deleting asset:', error);
+	// 			alert('Failed to delete asset. Please try again.');
+	// 		}
+	// 	}
+	// }
 </script>
 
 <h1>Edit Asset</h1>
@@ -47,6 +51,8 @@
 		id="purchasePrice"
 		name="purchasePrice"
 		value={formattedAsset.purchase_price}
+		step="0.01"
+		min="0"
 		required
 	/>
 
@@ -71,4 +77,19 @@
 	<button type="submit">Update Asset</button>
 </form>
 
-<button onclick={handleDelete}>Delete Asset</button>
+<form
+	action="?/delete"
+	method="POST"
+	use:enhance={() => {
+		return async ({ result }) => {
+			if (result.type === 'success') {
+				if (confirm('Are you sure you want to delete this asset?')) {
+					goto('/assets');
+				}
+				return false;
+			}
+		};
+	}}
+>
+	<button type="submit" class="delete-button">Delete Asset</button>
+</form>

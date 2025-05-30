@@ -1,6 +1,4 @@
 <script>
-	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
 	import AssetForm from '$lib/components/AssetForm.svelte'; // Import the form

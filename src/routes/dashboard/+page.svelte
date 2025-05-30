@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 	import PieChart from '$lib/components/PieChart.svelte'; // Import the chart component
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
@@ -73,23 +72,32 @@
 						<tr>
 							<th>Name</th>
 							<th>Category</th>
-							<th>Quantity</th>
-							<th>Purchase Price</th>
-							<th>Purchase Date</th>
-							<th>Current Price</th>
-							<th>Profit/Loss</th>
+							<th class="text-right">Qty</th>
+							<th class="text-right">Purchase <br />Date</th>
+							<th class="text-right">
+								Purchase<br />
+								Price
+							</th>
+							<th class="text-right">Current <br />Price</th>
+							<th class="text-right">P/L</th>
 						</tr>
 					</thead>
 					<tbody>
-						{#each assetsWithCurrentPrice as asset}
-							<tr>
+						{#each assetsWithCurrentPrice as asset, i}
+							<tr class:zebra={i % 2 === 1}>
 								<td>{asset.name}</td>
 								<td>{asset.category}</td>
-								<td>{asset.quantity}</td>
-								<td>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td>
-								<td>{formatDate(asset.purchase_date)}</td>
-								<td>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td>
-								<td>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td>
+								<td class="text-right">{asset.quantity}</td>
+								<td class="text-right">{formatDate(asset.purchase_date)}</td>
+								<td class="text-right"
+									>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
+								>
+								<td class="text-right"
+									>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
+								>
+								<td class="text-right" class:negative={calculateProfitLoss(asset) < 0}
+									>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td
+								>
 							</tr>
 						{/each}
 					</tbody>
@@ -107,5 +115,32 @@
 		border-radius: 5px;
 		margin: 0.5rem;
 		padding: 1rem;
+	}
+
+	.text-right {
+		text-align: right;
+	}
+
+	table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	th,
+	td {
+		padding: 0.1rem 0.1rem;
+		text-align: left;
+	}
+
+	thead > tr {
+		background-color: #f0f0f0;
+	}
+
+	.negative {
+		color: red;
+	}
+
+	.zebra {
+		background-color: #f5f5f5;
 	}
 </style>

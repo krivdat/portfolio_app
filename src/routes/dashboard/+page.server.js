@@ -29,10 +29,13 @@ const fetchStockPrices = async (tickers) => {
 
 export async function load({ locals }) {
 	const assets = await getAssetsByUserId(locals.user.id);
+	let currentPrices = {};
 
-	const currentPrices = await fetchStockPrices(
-		assets.filter((asset) => asset.ticker).map((asset) => asset.ticker)
-	);
+	if (assets && assets.length > 0) {
+		currentPrices = await fetchStockPrices(
+			assets.filter((asset) => asset.ticker).map((asset) => asset.ticker)
+		);
+	}
 
 	return {
 		assets,
