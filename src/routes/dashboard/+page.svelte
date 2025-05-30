@@ -7,6 +7,17 @@
 	import { formatCurrency } from '$lib/utils/currency';
 	let { data } = $props();
 	let user = $derived(data.user);
+	let currentPrices = $derived(data.currentPrices);
+	let assetsWithCurrentPrice = $derived(
+		data.assets.map((asset) => {
+			const currentPriceData = asset.ticker ? currentPrices[asset.ticker] : null;
+			return {
+				...asset,
+				current_price: currentPriceData?.price || asset.purchase_price,
+				current_currency: currentPriceData?.currency || asset.currency
+			};
+		})
+	);
 
 	let categoryData = $derived(getCategoryData());
 
@@ -27,9 +38,7 @@
 	}
 
 	function calculateProfitLoss(asset) {
-		// TODO: implement getting current price
-		const currentPrice = asset.purchase_price; // Replace with real price API call
-		return (currentPrice - asset.purchase_price) * asset.quantity;
+		return (asset.current_price - asset.purchase_price) * asset.quantity;
 	}
 
 	function logout() {
@@ -51,7 +60,7 @@
 	<form method="POST" action="?/logout" use:enhance>
 		<button type="submit" onclick={logout}>Logout</button>
 	</form>
-	{#if data.assets && data.assets.length > 0}
+	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>
 				<h2>Asset Allocation</h2>
@@ -67,17 +76,19 @@
 							<th>Quantity</th>
 							<th>Purchase Price</th>
 							<th>Purchase Date</th>
+							<th>Current Price</th>
 							<th>Profit/Loss</th>
 						</tr>
 					</thead>
 					<tbody>
-						{#each data.assets as asset}
+						{#each assetsWithCurrentPrice as asset}
 							<tr>
 								<td>{asset.name}</td>
 								<td>{asset.category}</td>
 								<td>{asset.quantity}</td>
 								<td>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td>
 								<td>{formatDate(asset.purchase_date)}</td>
+								<td>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td>
 								<td>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td>
 							</tr>
 						{/each}

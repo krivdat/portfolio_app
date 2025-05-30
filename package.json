@@ -36,8 +36,10 @@
 		"express-rate": "^0.0.1",
 		"express-rate-limit": "^7.5.0",
 		"limit": "^0.0.1",
+		"node-cache": "^5.1.2",
 		"pg": "^8.13.1",
-		"sharp": "^0.34.2"
+		"sharp": "^0.34.2",
+		"yahoo-finance2": "^2.13.3"
 	},
 	"overrides": {
 		"cookie": "^0.7.2"
