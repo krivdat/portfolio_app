@@ -14,7 +14,8 @@
 			alignment: 'center',
 			innerRadius: 0.6
 		},
-		height: '400px'
+		height: '400px',
+		width: '400px'
 	};
 </script>
 

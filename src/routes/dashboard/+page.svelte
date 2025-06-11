@@ -20,6 +20,29 @@
 
 	let categoryData = $derived(getCategoryData());
 
+	let purchaseTotal = $derived(
+		assetsWithCurrentPrice.reduce(
+			(total, asset) => total + asset.purchase_price * asset.quantity,
+			0
+		)
+	);
+	let marketValueTotal = $derived(
+		assetsWithCurrentPrice.reduce((total, asset) => total + asset.current_price * asset.quantity, 0)
+	);
+
+	let profitLossTotal = $derived(
+		assetsWithCurrentPrice.reduce((total, asset) => total + calculateProfitLoss(asset), 0)
+	);
+
+	let profitLossPctTotal = $derived(
+		(assetsWithCurrentPrice.reduce((total, asset) => total + calculateProfitLoss(asset), 0) /
+			assetsWithCurrentPrice.reduce(
+				(total, asset) => total + asset.purchase_price * asset.quantity,
+				0
+			)) *
+			100
+	);
+
 	function getCategoryData() {
 		const categoryCounts = {};
 		data.assets.forEach((asset) => {
@@ -38,6 +61,18 @@
 
 	function calculateProfitLoss(asset) {
 		return (asset.current_price - asset.purchase_price) * asset.quantity;
+	}
+
+	function calculateProfitLossPct(asset) {
+		return (asset.current_price - asset.purchase_price) / asset.purchase_price;
+	}
+
+	function calculatePurchaseTotal(asset) {
+		return asset.purchase_price * asset.quantity;
+	}
+
+	function calculateMarketValueTotal(asset) {
+		return asset.current_price * asset.quantity;
 	}
 
 	function logout() {
@@ -74,11 +109,14 @@
 							<th>Category</th>
 							<th class="text-right">Qty</th>
 							<th class="text-right">Purchase <br />Date</th>
+							<th class="text-right">Purchase<br />Price</th>
+							<th class="text-right">Current <br />Price</th>
 							<th class="text-right">
 								Purchase<br />
-								Price
-							</th>
-							<th class="text-right">Current <br />Price</th>
+								Total</th
+							>
+							<th class="text-right">Market<br />Value</th>
+							<th class="text-right">P/L %</th>
 							<th class="text-right">P/L</th>
 						</tr>
 					</thead>
@@ -87,7 +125,7 @@
 							<tr class:zebra={i % 2 === 1}>
 								<td>{asset.name}</td>
 								<td>{asset.category}</td>
-								<td class="text-right">{asset.quantity}</td>
+								<td class="text-right" class:negative={asset.quantity < 0}>{asset.quantity}</td>
 								<td class="text-right">{formatDate(asset.purchase_date)}</td>
 								<td class="text-right"
 									>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
@@ -95,12 +133,37 @@
 								<td class="text-right"
 									>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
 								>
+								<td class="text-right" class:negative={calculatePurchaseTotal(asset) < 0}
+									>{formatCurrency(calculatePurchaseTotal(asset), 'en-US', asset.currency)}</td
+								>
+								<td class="text-right" class:negative={calculateMarketValueTotal(asset) < 0}
+									>{formatCurrency(calculateMarketValueTotal(asset), 'en-US', asset.currency)}</td
+								>
+								<td class="text-right" class:negative={calculateProfitLossPct(asset) < 0}
+									>{(calculateProfitLossPct(asset) * 100).toFixed(2)}%</td
+								>
 								<td class="text-right" class:negative={calculateProfitLoss(asset) < 0}
 									>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td
 								>
 							</tr>
 						{/each}
 					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="6" class="text-right">Total:</td>
+							<td class="text-right" class:negative={purchaseTotal < 0}
+								>{formatCurrency(purchaseTotal, 'en-US', 'EUR')}</td
+							><td class="text-right" class:negative={marketValueTotal < 0}
+								>{formatCurrency(marketValueTotal, 'en-US', 'EUR')}</td
+							>
+							<td class="text-right" class:negative={profitLossPctTotal < 0}
+								>{profitLossPctTotal.toFixed(2)}%</td
+							>
+							<td class="text-right" class:negative={profitLossTotal < 0}
+								>{formatCurrency(profitLossTotal, 'en-US', 'EUR')}</td
+							>
+						</tr></tfoot
+					>
 				</table>
 			</div>
 		</div>
@@ -124,6 +187,7 @@
 	table {
 		border-collapse: collapse;
 		width: 100%;
+		font-size: 0.8rem;
 	}
 
 	th,
@@ -134,6 +198,12 @@
 
 	thead > tr {
 		background-color: #f0f0f0;
+	}
+
+	tfoot > tr {
+		border-top: 1px solid #000;
+		border-bottom: 1px solid #000;
+		font-weight: bold;
 	}
 
 	.negative {
