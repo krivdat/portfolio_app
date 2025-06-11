@@ -5,7 +5,7 @@ module.exports = {
 			env_production: {
 				NODE_ENV: 'production',
 				ORIGIN: 'https://dev.tomaskrivda.online',
-				PORT: 3001
+				PORT: 3002
 			}
 		}
 	]
