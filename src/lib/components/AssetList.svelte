@@ -19,7 +19,7 @@
 			<tbody>
 				{#each assets as asset (asset.id)}
 					<tr class="bg-white transition-colors hover:bg-blue-50">
-						<td class="px-4 py-2">
+						<td class="px-4 py-1">
 							<a
 								href={`/assets/${asset.id}`}
 								class="cursor-pointer font-medium text-blue-700 hover:underline"
@@ -27,10 +27,10 @@
 								{asset.name}
 							</a>
 						</td>
-						<td class="px-4 py-2 text-gray-600">{asset.category}</td>
-						<td class="px-4 py-2 text-gray-600">{asset.ticker}</td>
-						<td class="px-4 py-2 text-gray-600">{formatDate(asset.purchase_date)}</td>
-						<td class="px-4 py-2 text-gray-600">{asset.quantity}</td>
+						<td class="px-4 py-1 text-gray-600">{asset.category}</td>
+						<td class="px-4 py-1 text-gray-600">{asset.ticker}</td>
+						<td class="px-4 py-1 text-gray-600">{formatDate(asset.purchase_date)}</td>
+						<td class="px-4 py-1 text-gray-600">{asset.quantity}</td>
 					</tr>
 				{/each}
 			</tbody>

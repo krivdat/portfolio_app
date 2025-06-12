@@ -20,40 +20,40 @@
 	method="POST"
 	action={isUpdate ? '?/update' : '?/create'}
 	use:enhance
-	class="mx-auto mt-8 flex w-full max-w-md flex-col gap-4 rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-lg"
+	class="mx-auto mt-6 flex w-full max-w-md flex-col gap-2 rounded-lg border border-gray-200 bg-gray-50 p-4 shadow"
 >
-	<h2 class="mb-2 text-2xl font-bold text-gray-800">
+	<h2 class="mb-1 text-xl font-bold text-gray-800">
 		{isUpdate ? 'Update Asset' : 'Add Asset'}
 	</h2>
 
-	<div class="flex flex-col gap-1">
-		<label for="category" class="font-medium text-gray-600">Category</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="category" class="text-sm font-medium text-gray-600">Category</label>
 		<input
 			type="text"
 			id="category"
 			name="category"
 			bind:value={asset.category}
 			required
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 			placeholder="e.g. ETF, STOCK, CRYPTO, ..."
 		/>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<label for="name" class="font-medium text-gray-600">Name</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="name" class="text-sm font-medium text-gray-600">Name</label>
 		<input
 			type="text"
 			id="name"
 			name="name"
 			bind:value={asset.name}
 			required
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 			placeholder="Asset name"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<label for="purchasePrice" class="font-medium text-gray-600">Purchase Price</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="purchasePrice" class="text-sm font-medium text-gray-600">Purchase Price</label>
 		<input
 			type="number"
 			id="purchasePrice"
@@ -62,25 +62,25 @@
 			step="0.01"
 			min="0"
 			required
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 			placeholder="0.00"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<label for="purchaseDate" class="font-medium text-gray-600">Purchase Date</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="purchaseDate" class="text-sm font-medium text-gray-600">Purchase Date</label>
 		<input
 			type="date"
 			id="purchaseDate"
 			name="purchaseDate"
 			bind:value={asset.purchase_date}
 			required
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<label for="quantity" class="font-medium text-gray-600">Quantity</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="quantity" class="text-sm font-medium text-gray-600">Quantity</label>
 		<input
 			type="number"
 			id="quantity"
@@ -89,12 +89,12 @@
 			required
 			min="0"
 			placeholder="0"
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<label for="currency" class="font-medium text-gray-600">Currency</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="currency" class="text-sm font-medium text-gray-600">Currency</label>
 		<input
 			type="text"
 			id="currency"
@@ -102,25 +102,25 @@
 			bind:value={asset.currency}
 			required
 			placeholder="e.g. USD, EUR, BTC"
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<label for="ticker" class="font-medium text-gray-600">Ticker</label>
+	<div class="flex flex-col gap-0.5">
+		<label for="ticker" class="text-sm font-medium text-gray-600">Ticker</label>
 		<input
 			type="text"
 			id="ticker"
 			name="ticker"
 			bind:value={asset.ticker}
 			placeholder="e.g. AAPL, BTC"
-			class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 		/>
 	</div>
 
 	<button
 		type="submit"
-		class="mt-4 w-full rounded-lg bg-blue-200 px-4 py-2 text-lg font-semibold text-blue-900 shadow transition-colors duration-150 hover:bg-blue-300 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+		class="mt-2 w-full rounded bg-blue-200 px-3 py-1.5 text-base font-semibold text-blue-900 shadow transition-colors duration-150 hover:bg-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 	>
 		{isUpdate ? 'Update Asset' : 'Add Asset'}
 	</button>
