@@ -1,20 +1,13 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
-* {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+
+@theme {
+	--font-display: 'Arial', 'sans-serif';
 }
 
-*,
-*:before,
-*:after {
-	box-sizing: inherit;
-}
-
-body {
-	font-family: 'Roboto', sans-serif;
-	font-size: 0.9rem;
-	background-color: #f0f0f0;
+@layer base {
+	html {
+		@apply text-sm; /* or text-lg, text-sm, etc. */
+	}
 }

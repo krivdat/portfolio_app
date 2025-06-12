@@ -81,136 +81,118 @@
 	}
 </script>
 
-<div class="container">
-	<h1>Dashboard</h1>
+<div class="container my-4 max-w-4xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
+	<h1 class="mb-2 text-xl font-bold">Dashboard</h1>
 
 	{#if user}
 		<p>Welcome, {user.username} ({user.email})</p>
 		{#if user.profile_picture}
-			<img src={user.profile_picture} alt="Profile" width="50" />
+			<img src={user.profile_picture} alt="Profile" width="50" class="rounded-full" />
 		{/if}
 	{/if}
 
 	<form method="POST" action="?/logout" use:enhance>
-		<button type="submit" onclick={logout}>Logout</button>
+		<button
+			type="submit"
+			onclick={logout}
+			class="mt-2 mb-4 rounded bg-gray-200 px-3 py-1 hover:bg-gray-300">Logout</button
+		>
 	</form>
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
-			<div>
-				<h2>Asset Allocation</h2>
-				<PieChart data={categoryData} />
+			<div class="mb-4">
+				<h2 class="mb-2 font-semibold">Portfolio Allocation</h2>
+				<PieChart data={categoryData} title="Categories" />
 			</div>
 			<div>
-				<h2>Asset List</h2>
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Category</th>
-							<th class="text-right">Qty</th>
-							<th class="text-right">Purchase <br />Date</th>
-							<th class="text-right">Purchase<br />Price</th>
-							<th class="text-right">Current <br />Price</th>
-							<th class="text-right">
-								Purchase<br />
-								Total</th
-							>
-							<th class="text-right">Market<br />Value</th>
-							<th class="text-right">P/L %</th>
-							<th class="text-right">P/L</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each assetsWithCurrentPrice as asset, i}
-							<tr class:zebra={i % 2 === 1}>
-								<td>{asset.name}</td>
-								<td>{asset.category}</td>
-								<td class="text-right" class:negative={asset.quantity < 0}>{asset.quantity}</td>
-								<td class="text-right">{formatDate(asset.purchase_date)}</td>
-								<td class="text-right"
-									>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
+				<h2 class="mb-2 font-semibold">Asset List</h2>
+				<div class="w-full">
+					<table class="w-full border-collapse text-xs">
+						<thead>
+							<tr>
+								<th class="px-2 py-1 text-left">Name</th>
+								<th class="px-2 py-1 text-left">Cat.</th>
+								<th class="px-2 py-1 text-right">Qty</th>
+								<th class="hidden px-2 py-1 text-right md:table-cell">Purchase <br />Date</th>
+								<th class="hidden px-2 py-1 text-right md:table-cell">Purchase<br />Price</th>
+								<th class="px-2 py-1 text-right">Current <br />Price</th>
+								<th class="hidden px-2 py-1 text-right md:table-cell">Purchase<br />Total</th>
+								<th class="px-2 py-1 text-right">Market<br />Value</th>
+								<th class="px-2 py-1 text-right">P/L</th>
+								<th class="px-2 py-1 text-right">P/L %</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each assetsWithCurrentPrice as asset, i}
+								<tr class={i % 2 === 1 ? 'bg-gray-50' : ''}>
+									<td class="px-2 py-1">{asset.name}</td>
+									<td class="px-2 py-1">{asset.category}</td>
+									<td class="px-2 py-1 text-right {asset.quantity < 0 ? 'text-red-600' : ''}"
+										>{asset.quantity}</td
+									>
+									<td class="hidden px-2 py-1 text-right md:table-cell"
+										>{formatDate(asset.purchase_date)}</td
+									>
+									<td class="hidden px-2 py-1 text-right md:table-cell"
+										>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
+									>
+									<td class="px-2 py-1 text-right"
+										>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
+									>
+									<td
+										class="hidden px-2 py-1 text-right md:table-cell {calculatePurchaseTotal(
+											asset
+										) < 0
+											? 'text-red-600'
+											: ''}"
+										>{formatCurrency(calculatePurchaseTotal(asset), 'en-US', asset.currency)}</td
+									>
+									<td class="px-2 py-1 text-right"
+										>{formatCurrency(calculateMarketValueTotal(asset), 'en-US', asset.currency)}</td
+									>
+									<td
+										class="px-2 py-1 text-right {calculateProfitLoss(asset) < 0
+											? 'text-red-600'
+											: ''}"
+										>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td
+									>
+									<td
+										class="px-2 py-1 text-right {calculateProfitLossPct(asset) < 0
+											? 'text-red-600'
+											: ''}">{(calculateProfitLossPct(asset) * 100).toFixed(2)}%</td
+									>
+								</tr>
+							{/each}
+						</tbody>
+						<tfoot>
+							<tr class="font-bold">
+								<td class="px-2 py-1">Total:</td>
+								<td></td>
+								<td></td>
+								<td class="hidden md:table-cell"></td>
+								<td class="hidden md:table-cell"></td>
+								<td></td>
+								<td
+									class="hidden px-2 py-1 text-right md:table-cell {purchaseTotal < 0
+										? 'text-red-600'
+										: ''}">{formatCurrency(purchaseTotal, 'en-US', 'EUR')}</td
 								>
-								<td class="text-right"
-									>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
+								<td class="px-2 py-1 text-right {marketValueTotal < 0 ? 'text-red-600' : ''}"
+									>{formatCurrency(marketValueTotal, 'en-US', 'EUR')}</td
 								>
-								<td class="text-right" class:negative={calculatePurchaseTotal(asset) < 0}
-									>{formatCurrency(calculatePurchaseTotal(asset), 'en-US', asset.currency)}</td
+								<td class="px-2 py-1 text-right {profitLossTotal < 0 ? 'text-red-600' : ''}"
+									>{formatCurrency(profitLossTotal, 'en-US', 'EUR')}</td
 								>
-								<td class="text-right" class:negative={calculateMarketValueTotal(asset) < 0}
-									>{formatCurrency(calculateMarketValueTotal(asset), 'en-US', asset.currency)}</td
-								>
-								<td class="text-right" class:negative={calculateProfitLossPct(asset) < 0}
-									>{(calculateProfitLossPct(asset) * 100).toFixed(2)}%</td
-								>
-								<td class="text-right" class:negative={calculateProfitLoss(asset) < 0}
-									>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td
+								<td class="px-2 py-1 text-right {profitLossPctTotal < 0 ? 'text-red-600' : ''}"
+									>{profitLossPctTotal.toFixed(2)}%</td
 								>
 							</tr>
-						{/each}
-					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="6" class="text-right">Total:</td>
-							<td class="text-right" class:negative={purchaseTotal < 0}
-								>{formatCurrency(purchaseTotal, 'en-US', 'EUR')}</td
-							><td class="text-right" class:negative={marketValueTotal < 0}
-								>{formatCurrency(marketValueTotal, 'en-US', 'EUR')}</td
-							>
-							<td class="text-right" class:negative={profitLossPctTotal < 0}
-								>{profitLossPctTotal.toFixed(2)}%</td
-							>
-							<td class="text-right" class:negative={profitLossTotal < 0}
-								>{formatCurrency(profitLossTotal, 'en-US', 'EUR')}</td
-							>
-						</tr></tfoot
-					>
-				</table>
+						</tfoot>
+					</table>
+				</div>
 			</div>
 		</div>
 	{:else}
 		<p>No assets found.</p>
 	{/if}
 </div>
-
-<style>
-	.container {
-		background-color: #fefefe;
-		border-radius: 5px;
-		margin: 0.5rem;
-		padding: 1rem;
-	}
-
-	.text-right {
-		text-align: right;
-	}
-
-	table {
-		border-collapse: collapse;
-		width: 100%;
-		font-size: 0.8rem;
-	}
-
-	th,
-	td {
-		padding: 0.1rem 0.1rem;
-		text-align: left;
-	}
-
-	thead > tr {
-		background-color: #f0f0f0;
-	}
-
-	tfoot > tr {
-		border-top: 1px solid #000;
-		border-bottom: 1px solid #000;
-		font-weight: bold;
-	}
-
-	.negative {
-		color: red;
-	}
-
-	.zebra {
-		background-color: #f5f5f5;
-	}
-</style>

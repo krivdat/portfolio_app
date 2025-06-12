@@ -18,16 +18,16 @@
 	<title>Portfolio Tracker</title>
 </svelte:head>
 
-<header>
-	<nav>
-		<ul>
-			<li><a href="/">Home</a></li>
+<header class="sticky top-0 left-0 z-10 w-full bg-neutral-200 text-sm shadow-sm">
+	<nav class="mx-auto max-w-4xl px-4">
+		<ul class="flex flex-row items-center gap-4 py-2">
+			<li class="hover:font-bold active:font-semibold"><a href="/">Home</a></li>
 			{#if user}
-				<li><a href="/dashboard">Dashboard</a></li>
-				<li><a href="/assets">Assets</a></li>
+				<li class="hover:font-bold active:font-semibold"><a href="/dashboard">Dashboard</a></li>
+				<li class="hover:font-bold active:font-semibold"><a href="/assets">Assets</a></li>
 			{:else}
-				<li><a href="/login">Login</a></li>
-				<li><a href="/register">Register</a></li>
+				<li class="hover:font-bold active:font-semibold"><a href="/login">Login</a></li>
+				<li class="hover:font-bold active:font-semibold"><a href="/register">Register</a></li>
 			{/if}
 		</ul>
 	</nav>
@@ -38,35 +38,3 @@
 </main>
 
 <!-- This is where the content of each page will be rendered -->
-
-<style>
-	main {
-		max-width: 1200px;
-		margin-left: auto;
-		margin-right: auto;
-		/* background-color: rgb(108, 108, 154); */
-	}
-
-	header {
-		position: sticky;
-		left: 0;
-		top: 0;
-		background-color: #a19b93;
-		padding: 0.5rem;
-	}
-
-	nav a {
-		color: blue; /* Default link color */
-		text-decoration: none; /* Remove underline */
-	}
-
-	nav a:hover {
-		color: darkblue; /* Link color on hover */
-	}
-
-	nav ul {
-		display: flex;
-		gap: 1rem; /* space-x-4  adjust the value as needed */
-		list-style: none; /* Remove bullet points from list */
-	}
-</style>
