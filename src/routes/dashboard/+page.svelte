@@ -145,21 +145,26 @@
 										) < 0
 											? 'text-red-600'
 											: ''}"
-										>{formatCurrency(calculatePurchaseTotal(asset), 'en-US', asset.currency)}</td
+										>{formatCurrency(calculatePurchaseTotal(asset), 'en-US', asset.currency, 1)}</td
 									>
 									<td class="px-2 py-1 text-right"
-										>{formatCurrency(calculateMarketValueTotal(asset), 'en-US', asset.currency)}</td
+										>{formatCurrency(
+											calculateMarketValueTotal(asset),
+											'en-US',
+											asset.currency,
+											1
+										)}</td
 									>
 									<td
 										class="px-2 py-1 text-right {calculateProfitLoss(asset) < 0
 											? 'text-red-600'
 											: ''}"
-										>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency)}</td
+										>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency, 1)}</td
 									>
 									<td
 										class="px-2 py-1 text-right {calculateProfitLossPct(asset) < 0
 											? 'text-red-600'
-											: ''}">{(calculateProfitLossPct(asset) * 100).toFixed(2)}%</td
+											: ''}">{(calculateProfitLossPct(asset) * 100).toFixed(1)}%</td
 									>
 								</tr>
 							{/each}
@@ -175,16 +180,16 @@
 								<td
 									class="hidden px-2 py-1 text-right md:table-cell {purchaseTotal < 0
 										? 'text-red-600'
-										: ''}">{formatCurrency(purchaseTotal, 'en-US', 'EUR')}</td
+										: ''}">{formatCurrency(purchaseTotal, 'en-US', 'EUR', 1)}</td
 								>
 								<td class="px-2 py-1 text-right {marketValueTotal < 0 ? 'text-red-600' : ''}"
-									>{formatCurrency(marketValueTotal, 'en-US', 'EUR')}</td
+									>{formatCurrency(marketValueTotal, 'en-US', 'EUR', 1)}</td
 								>
 								<td class="px-2 py-1 text-right {profitLossTotal < 0 ? 'text-red-600' : ''}"
-									>{formatCurrency(profitLossTotal, 'en-US', 'EUR')}</td
+									>{formatCurrency(profitLossTotal, 'en-US', 'EUR', 1)}</td
 								>
 								<td class="px-2 py-1 text-right {profitLossPctTotal < 0 ? 'text-red-600' : ''}"
-									>{profitLossPctTotal.toFixed(2)}%</td
+									>{profitLossPctTotal.toFixed(1)}%</td
 								>
 							</tr>
 						</tfoot>
