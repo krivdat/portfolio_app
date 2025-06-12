@@ -1,25 +1,41 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-
-    export let assets;
-
-    const dispatch = createEventDispatcher();
-
-    function handleAssetClick(assetId) {
-        dispatch('assetClick', { assetId });
-    }
+	import { formatDate } from '$lib/utils/date';
+	export let assets;
 </script>
 
+<h2 class="mx-4 my-4 text-xl font-bold text-gray-800">Assets List</h2>
 {#if assets && assets.length > 0}
-    <ul>
-        {#each assets as asset (asset.id)}
-            <li>
-                <a href={`/assets/${asset.id}`} on:click|preventDefault={() => handleAssetClick(asset.id)}>
-                    {asset.name} ({asset.category}) - {asset.ticker}
-                </a>
-            </li>
-        {/each}
-    </ul>
+	<div class="overflow-x-auto">
+		<table class="min-w-full border-separate border-spacing-y-2 text-sm">
+			<thead>
+				<tr class="bg-gray-100">
+					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Name</th>
+					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Category</th>
+					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Ticker</th>
+					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Purchase Date</th>
+					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Quantity</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each assets as asset (asset.id)}
+					<tr class="bg-white transition-colors hover:bg-blue-50">
+						<td class="px-4 py-2">
+							<a
+								href={`/assets/${asset.id}`}
+								class="cursor-pointer font-medium text-blue-700 hover:underline"
+							>
+								{asset.name}
+							</a>
+						</td>
+						<td class="px-4 py-2 text-gray-600">{asset.category}</td>
+						<td class="px-4 py-2 text-gray-600">{asset.ticker}</td>
+						<td class="px-4 py-2 text-gray-600">{formatDate(asset.purchase_date)}</td>
+						<td class="px-4 py-2 text-gray-600">{asset.quantity}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 {:else}
-    <p>No assets found.</p>
+	<p class="text-gray-500 italic">No assets found.</p>
 {/if}
