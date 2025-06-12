@@ -14,12 +14,17 @@
 		ticker: ''
 	};
 	export let isUpdate = false; // Flag to indicate create or update mode
+	export let onSuccess = undefined; // Optional callback for successful form submission
 </script>
 
 <form
 	method="POST"
 	action={isUpdate ? '?/update' : '?/create'}
-	use:enhance
+	use:enhance={({ result }) => {
+		if (result?.type === 'success' && result?.data?.success && typeof onSuccess === 'function') {
+			onSuccess();
+		}
+	}}
 	class="mx-auto mt-6 flex w-full max-w-md flex-col gap-2 rounded-lg border border-gray-200 bg-gray-50 p-4 shadow"
 >
 	<h2 class="mb-1 text-xl font-bold text-gray-800">

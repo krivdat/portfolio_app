@@ -65,11 +65,11 @@ export const actions = {
 			if (!updatedAsset) {
 				return fail(404, { message: 'Asset not found or unauthorized' });
 			}
+			return { success: true };
 		} catch (e) {
 			console.error(e);
 			return fail(500, { message: 'Could not update asset' });
 		}
-		return { success: true };
 	},
 	delete: async ({ params, locals }) => {
 		if (!locals.user) {
