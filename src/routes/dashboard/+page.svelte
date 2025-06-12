@@ -4,6 +4,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
+
 	let { data } = $props();
 	let user = $derived(data.user);
 	let currentPrices = $derived(data.currentPrices);
@@ -12,8 +13,7 @@
 			const currentPriceData = asset.ticker ? currentPrices[asset.ticker] : null;
 			return {
 				...asset,
-				current_price: currentPriceData?.price || asset.purchase_price,
-				current_currency: currentPriceData?.currency || asset.currency
+				current_price: currentPriceData?.price || asset.purchase_price
 			};
 		})
 	);
