@@ -1,8 +1,9 @@
 <script>
-	import '../app.css'; // Global styles
+	import '../app.css';
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+
 	let { data, children } = $props();
 	let user = $derived(data.user);
 
