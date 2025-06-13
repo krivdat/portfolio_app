@@ -4,6 +4,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	let user = $derived(data.user);
@@ -42,6 +43,44 @@
 			)) *
 			100
 	);
+
+	// Group assets by ticker
+	function groupAssetsByTicker(assets) {
+		const groups = {};
+		for (const asset of assets) {
+			const key = asset.ticker || asset.name;
+			if (!groups[key]) groups[key] = [];
+			groups[key].push(asset);
+		}
+		return groups;
+	}
+
+	let groupedAssets = $derived(groupAssetsByTicker(assetsWithCurrentPrice));
+	let expandedTickers = $state({});
+
+	function toggleTicker(ticker) {
+		expandedTickers = { ...expandedTickers, [ticker]: !expandedTickers[ticker] };
+	}
+
+	function getSummary(assets) {
+		const first = assets[0];
+		const totalQty = assets.reduce((sum, a) => sum + a.quantity, 0);
+		const purchaseTotal = assets.reduce((sum, a) => sum + a.purchase_price * a.quantity, 0);
+		const marketValue = assets.reduce((sum, a) => sum + a.current_price * a.quantity, 0);
+		const profitLoss = marketValue - purchaseTotal;
+		const profitLossPct = purchaseTotal ? (profitLoss / purchaseTotal) * 100 : 0;
+		return {
+			name: first.name,
+			category: first.category,
+			currency: first.currency,
+			ticker: first.ticker,
+			totalQty,
+			purchaseTotal,
+			marketValue,
+			profitLoss,
+			profitLossPct
+		};
+	}
 
 	function getCategoryData() {
 		const categoryCounts = {};
@@ -123,50 +162,93 @@
 							</tr>
 						</thead>
 						<tbody>
-							{#each assetsWithCurrentPrice as asset, i}
-								<tr class={i % 2 === 1 ? 'bg-gray-50' : ''}>
-									<td class="px-2 py-1">{asset.name}</td>
-									<td class="px-2 py-1">{asset.category}</td>
-									<td class="px-2 py-1 text-right {asset.quantity < 0 ? 'text-red-600' : ''}"
-										>{asset.quantity}</td
+							{#each Object.entries(groupedAssets) as [ticker, assets]}
+								{@const summary = getSummary(assets)}
+								<tr
+									class="cursor-pointer bg-blue-50 transition hover:bg-blue-100"
+									tabindex="0"
+									aria-expanded={!!expandedTickers[ticker]}
+									onclick={() => toggleTicker(ticker)}
+									onkeydown={(e) => e.key === 'Enter' && toggleTicker(ticker)}
+								>
+									<td class="px-2 py-1 font-semibold"
+										>{summary.name} <span class="ml-1 text-xs text-gray-400">[{ticker}]</span></td
 									>
+									<td class="px-2 py-1">{summary.category}</td>
+									<td class="px-2 py-1 text-right">{summary.totalQty}</td>
+									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
+									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
+									<td class="px-2 py-1 text-right"></td>
 									<td class="hidden px-2 py-1 text-right md:table-cell"
-										>{formatDate(asset.purchase_date)}</td
-									>
-									<td class="hidden px-2 py-1 text-right md:table-cell"
-										>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
+										>{formatCurrency(summary.purchaseTotal, 'en-US', summary.currency, 1)}</td
 									>
 									<td class="px-2 py-1 text-right"
-										>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
+										>{formatCurrency(summary.marketValue, 'en-US', summary.currency, 1)}</td
 									>
-									<td
-										class="hidden px-2 py-1 text-right md:table-cell {calculatePurchaseTotal(
-											asset
-										) < 0
-											? 'text-red-600'
-											: ''}"
-										>{formatCurrency(calculatePurchaseTotal(asset), 'en-US', asset.currency, 1)}</td
+									<td class="px-2 py-1 text-right {summary.profitLoss < 0 ? 'text-red-600' : ''}"
+										>{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 1)}</td
 									>
-									<td class="px-2 py-1 text-right"
-										>{formatCurrency(
-											calculateMarketValueTotal(asset),
-											'en-US',
-											asset.currency,
-											1
-										)}</td
-									>
-									<td
-										class="px-2 py-1 text-right {calculateProfitLoss(asset) < 0
-											? 'text-red-600'
-											: ''}"
-										>{formatCurrency(calculateProfitLoss(asset), 'en-US', asset.currency, 1)}</td
-									>
-									<td
-										class="px-2 py-1 text-right {calculateProfitLossPct(asset) < 0
-											? 'text-red-600'
-											: ''}">{(calculateProfitLossPct(asset) * 100).toFixed(1)}%</td
+									<td class="px-2 py-1 text-right {summary.profitLossPct < 0 ? 'text-red-600' : ''}"
+										>{summary.profitLossPct.toFixed(1)}%</td
 									>
 								</tr>
+								{#if expandedTickers[ticker]}
+									{#each assets as asset, j}
+										<tr class={j % 2 === 1 ? 'bg-gray-50' : ''}>
+											<td class="px-2 py-1 pl-6">{asset.name}</td>
+											<td class="px-2 py-1">{asset.category}</td>
+											<td class="px-2 py-1 text-right {asset.quantity < 0 ? 'text-red-600' : ''}"
+												>{asset.quantity}</td
+											>
+											<td class="hidden px-2 py-1 text-right md:table-cell"
+												>{formatDate(asset.purchase_date)}</td
+											>
+											<td class="hidden px-2 py-1 text-right md:table-cell"
+												>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
+											>
+											<td class="px-2 py-1 text-right"
+												>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
+											>
+											<td
+												class="hidden px-2 py-1 text-right md:table-cell {calculatePurchaseTotal(
+													asset
+												) < 0
+													? 'text-red-600'
+													: ''}"
+												>{formatCurrency(
+													calculatePurchaseTotal(asset),
+													'en-US',
+													asset.currency,
+													1
+												)}</td
+											>
+											<td class="px-2 py-1 text-right"
+												>{formatCurrency(
+													calculateMarketValueTotal(asset),
+													'en-US',
+													asset.currency,
+													1
+												)}</td
+											>
+											<td
+												class="px-2 py-1 text-right {calculateProfitLoss(asset) < 0
+													? 'text-red-600'
+													: ''}"
+												>{formatCurrency(
+													calculateProfitLoss(asset),
+													'en-US',
+													asset.currency,
+													1
+												)}</td
+											>
+											<td
+												class="px-2 py-1 text-right {calculateProfitLossPct(asset) < 0
+													? 'text-red-600'
+													: ''}">{(calculateProfitLossPct(asset) * 100).toFixed(1)}%</td
+											>
+										</tr>
+									{/each}
+								{/if}
 							{/each}
 						</tbody>
 						<tfoot>
