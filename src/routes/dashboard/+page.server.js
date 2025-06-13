@@ -20,7 +20,7 @@ const fetchStockPrices = async (tickers) => {
 		console.log('Using cached exchange rates');
 	} else {
 		console.log('Fetching exchange rates');
-		const exchangeRateResults = await yahooFinance.quote(['USDEUR=X', 'CZKEUR=X']);
+		const exchangeRateResults = await yahooFinance.quote(['USDEUR=X', 'EURCZK=X', 'USDCZK=X']);
 		console.log('Exchange rates fetched', exchangeRateResults);
 		exchangeRates = exchangeRateResults.reduce((acc, result) => {
 			acc[result.symbol.slice(0, -2)] = {
