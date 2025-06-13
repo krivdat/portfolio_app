@@ -20,14 +20,14 @@
 
 <header class="sticky top-0 left-0 z-10 w-full bg-neutral-200 text-sm shadow-sm">
 	<nav class="mx-auto max-w-4xl px-4">
-		<ul class="flex flex-row items-center gap-4 py-2">
-			<li class="hover:font-bold active:font-semibold"><a href="/">Home</a></li>
+		<ul class="flex flex-row items-center gap-4 py-2 font-semibold">
+			<li class="hover:text-blue-600"><a href="/">Home</a></li>
 			{#if user}
-				<li class="hover:font-bold active:font-semibold"><a href="/dashboard">Dashboard</a></li>
-				<li class="hover:font-bold active:font-semibold"><a href="/assets">Assets</a></li>
+				<li class="hover:text-blue-600"><a href="/dashboard">Dashboard</a></li>
+				<li class="hover:text-blue-600"><a href="/assets">Assets</a></li>
 			{:else}
-				<li class="hover:font-bold active:font-semibold"><a href="/login">Login</a></li>
-				<li class="hover:font-bold active:font-semibold"><a href="/register">Register</a></li>
+				<li class="hover:text-blue-600"><a href="/login">Login</a></li>
+				<li class="hover:text-blue-600"><a href="/register">Register</a></li>
 			{/if}
 		</ul>
 	</nav>

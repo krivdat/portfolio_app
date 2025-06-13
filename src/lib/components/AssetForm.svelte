@@ -1,9 +1,12 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+
+	let { asset, isUpdate, form } = $props();
 
 	const today = new Date().toISOString().split('T')[0];
 
-	export let asset = {
+	asset = asset || {
 		// Default values
 		category: '',
 		name: '',
@@ -13,23 +16,28 @@
 		currency: '',
 		ticker: ''
 	};
-	export let isUpdate = false; // Flag to indicate create or update mode
-	export let onSuccess = undefined; // Optional callback for successful form submission
 </script>
 
 <form
 	method="POST"
 	action={isUpdate ? '?/update' : '?/create'}
-	use:enhance={({ result }) => {
-		if (result?.type === 'success' && result?.data?.success && typeof onSuccess === 'function') {
-			onSuccess();
-		}
+	use:enhance={() => {
+		return async ({ result }) => {
+			if (result.type === 'success') {
+				// Redirect to the assets page after successful update
+				goto('/assets');
+			}
+		};
 	}}
 	class="mx-auto mt-6 flex w-full max-w-md flex-col gap-2 rounded-lg border border-gray-200 bg-gray-50 p-4 shadow"
 >
 	<h2 class="mb-1 text-xl font-bold text-gray-800">
 		{isUpdate ? 'Update Asset' : 'Add Asset'}
 	</h2>
+
+	{#if form?.error}
+		<p style="color: red">{form.error}</p>
+	{/if}
 
 	<div class="flex flex-col gap-0.5">
 		<label for="category" class="text-sm font-medium text-gray-600">Category</label>
@@ -92,7 +100,7 @@
 			name="quantity"
 			bind:value={asset.quantity}
 			required
-			min="0"
+			step="0.0001"
 			placeholder="0"
 			class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 		/>
@@ -130,7 +138,3 @@
 		{isUpdate ? 'Update Asset' : 'Add Asset'}
 	</button>
 </form>
-
-<style>
-	/* Removed .input class and @apply usage, as Tailwind utility classes are now used inline. */
-</style>

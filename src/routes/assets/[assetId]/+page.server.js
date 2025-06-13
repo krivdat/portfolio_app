@@ -41,14 +41,18 @@ export const actions = {
 			isNaN(quantity) ||
 			!currency
 		) {
-			return fail(400, { message: 'Invalid input' });
+			return fail(400, { error: 'Invalid input' });
 		}
 
 		try {
 			const parsedPurchaseDate = parseDate(purchaseDate);
 
 			if (!parsedPurchaseDate) {
-				return fail(400, { message: 'Invalid purchase date' });
+				return fail(400, { error: 'Invalid purchase date' });
+			}
+
+			if (quantity < 0) {
+				return fail(400, { error: 'Quantity cannot be negative' });
 			}
 
 			const updatedAsset = await updateAsset(
@@ -63,12 +67,12 @@ export const actions = {
 				ticker
 			);
 			if (!updatedAsset) {
-				return fail(404, { message: 'Asset not found or unauthorized' });
+				return fail(404, { error: 'Asset not found or unauthorized' });
 			}
-			return { success: true };
+			return { success: true, asset: updatedAsset };
 		} catch (e) {
 			console.error(e);
-			return fail(500, { message: 'Could not update asset' });
+			return fail(500, { error: 'Could not update asset' });
 		}
 	},
 	delete: async ({ params, locals }) => {

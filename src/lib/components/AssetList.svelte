@@ -6,17 +6,17 @@
 <h2 class="mx-4 my-4 text-xl font-bold text-gray-800">Assets List</h2>
 {#if assets && assets.length > 0}
 	<div class="overflow-x-auto">
-		<table class="min-w-full border-separate border-spacing-y-2 text-sm">
-			<thead>
+		<table class="min-w-full border-separate border-spacing-y-1">
+			<thead class="text-sm">
 				<tr class="bg-gray-100">
-					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Name</th>
-					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Category</th>
-					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Ticker</th>
-					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Purchase Date</th>
-					<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Quantity</th>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700">Name</th>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700">Category</th>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700">Ticker</th>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700">Purchase Date</th>
+					<th class="px-4 py-2 text-left font-semibold text-gray-700">Quantity</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="text-xs">
 				{#each assets as asset (asset.id)}
 					<tr class="bg-white transition-colors hover:bg-blue-50">
 						<td class="px-4 py-1">
