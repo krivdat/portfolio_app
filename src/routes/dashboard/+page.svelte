@@ -45,9 +45,9 @@
 
 	function getCategoryData() {
 		const categoryCounts = {};
-		data.assets.forEach((asset) => {
+		assetsWithCurrentPrice.forEach((asset) => {
 			categoryCounts[asset.category] =
-				(categoryCounts[asset.category] || 0) + asset.purchase_price * asset.quantity;
+				(categoryCounts[asset.category] || 0) + asset.current_price * asset.quantity;
 		});
 
 		let result = Object.entries(categoryCounts).map(([category, value]) => ({
