@@ -171,9 +171,10 @@
 									onclick={() => toggleTicker(ticker)}
 									onkeydown={(e) => e.key === 'Enter' && toggleTicker(ticker)}
 								>
-									<td class="px-2 py-1 font-semibold"
-										>{summary.name} <span class="ml-1 text-xs text-gray-400">[{ticker}]</span></td
-									>
+									<td class="px-2 py-1 font-semibold">
+										{summary.name}
+										<span class="ml-1 hidden text-xs text-gray-400 md:inline">[{ticker}]</span>
+									</td>
 									<td class="px-2 py-1">{summary.category}</td>
 									<td class="px-2 py-1 text-right">{summary.totalQty}</td>
 									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
