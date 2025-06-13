@@ -4,26 +4,53 @@ import { clearSession } from '$lib/utils/auth';
 import yahooFinance from 'yahoo-finance2';
 import NodeCache from 'node-cache';
 
-const cache = new NodeCache({ stdTTL: 15 * 60 }); // Cache for 15 minutes
+const stockPricesCache = new NodeCache({ stdTTL: 15 * 60 }); // Cache for 15 minutes
+const exchangeRatesCache = new NodeCache({ stdTTL: 24 * 15 * 60 }); // Cache for 24 hours
 
 const fetchStockPrices = async (tickers) => {
-	const cachedData = cache.get('stockPrices');
+	const cachedStockPrices = stockPricesCache.get('stockPrices');
+	let exchangeRates = exchangeRatesCache.get('exchangeRates');
 
-	if (cachedData) {
+	if (cachedStockPrices) {
 		console.log('Using cached data');
-		return cachedData;
+		return cachedStockPrices;
+	}
+
+	if (exchangeRates) {
+		console.log('Using cached exchange rates');
+	} else {
+		console.log('Fetching exchange rates');
+		const exchangeRateResults = await yahooFinance.quote(['USDEUR=X', 'CZKEUR=X']);
+		console.log('Exchange rates fetched', exchangeRateResults);
+		exchangeRates = exchangeRateResults.reduce((acc, result) => {
+			acc[result.symbol.slice(0, -2)] = {
+				rate: result.regularMarketPrice
+			};
+			return acc;
+		}, {});
+		exchangeRatesCache.set('exchangeRates', exchangeRates);
+		console.log('New exchange rates cached', exchangeRates);
 	}
 
 	const results = await yahooFinance.quote(tickers);
 	// Convert array to object with ticker as key
 	const stockPrices = results.reduce((acc, result) => {
-		acc[result.symbol] = {
-			price: result.regularMarketPrice,
-			currency: result.currency
-		};
+		if (result.symbol === 'BTC-USD') {
+			// Special handling for BTC-USD
+			acc[result.symbol] = {
+				price: result.regularMarketPrice * exchangeRates['USDEUR'].rate,
+				currency: 'EUR'
+			};
+		} else {
+			acc[result.symbol] = {
+				price: result.regularMarketPrice,
+				currency: result.currency
+			};
+		}
 		return acc;
 	}, {});
-	cache.set('stockPrices', stockPrices);
+
+	stockPricesCache.set('stockPrices', stockPrices);
 	return stockPrices;
 };
 
