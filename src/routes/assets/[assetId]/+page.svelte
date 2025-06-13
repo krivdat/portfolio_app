@@ -2,7 +2,7 @@
 	import { formatDate } from '$lib/utils/date';
 	import AssetForm from '$lib/components/AssetForm.svelte';
 
-	let { data, form } = $props();
+	let { data } = $props();
 	let asset = $state(data.asset);
 	let user = $derived(data.user);
 

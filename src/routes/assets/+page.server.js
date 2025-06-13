@@ -55,10 +55,10 @@ export const actions = {
 				currency,
 				ticker
 			);
+			return { success: true };
 		} catch (error) {
 			console.error(error);
 			return fail(500, { message: 'Could not create asset' });
 		}
-		return { success: true }; // Indicate success (SvelteKit will handle UI updates)
 	}
 };

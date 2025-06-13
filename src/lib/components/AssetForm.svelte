@@ -1,6 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 
 	let { asset, isUpdate, form } = $props();
 
@@ -25,6 +25,16 @@
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				// Redirect to the assets page after successful update
+				invalidateAll();
+				asset = {
+					category: '',
+					name: '',
+					purchase_price: 0.0,
+					purchase_date: today,
+					quantity: 0,
+					currency: '',
+					ticker: ''
+				};
 				goto('/assets');
 			}
 		};

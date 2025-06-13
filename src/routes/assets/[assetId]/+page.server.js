@@ -1,5 +1,5 @@
 import { getAssetById, updateAsset, deleteAsset } from '$lib/db/asset';
-import { fail, redirect, error } from '@sveltejs/kit';
+import { fail, error } from '@sveltejs/kit';
 import { parseDate } from '$lib/utils/date';
 
 export async function load({ params, locals }) {
