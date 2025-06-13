@@ -139,8 +139,10 @@
 	</form>
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
-			<div class="mb-4">
-				<h2 class="mb-2 font-semibold">Portfolio Allocation</h2>
+			<div>
+				<h2 class="mb-4 font-semibold">Portfolio Allocation</h2>
+			</div>
+			<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
 				<PieChart data={categoryData} title="Categories" />
 			</div>
 			<div>
