@@ -4,7 +4,6 @@
 
 	let { data } = $props();
 	let asset = $state(data.asset);
-	let user = $derived(data.user);
 
 	let formattedAsset = $derived({
 		...asset,

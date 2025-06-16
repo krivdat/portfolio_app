@@ -4,7 +4,6 @@
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
-	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	let user = $derived(data.user);
@@ -178,7 +177,11 @@
 										<span class="ml-1 hidden text-xs text-gray-400 md:inline">[{ticker}]</span>
 									</td>
 									<td class="px-2 py-1">{summary.category}</td>
-									<td class="px-2 py-1 text-right">{summary.totalQty}</td>
+									<td class="px-2 py-1 text-right">
+										{Number.isInteger(summary.totalQty)
+											? summary.totalQty
+											: summary.totalQty.toFixed(4)}
+									</td>
 									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
 									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
 									<td class="px-2 py-1 text-right"></td>
@@ -200,9 +203,11 @@
 										<tr class={j % 2 === 1 ? 'bg-gray-50' : ''}>
 											<td class="px-2 py-1 pl-6">{asset.name}</td>
 											<td class="px-2 py-1">{asset.category}</td>
-											<td class="px-2 py-1 text-right {asset.quantity < 0 ? 'text-red-600' : ''}"
-												>{asset.quantity}</td
-											>
+											<td class="px-2 py-1 text-right {asset.quantity < 0 ? 'text-red-600' : ''}">
+												{Number.isInteger(asset.quantity)
+													? asset.quantity
+													: asset.quantity.toFixed(4)}
+											</td>
 											<td class="hidden px-2 py-1 text-right md:table-cell"
 												>{formatDate(asset.purchase_date)}</td
 											>

@@ -123,7 +123,7 @@
 				name="quantity"
 				bind:value={asset.quantity}
 				required
-				step="0.0001"
+				step="0.00000001"
 				placeholder="0"
 				class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
 			/>
