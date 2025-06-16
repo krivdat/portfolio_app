@@ -68,6 +68,18 @@
 		const marketValue = assets.reduce((sum, a) => sum + a.current_price * a.quantity, 0);
 		const profitLoss = marketValue - purchaseTotal;
 		const profitLossPct = purchaseTotal ? (profitLoss / purchaseTotal) * 100 : 0;
+		// Weighted average purchase price
+		const weightedPurchasePrice = totalQty ? purchaseTotal / totalQty : 0;
+		// Weighted average current price
+		const weightedCurrentPrice = totalQty ? marketValue / totalQty : 0;
+		// Oldest purchase date
+		const oldestPurchaseDate = assets.reduce((oldest, a) => {
+			if (!oldest) return a.purchase_date;
+			// Compare as Date objects
+			const aDate = new Date(a.purchase_date);
+			const oldestDate = new Date(oldest);
+			return aDate < oldestDate ? a.purchase_date : oldest;
+		}, null);
 		return {
 			name: first.name,
 			category: first.category,
@@ -77,7 +89,10 @@
 			purchaseTotal,
 			marketValue,
 			profitLoss,
-			profitLossPct
+			profitLossPct,
+			weightedPurchasePrice,
+			weightedCurrentPrice,
+			oldestPurchaseDate
 		};
 	}
 
@@ -182,9 +197,15 @@
 											? summary.totalQty
 											: summary.totalQty.toFixed(4)}
 									</td>
-									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
-									<td class="hidden px-2 py-1 text-right md:table-cell"></td>
-									<td class="px-2 py-1 text-right"></td>
+									<td class="hidden px-2 py-1 text-right md:table-cell">
+										{summary.oldestPurchaseDate ? formatDate(summary.oldestPurchaseDate) : ''}
+									</td>
+									<td class="hidden px-2 py-1 text-right md:table-cell">
+										{formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
+									</td>
+									<td class="px-2 py-1 text-right">
+										{formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
+									</td>
 									<td class="hidden px-2 py-1 text-right md:table-cell"
 										>{formatCurrency(summary.purchaseTotal, 'en-US', summary.currency, 1)}</td
 									>
@@ -199,7 +220,7 @@
 									>
 								</tr>
 								{#if expandedTickers[ticker]}
-									{#each assets as asset, j}
+									{#each [...assets].sort((a, b) => new Date(a.purchase_date) - new Date(b.purchase_date)) as asset, j}
 										<tr class={j % 2 === 1 ? 'bg-gray-50' : ''}>
 											<td class="px-2 py-1 pl-6">{asset.name}</td>
 											<td class="px-2 py-1">{asset.category}</td>
