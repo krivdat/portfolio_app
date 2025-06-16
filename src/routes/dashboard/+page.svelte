@@ -207,13 +207,13 @@
 										{formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
 									</td>
 									<td class="hidden px-2 py-1 text-right md:table-cell"
-										>{formatCurrency(summary.purchaseTotal, 'en-US', summary.currency, 1)}</td
+										>{formatCurrency(summary.purchaseTotal, 'en-US', summary.currency, 0)}</td
 									>
 									<td class="px-2 py-1 text-right"
-										>{formatCurrency(summary.marketValue, 'en-US', summary.currency, 1)}</td
+										>{formatCurrency(summary.marketValue, 'en-US', summary.currency, 0)}</td
 									>
 									<td class="px-2 py-1 text-right {summary.profitLoss < 0 ? 'text-red-600' : ''}"
-										>{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 1)}</td
+										>{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}</td
 									>
 									<td class="px-2 py-1 text-right {summary.profitLossPct < 0 ? 'text-red-600' : ''}"
 										>{summary.profitLossPct.toFixed(1)}%</td
@@ -248,7 +248,7 @@
 													calculatePurchaseTotal(asset),
 													'en-US',
 													asset.currency,
-													1
+													0
 												)}</td
 											>
 											<td class="px-2 py-1 text-right"
@@ -256,7 +256,7 @@
 													calculateMarketValueTotal(asset),
 													'en-US',
 													asset.currency,
-													1
+													0
 												)}</td
 											>
 											<td
@@ -267,7 +267,7 @@
 													calculateProfitLoss(asset),
 													'en-US',
 													asset.currency,
-													1
+													0
 												)}</td
 											>
 											<td
@@ -291,13 +291,13 @@
 								<td
 									class="hidden px-2 py-1 text-right md:table-cell {purchaseTotal < 0
 										? 'text-red-600'
-										: ''}">{formatCurrency(purchaseTotal, 'en-US', 'EUR', 1)}</td
+										: ''}">{formatCurrency(purchaseTotal, 'en-US', 'EUR', 0)}</td
 								>
 								<td class="px-2 py-1 text-right {marketValueTotal < 0 ? 'text-red-600' : ''}"
-									>{formatCurrency(marketValueTotal, 'en-US', 'EUR', 1)}</td
+									>{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}</td
 								>
 								<td class="px-2 py-1 text-right {profitLossTotal < 0 ? 'text-red-600' : ''}"
-									>{formatCurrency(profitLossTotal, 'en-US', 'EUR', 1)}</td
+									>{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}</td
 								>
 								<td class="px-2 py-1 text-right {profitLossPctTotal < 0 ? 'text-red-600' : ''}"
 									>{profitLossPctTotal.toFixed(1)}%</td
