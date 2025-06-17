@@ -148,20 +148,6 @@
 <div class="container my-4 max-w-4xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
 	<h1 class="mb-2 text-xl font-bold">Dashboard</h1>
 
-	{#if user}
-		<p>Welcome, {user.username} ({user.email})</p>
-		{#if user.profile_picture}
-			<img src={user.profile_picture} alt="Profile" width="50" class="rounded-full" />
-		{/if}
-	{/if}
-
-	<form method="POST" action="?/logout" use:enhance>
-		<button
-			type="submit"
-			onclick={logout}
-			class="mt-2 mb-4 rounded bg-gray-200 px-3 py-1 hover:bg-gray-300">Logout</button
-		>
-	</form>
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>

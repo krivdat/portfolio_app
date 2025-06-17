@@ -28,6 +28,6 @@
 	});
 </script>
 
-<div>
+<div class="mb-8">
 	<Chart {data} {options} />
 </div>

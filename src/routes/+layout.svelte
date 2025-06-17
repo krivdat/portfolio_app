@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { page } from '$app/state';
+	import { enhance } from '$app/forms';
 
 	let { data, children } = $props();
 	let user = $derived(data.user);
@@ -18,23 +18,52 @@
 	<title>Portfolio Tracker</title>
 </svelte:head>
 
-<header class="sticky top-0 left-0 z-10 w-full bg-neutral-200 text-sm shadow-sm">
-	<nav class="mx-auto max-w-4xl px-4">
-		<ul class="flex flex-row items-center gap-4 py-2 font-semibold">
-			<li class="hover:text-blue-600"><a href="/">Home</a></li>
-			{#if user}
-				<li class="hover:text-blue-600"><a href="/dashboard">Dashboard</a></li>
-				<li class="hover:text-blue-600"><a href="/assets">Assets</a></li>
-			{:else}
-				<li class="hover:text-blue-600"><a href="/login">Login</a></li>
-				<li class="hover:text-blue-600"><a href="/register">Register</a></li>
-			{/if}
-		</ul>
+<header class="sticky top-0 left-0 z-10 w-full bg-neutral-200 text-sm font-semibold shadow-sm">
+	<nav>
+		<div class="tex flex w-full justify-between px-1 md:px-2">
+			<!-- Left group -->
+			<div class="flex items-center gap-2 md:gap-4">
+				<a class="hover:text-blue-600" href="/">Home</a>
+				{#if user}
+					<a class="hover:text-blue-600" href="/dashboard">Dashboard</a>
+					<a class="hover:text-blue-600" href="/assets">Assets</a>
+				{/if}
+			</div>
+			<!-- Right group -->
+			<div class="flex items-center gap-2 md:gap-4">
+				{#if user}
+					<span>{user.username}</span> <span class="hidden md:inline">({user.email})</span>
+					<form action="/logout" method="POST" use:enhance>
+						<button
+							class="flex items-center gap-1 rounded px-2 py-1 text-red-600 hover:bg-red-100 focus:ring-2 focus:ring-red-400 focus:outline-none"
+							type="submit"
+							aria-label="Logout"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"
+								/>
+							</svg>
+						</button>
+					</form>
+				{:else}
+					<a class="hover:text-blue-600" href="/login">Login</a>
+					<a class="hover:text-blue-600" href="/register">Register</a>
+				{/if}
+			</div>
+		</div>
 	</nav>
 </header>
 
 <main>
 	{@render children()}
 </main>
-
-<!-- This is where the content of each page will be rendered -->

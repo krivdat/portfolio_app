@@ -1,6 +1,4 @@
 import { getAssetsByUserId } from '$lib/db/asset';
-import { redirect } from '@sveltejs/kit';
-import { clearSession } from '$lib/utils/auth';
 import yahooFinance from 'yahoo-finance2';
 import NodeCache from 'node-cache';
 
@@ -69,10 +67,3 @@ export async function load({ locals }) {
 		currentPrices
 	};
 }
-
-export const actions = {
-	logout: async ({ cookies }) => {
-		clearSession(cookies);
-		throw redirect(302, '/login');
-	}
-};
