@@ -1,5 +1,6 @@
 <script>
-	import PieChart from '$lib/components/PieChart.svelte'; // Import the chart component
+	import BarChart from '$lib/components/BarChart.svelte';
+	import PieChart from '$lib/components/PieChart.svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
@@ -158,6 +159,7 @@
 			</div>
 			<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
 				<PieChart data={categoryData} title="Categories" />
+				<BarChart data={categoryData} title="Categories" />
 			</div>
 			<div>
 				<h2 class="mb-2 font-semibold">Asset List</h2>

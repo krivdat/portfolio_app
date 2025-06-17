@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	let Chart = $state();
-	let { data = [], title = 'Pie' } = $props();
+	let { data = [], title = 'Bar Chart' } = $props();
 
 	let options = {
 		theme: 'white',
@@ -16,9 +16,9 @@
 	};
 
 	onMount(async () => {
-		console.log('Inside onMount function in PieChart.svelte, data =', data);
+		console.log('Inside onMount function in BarChart.svelte, data =', data);
 		const charts = await import('@carbon/charts-svelte');
-		Chart = charts.PieChart;
+		Chart = charts.BarChartSimple;
 	});
 </script>
 

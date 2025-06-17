@@ -13,6 +13,7 @@
 		"convert-icons": "node scripts/convert-icons.js"
 	},
 	"devDependencies": {
+		"@carbon/charts-svelte": "^1.23.11",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-auto": "^4.0.0",
@@ -34,7 +35,6 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@carbon/charts-svelte": "^1.22.18",
 		"bcrypt": "^5.1.1",
 		"better-sqlite3": "^11.10.0",
 		"dotenv": "^16.4.7",
@@ -42,7 +42,6 @@
 		"express-rate-limit": "^7.5.0",
 		"limit": "^0.0.1",
 		"node-cache": "^5.1.2",
-		"pg": "^8.13.1",
 		"sharp": "^0.34.2",
 		"yahoo-finance2": "^2.13.3"
 	},

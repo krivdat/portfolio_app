@@ -14,5 +14,8 @@ export default defineConfig({
 		},
 		serviceWorker: false
 	},
-	optimizeDeps: { exclude: ['@sveltejs/kit'] }
+	optimizeDeps: { exclude: ['@sveltejs/kit'] },
+	ssr: {
+		noExternal: process.env.NODE_ENV === 'production' ? ['@carbon/charts'] : []
+	}
 });
