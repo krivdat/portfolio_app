@@ -8,10 +8,16 @@
 	let options = {
 		theme: 'white',
 		title,
-		height: '400px',
+		height: '300px',
 		axes: {
 			left: { mapsTo: 'value' },
 			bottom: { mapsTo: 'group', scaleType: 'labels' }
+		},
+		legend: {
+			alignment: 'center'
+		},
+		toolbar: {
+			enabled: false
 		}
 	};
 
@@ -22,6 +28,6 @@
 	});
 </script>
 
-<div>
+<div class="mb-8">
 	<Chart {data} {options} />
 </div>

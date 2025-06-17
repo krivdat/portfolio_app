@@ -8,10 +8,16 @@
 	let options = {
 		theme: 'white',
 		title,
-		height: '400px',
+		height: '300px',
 		axes: {
 			left: { mapsTo: 'value' },
 			bottom: { mapsTo: 'group', scaleType: 'labels' }
+		},
+		legend: {
+			enabled: false
+		},
+		toolbar: {
+			enabled: false
 		}
 	};
 

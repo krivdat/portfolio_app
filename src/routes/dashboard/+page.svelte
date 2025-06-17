@@ -133,6 +133,16 @@
 		localStorage.clear();
 		invalidateAll();
 	}
+
+	let performanceData = $derived(
+		Object.entries(groupedAssets).map(([ticker, assets]) => {
+			const summary = getSummary(assets);
+			return {
+				group: ticker,
+				value: summary.profitLoss
+			};
+		})
+	);
 </script>
 
 <div class="container my-4 max-w-4xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
@@ -159,7 +169,7 @@
 			</div>
 			<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
 				<PieChart data={categoryData} title="Categories" />
-				<BarChart data={categoryData} title="Categories" />
+				<BarChart data={performanceData} title="Performance by Ticker (%)" />
 			</div>
 			<div>
 				<h2 class="mb-2 font-semibold">Asset List</h2>
