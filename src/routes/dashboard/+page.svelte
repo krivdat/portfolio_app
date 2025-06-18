@@ -1,13 +1,10 @@
 <script>
 	import BarChart from '$lib/components/BarChart.svelte';
 	import PieChart from '$lib/components/PieChart.svelte';
-	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import { formatDate } from '$lib/utils/date';
 	import { formatCurrency } from '$lib/utils/currency';
 
 	let { data } = $props();
-	let user = $derived(data.user);
 	let currentPrices = $derived(data.currentPrices);
 	let assetsWithCurrentPrice = $derived(
 		data.assets.map((asset) => {
@@ -129,7 +126,7 @@
 		return asset.current_price * asset.quantity;
 	}
 
-	let performanceData = $derived(
+	let performanceDataSum = $derived(
 		Object.entries(groupedAssets).map(([ticker, assets]) => {
 			const summary = getSummary(assets);
 			return {
@@ -138,19 +135,30 @@
 			};
 		})
 	);
+
+	let performanceDataPct = $derived(
+		Object.entries(groupedAssets).map(([ticker, assets]) => {
+			const summary = getSummary(assets);
+			return {
+				group: ticker,
+				value: summary.profitLossPct
+			};
+		})
+	);
 </script>
 
-<div class="container my-4 max-w-4xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
-	<h1 class="mb-2 text-xl font-bold">Dashboard</h1>
-
+<div class="container my-4 max-w-5xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>
-				<h2 class="mb-4 font-semibold">Portfolio Allocation</h2>
+				<h2 class="mb-4 font-semibold">Portfolio Overview</h2>
 			</div>
-			<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+			<div
+				class="mb-8 flex w-full flex-col items-center justify-between gap-2 md:flex-row md:flex-wrap"
+			>
 				<PieChart data={categoryData} title="Categories" />
-				<BarChart data={performanceData} title="Performance by Ticker (EUR)" />
+				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
+				<BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
 			</div>
 			<div>
 				<h2 class="mb-2 font-semibold">Asset List</h2>

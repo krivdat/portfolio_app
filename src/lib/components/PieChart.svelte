@@ -8,7 +8,7 @@
 	let options = {
 		theme: 'white',
 		title,
-		height: '300px',
+		height: '250px',
 		axes: {
 			left: { mapsTo: 'value' },
 			bottom: { mapsTo: 'group', scaleType: 'labels' }
@@ -28,6 +28,6 @@
 	});
 </script>
 
-<div class="mb-8">
+<div class="max-w-2xs">
 	<Chart {data} {options} />
 </div>
