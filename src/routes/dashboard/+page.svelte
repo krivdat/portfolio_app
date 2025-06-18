@@ -129,11 +129,6 @@
 		return asset.current_price * asset.quantity;
 	}
 
-	function logout() {
-		localStorage.clear();
-		invalidateAll();
-	}
-
 	let performanceData = $derived(
 		Object.entries(groupedAssets).map(([ticker, assets]) => {
 			const summary = getSummary(assets);
@@ -155,7 +150,7 @@
 			</div>
 			<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
 				<PieChart data={categoryData} title="Categories" />
-				<BarChart data={performanceData} title="Performance by Ticker (%)" />
+				<BarChart data={performanceData} title="Performance by Ticker (EUR)" />
 			</div>
 			<div>
 				<h2 class="mb-2 font-semibold">Asset List</h2>
