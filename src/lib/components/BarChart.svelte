@@ -28,6 +28,6 @@
 	});
 </script>
 
-<div class="max-w-2xs">
+<div class="mb-4 max-w-2xs">
 	<Chart {data} {options} />
 </div>

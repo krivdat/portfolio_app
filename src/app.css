@@ -11,3 +11,10 @@
 		@apply text-sm; /* or text-lg, text-sm, etc. */
 	}
 }
+
+/* Target Carbon Charts' title element */
+.cds--cc--title .title {
+	text-align: center !important; /* or left, right */
+	font-size: 0.9rem !important; /* your preferred font size */
+	/* Optional: font-weight, color, margin adjustments */
+}

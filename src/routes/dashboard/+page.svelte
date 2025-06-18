@@ -16,7 +16,8 @@
 		})
 	);
 
-	let categoryData = $derived(getCategoryData());
+	let categoryDataCurrent = $derived(getCategoryDataCurrent());
+	let categoryDataPurchase = $derived(getCategoryDataPurchase());
 
 	let purchaseTotal = $derived(
 		assetsWithCurrentPrice.reduce(
@@ -94,11 +95,27 @@
 		};
 	}
 
-	function getCategoryData() {
+	function getCategoryDataCurrent() {
 		const categoryCounts = {};
 		assetsWithCurrentPrice.forEach((asset) => {
 			categoryCounts[asset.category] =
 				(categoryCounts[asset.category] || 0) + asset.current_price * asset.quantity;
+		});
+
+		let result = Object.entries(categoryCounts).map(([category, value]) => ({
+			group: category,
+			value
+		}));
+		console.log('Category Data:', result);
+
+		return result;
+	}
+
+	function getCategoryDataPurchase() {
+		const categoryCounts = {};
+		assetsWithCurrentPrice.forEach((asset) => {
+			categoryCounts[asset.category] =
+				(categoryCounts[asset.category] || 0) + asset.purchase_price * asset.quantity;
 		});
 
 		let result = Object.entries(categoryCounts).map(([category, value]) => ({
@@ -151,12 +168,13 @@
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>
-				<h2 class="mb-4 font-semibold">Portfolio Overview</h2>
+				<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
 			</div>
 			<div
 				class="mb-8 flex w-full flex-col items-center justify-between gap-2 md:flex-row md:flex-wrap"
 			>
-				<PieChart data={categoryData} title="Categories" />
+				<PieChart data={categoryDataCurrent} title="Allocation - current value" />
+				<PieChart data={categoryDataPurchase} title="Allocation - purchase cost" />
 				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
 				<BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
 			</div>
