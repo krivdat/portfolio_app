@@ -62,3 +62,28 @@ export async function getUserById(userId) {
 export async function comparePassword(password, hashedPassword) {
 	return await bcrypt.compare(password, hashedPassword);
 }
+
+export async function updateUserById(userId, { first_name, last_name, email, profile_picture }) {
+	const fields = [];
+	const values = [];
+	if (first_name !== undefined) {
+		fields.push('first_name = ?');
+		values.push(first_name);
+	}
+	if (last_name !== undefined) {
+		fields.push('last_name = ?');
+		values.push(last_name);
+	}
+	if (email !== undefined) {
+		fields.push('encrypted_email = hex(AES_ENCRYPT(?, ?))');
+		values.push(email, ENCRYPTION_KEY);
+	}
+	if (profile_picture !== undefined) {
+		fields.push('profile_picture = ?');
+		values.push(profile_picture);
+	}
+	if (fields.length === 0) return;
+	values.push(userId);
+	const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+	await query(sql, values);
+}

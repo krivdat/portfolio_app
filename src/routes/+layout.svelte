@@ -34,11 +34,11 @@
 				<!-- Right group -->
 				<div class="flex items-center gap-2 md:gap-4">
 					{#if user}
-						<span
-							>{user.first_name || user.last_name
+						<a href="/profile" class="hover:text-blue-600">
+							{user.first_name || user.last_name
 								? `${user.first_name || ''} ${user.last_name || ''}`.trim()
-								: user.username}</span
-						>
+								: user.username}
+						</a>
 						<span class="hidden md:inline">({user.email})</span>
 						<form action="/logout" method="POST" use:enhance>
 							<button
