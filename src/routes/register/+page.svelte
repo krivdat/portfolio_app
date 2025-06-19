@@ -25,5 +25,11 @@
 	<label for="profile_picture">Profile Picture URL:</label>
 	<input type="url" id="profile_picture" name="profile_picture" />
 
+	<label for="first_name">First Name:</label>
+	<input type="text" id="first_name" name="first_name" />
+
+	<label for="last_name">Last Name:</label>
+	<input type="text" id="last_name" name="last_name" />
+
 	<button type="submit">Register</button>
 </form>

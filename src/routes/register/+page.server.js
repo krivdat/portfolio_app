@@ -9,6 +9,9 @@ export const actions = {
 		const confirmPassword = formData.get('confirmPassword');
 		const email = formData.get('email');
 		const profilePicture = formData.get('profile_picture');
+		const firstName = formData.get('first_name');
+		const last_name =
+			formData.get('second_name') || formData.get('lastname') || formData.get('last_name');
 
 		if (!username || !password || !confirmPassword || !email) {
 			return fail(400, { error: 'Please fill in all required fields.' });
@@ -28,7 +31,14 @@ export const actions = {
 		}
 		try {
 			console.log('Starting user registration process...');
-			const userId = await createUser(username, password, email, profilePicture);
+			const userId = await createUser(
+				username,
+				password,
+				email,
+				profilePicture,
+				firstName,
+				last_name
+			);
 			console.log('User registered successfully with ID:', userId);
 		} catch (error) {
 			console.error('Registration error:', error);

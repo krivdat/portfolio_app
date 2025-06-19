@@ -17,11 +17,14 @@ export const handle = async ({ event, resolve }) => {
 	if (userId) {
 		const user = await getUserById(userId);
 		if (user) {
+			// Add first_name and last_name to event.locals.user
 			event.locals.user = {
 				id: user.id,
 				username: user.username,
 				email: user.email,
-				profile_picture: user.profile_picture
+				profile_picture: user.profile_picture,
+				first_name: user.first_name,
+				last_name: user.last_name
 			};
 		} else {
 			// Invalid session - clear it

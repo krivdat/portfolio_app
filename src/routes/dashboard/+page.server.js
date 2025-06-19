@@ -14,9 +14,7 @@ const fetchStockPrices = async (tickers) => {
 		return cachedStockPrices;
 	}
 
-	if (exchangeRates) {
-		console.log('Using cached exchange rates');
-	} else {
+	if (!exchangeRates) {
 		console.log('Fetching exchange rates');
 		const exchangeRateResults = await yahooFinance.quote(['USDEUR=X', 'EURCZK=X', 'USDCZK=X']);
 		console.log('Exchange rates fetched', exchangeRateResults);
@@ -28,6 +26,13 @@ const fetchStockPrices = async (tickers) => {
 		}, {});
 		exchangeRatesCache.set('exchangeRates', exchangeRates);
 		console.log('New exchange rates cached', exchangeRates);
+	} else {
+		console.log('Using cached exchange rates');
+	}
+
+	// Wait for exchangeRates to be available before using
+	if (!exchangeRates['USDEUR']?.rate) {
+		throw new Error('USDEUR exchange rate not available');
 	}
 
 	const results = await yahooFinance.quote(tickers);
@@ -36,7 +41,7 @@ const fetchStockPrices = async (tickers) => {
 		if (result.symbol === 'BTC-USD') {
 			// Special handling for BTC-USD
 			acc[result.symbol] = {
-				price: result.regularMarketPrice * exchangeRates['USDEUR'].rate,
+				price: result.regularMarketPrice * (exchangeRates['USDEUR']?.rate ?? 1),
 				currency: 'EUR'
 			};
 		} else {

@@ -34,7 +34,12 @@
 				<!-- Right group -->
 				<div class="flex items-center gap-2 md:gap-4">
 					{#if user}
-						<span>{user.username}</span> <span class="hidden md:inline">({user.email})</span>
+						<span
+							>{user.first_name || user.last_name
+								? `${user.first_name || ''} ${user.last_name || ''}`.trim()
+								: user.username}</span
+						>
+						<span class="hidden md:inline">({user.email})</span>
 						<form action="/logout" method="POST" use:enhance>
 							<button
 								class="flex items-center gap-1 rounded px-2 py-1 text-red-600 hover:bg-red-100 focus:ring-2 focus:ring-red-400 focus:outline-none"

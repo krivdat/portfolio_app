@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     encrypted_email TEXT UNIQUE NOT NULL,
+    first_name TEXT,
+    last_name TEXT,
     profile_picture TEXT,
     created_at DATETIME DEFAULT (datetime('now'))
 );

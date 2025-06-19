@@ -29,5 +29,9 @@
 </script>
 
 <div class="mb-4 max-w-2xs">
-	<Chart {data} {options} />
+	{#if Chart}
+		<Chart {data} {options} />
+	{:else}
+		<div>Loading chart...</div>
+	{/if}
 </div>

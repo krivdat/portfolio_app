@@ -162,9 +162,22 @@
 			};
 		})
 	);
+
+	// Get user from data
+	let user = $derived(data.user);
 </script>
 
 <div class="container my-4 max-w-5xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
+	{#if user}
+		<h1 class="mb-2 text-xl font-bold">
+			Dashboard
+			<span class="ml-2 text-base font-normal text-gray-500">
+				{user.first_name || user.last_name
+					? `${user.first_name || ''} ${user.last_name || ''}`.trim()
+					: user.username}
+			</span>
+		</h1>
+	{/if}
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>

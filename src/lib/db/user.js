@@ -4,17 +4,24 @@ import { ENCRYPTION_KEY } from '$env/static/private'; // Load from .env
 
 const SALT_ROUNDS = 10;
 
-export async function createUser(username, password, email, profilePicture) {
+export async function createUser(
+	username,
+	password,
+	email,
+	profilePicture,
+	firstName = null,
+	last_name = null
+) {
 	try {
-		console.log('Creating user:', { username, email, profilePicture });
+		console.log('Creating user:', { username, email, profilePicture, firstName, last_name });
 		const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 		console.log('Password hashed successfully');
 
 		const result = await query(
-			`INSERT INTO users (username, password, encrypted_email, profile_picture)
-			 VALUES (?, ?, hex(AES_ENCRYPT(?, ?)), ?)
+			`INSERT INTO users (username, password, encrypted_email, profile_picture, first_name, last_name)
+			 VALUES (?, ?, hex(AES_ENCRYPT(?, ?)), ?, ?, ?)
 			 RETURNING id`,
-			[username, hashedPassword, email, ENCRYPTION_KEY, profilePicture]
+			[username, hashedPassword, email, ENCRYPTION_KEY, profilePicture, firstName, last_name]
 		);
 		console.log('User created successfully:', result);
 		return result.rows[0].id;
@@ -28,7 +35,9 @@ export async function getUserByUsername(username) {
 	const result = await query(
 		`SELECT id, username, password,
                 AES_DECRYPT(unhex(encrypted_email), ?) as email,
-                profile_picture
+                profile_picture,
+                first_name,
+                last_name
          FROM users
          WHERE username = ?`,
 		[ENCRYPTION_KEY, username]
@@ -40,7 +49,9 @@ export async function getUserById(userId) {
 	const result = await query(
 		`SELECT id, username, password,
                 AES_DECRYPT(unhex(encrypted_email), ?) as email,
-                profile_picture
+                profile_picture,
+                first_name,
+                last_name
          FROM users
          WHERE id = ?`,
 		[ENCRYPTION_KEY, userId]
