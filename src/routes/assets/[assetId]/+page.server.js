@@ -25,27 +25,50 @@ export const actions = {
 		console.log('Inside update action in +page.server.js, assetId: ', params.assetId);
 
 		const formData = await request.formData();
-		const category = formData.get('category');
-		const name = formData.get('name');
-		const purchasePrice = parseFloat(formData.get('purchasePrice'));
-		const purchaseDate = formData.get('purchaseDate');
-		const quantity = parseFloat(formData.get('quantity'));
-		const currency = formData.get('currency');
-		const ticker = formData.get('ticker');
+		const status = formData.get('status') || 'open';
+
+		// If closing, fetch original asset and use its original values for non-closing fields
+		let origAsset = null;
+		if (status === 'closed') {
+			origAsset = await getAssetById(params.assetId);
+			if (!origAsset || origAsset.user_id !== locals.user.id) {
+				return fail(404, { error: 'Asset not found or unauthorized' });
+			}
+		}
+
+		const category = status === 'closed' ? origAsset.category : formData.get('category');
+		const name = status === 'closed' ? origAsset.name : formData.get('name');
+		const purchasePrice =
+			status === 'closed' ? origAsset.purchase_price : parseFloat(formData.get('purchasePrice'));
+		const purchaseDate =
+			status === 'closed' ? origAsset.purchase_date : formData.get('purchaseDate');
+		const quantity =
+			status === 'closed' ? origAsset.quantity : parseFloat(formData.get('quantity'));
+		const currency = status === 'closed' ? origAsset.currency : formData.get('currency');
+		const ticker = status === 'closed' ? origAsset.ticker : formData.get('ticker');
+		const closingPrice = formData.get('closing_price')
+			? parseFloat(formData.get('closing_price'))
+			: null;
+		const closingDate = formData.get('closing_date') || null;
+		const closingNote = formData.get('closing_note') || null;
 
 		if (
-			!category ||
-			!name ||
-			isNaN(purchasePrice) ||
-			!purchaseDate ||
-			isNaN(quantity) ||
-			!currency
+			(status === 'open' &&
+				(!category ||
+					!name ||
+					isNaN(purchasePrice) ||
+					!purchaseDate ||
+					isNaN(quantity) ||
+					!currency)) ||
+			(status !== 'open' && (isNaN(closingPrice) || !closingDate))
 		) {
+			console.error('Invalid input data', formData);
 			return fail(400, { error: 'Invalid input' });
 		}
 
 		try {
 			const parsedPurchaseDate = parseDate(purchaseDate);
+			const parsedClosingDate = closingDate ? parseDate(closingDate) : null;
 
 			if (!parsedPurchaseDate) {
 				return fail(400, { error: 'Invalid purchase date' });
@@ -64,11 +87,16 @@ export const actions = {
 				parsedPurchaseDate,
 				quantity,
 				currency,
-				ticker
+				ticker,
+				status,
+				closingPrice,
+				parsedClosingDate,
+				closingNote
 			);
 			if (!updatedAsset) {
 				return fail(404, { error: 'Asset not found or unauthorized' });
 			}
+			console.log('Updated asset: ', updatedAsset);
 			return { success: true, asset: updatedAsset };
 		} catch (e) {
 			console.error(e);

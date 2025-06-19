@@ -167,14 +167,14 @@
 	let user = $derived(data.user);
 </script>
 
-<div class="container my-4 max-w-5xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
+<div class="container my-8 max-w-7xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>
 				<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
 			</div>
 			<div
-				class="mb-8 flex w-full flex-col items-center justify-between gap-2 md:flex-row md:flex-wrap"
+				class="mb-8 flex w-full flex-col items-center justify-between gap-4 md:flex-row md:flex-wrap"
 			>
 				<PieChart data={categoryDataCurrent} title="Allocation - current value" />
 				<PieChart data={categoryDataPurchase} title="Allocation - purchase cost" />

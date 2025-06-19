@@ -9,18 +9,26 @@ export async function createAsset(
 	purchaseDate,
 	quantity,
 	currency,
-	ticker
+	ticker,
+	status = 'open',
+	closingPrice = null,
+	closingDate = null,
+	closingNote = null
 ) {
 	// In SQLite we'll use the built-in hex() and unhex() functions for binary-to-hex conversion
 	// and AES-256-CBC encryption from crypto module for encryption
 	const result = await query(
-		`INSERT INTO assets (user_id, category, encrypted_name, encrypted_purchase_price, encrypted_purchase_date, quantity, currency, encrypted_ticker) 
+		`INSERT INTO assets (user_id, category, encrypted_name, encrypted_purchase_price, encrypted_purchase_date, quantity, currency, encrypted_ticker, status, encrypted_closing_price, encrypted_closing_date, closing_note)
     VALUES (?, ?, 
          hex(AES_ENCRYPT(?, ?)),
          hex(AES_ENCRYPT(?, ?)),
          hex(AES_ENCRYPT(?, ?)),
          ?, ?, 
-         hex(AES_ENCRYPT(?, ?)))
+         hex(AES_ENCRYPT(?, ?)),
+         ?,
+         ${closingPrice !== null ? 'hex(AES_ENCRYPT(?, ?))' : 'NULL'},
+         ${closingDate !== null ? 'hex(AES_ENCRYPT(?, ?))' : 'NULL'},
+         ?)
     RETURNING *`,
 		[
 			userId,
@@ -34,7 +42,11 @@ export async function createAsset(
 			quantity,
 			currency,
 			ticker || '',
-			ENCRYPTION_KEY
+			ENCRYPTION_KEY,
+			status,
+			...(closingPrice !== null ? [closingPrice.toString(), ENCRYPTION_KEY] : []),
+			...(closingDate !== null ? [closingDate.toString(), ENCRYPTION_KEY] : []),
+			closingNote
 		]
 	);
 	return result.rows[0];
@@ -47,10 +59,22 @@ export async function getAssetsByUserId(userId) {
             CAST(AES_DECRYPT(unhex(encrypted_purchase_price), ?) AS DECIMAL) as purchase_price,
             AES_DECRYPT(unhex(encrypted_purchase_date), ?) as purchase_date,
             quantity, currency,
-            AES_DECRYPT(unhex(encrypted_ticker), ?) as ticker
+            AES_DECRYPT(unhex(encrypted_ticker), ?) as ticker,
+            status,
+            CAST(AES_DECRYPT(unhex(encrypted_closing_price), ?) AS DECIMAL) as closing_price,
+            AES_DECRYPT(unhex(encrypted_closing_date), ?) as closing_date,
+            closing_note
      FROM assets
      WHERE user_id = ?`,
-		[ENCRYPTION_KEY, ENCRYPTION_KEY, ENCRYPTION_KEY, ENCRYPTION_KEY, userId]
+		[
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			userId
+		]
 	);
 	return result.rows;
 }
@@ -62,10 +86,22 @@ export async function getAssetById(assetId) {
             CAST(AES_DECRYPT(unhex(encrypted_purchase_price), ?) AS DECIMAL) as purchase_price,
             AES_DECRYPT(unhex(encrypted_purchase_date), ?) as purchase_date,
             quantity, currency,
-            AES_DECRYPT(unhex(encrypted_ticker), ?) as ticker
+            AES_DECRYPT(unhex(encrypted_ticker), ?) as ticker,
+            status,
+            CAST(AES_DECRYPT(unhex(encrypted_closing_price), ?) AS DECIMAL) as closing_price,
+            AES_DECRYPT(unhex(encrypted_closing_date), ?) as closing_date,
+            closing_note
      FROM assets
      WHERE id = ?`,
-		[ENCRYPTION_KEY, ENCRYPTION_KEY, ENCRYPTION_KEY, ENCRYPTION_KEY, assetId]
+		[
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			ENCRYPTION_KEY,
+			assetId
+		]
 	);
 	return result.rows[0];
 }
@@ -79,7 +115,11 @@ export async function updateAsset(
 	purchaseDate,
 	quantity,
 	currency,
-	ticker
+	ticker,
+	status = 'open',
+	closingPrice = null,
+	closingDate = null,
+	closingNote = null
 ) {
 	const result = await query(
 		`UPDATE assets
@@ -90,6 +130,10 @@ export async function updateAsset(
          quantity = ?,
          currency = ?,
          encrypted_ticker = hex(AES_ENCRYPT(?, ?)),
+         status = ?,
+         encrypted_closing_price = ${closingPrice !== null ? 'hex(AES_ENCRYPT(?, ?))' : 'NULL'},
+         encrypted_closing_date = ${closingDate !== null ? 'hex(AES_ENCRYPT(?, ?))' : 'NULL'},
+         closing_note = ?,
          updated_at = datetime('now')
      WHERE id = ? AND user_id = ?
      RETURNING *`,
@@ -105,6 +149,10 @@ export async function updateAsset(
 			currency,
 			ticker || '',
 			ENCRYPTION_KEY,
+			status,
+			...(closingPrice !== null ? [closingPrice.toString(), ENCRYPTION_KEY] : []),
+			...(closingDate !== null ? [closingDate.toString(), ENCRYPTION_KEY] : []),
+			closingNote,
 			assetId,
 			userId
 		]

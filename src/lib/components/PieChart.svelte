@@ -28,7 +28,7 @@
 	});
 </script>
 
-<div class="mb-4 max-w-2xs">
+<div class="w-[250px]">
 	{#if Chart}
 		<Chart {data} {options} />
 	{:else}

@@ -26,6 +26,12 @@ export const actions = {
 		const quantity = parseFloat(formData.get('quantity'));
 		const currency = formData.get('currency');
 		const ticker = formData.get('ticker');
+		const status = formData.get('status') || 'open';
+		const closingPrice = formData.get('closing_price')
+			? parseFloat(formData.get('closing_price'))
+			: null;
+		const closingDate = formData.get('closing_date') || null;
+		const closingNote = formData.get('closing_note') || null;
 
 		if (
 			!category ||
@@ -53,7 +59,11 @@ export const actions = {
 				parsedPurchaseDate,
 				quantity,
 				currency,
-				ticker
+				ticker,
+				status,
+				closingPrice,
+				closingDate,
+				closingNote
 			);
 			return { success: true };
 		} catch (error) {

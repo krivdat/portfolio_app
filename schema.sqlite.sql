@@ -21,6 +21,10 @@ CREATE TABLE IF NOT EXISTS assets (
     quantity DECIMAL NOT NULL,
     currency TEXT NOT NULL,
     encrypted_ticker TEXT,
+    status TEXT NOT NULL DEFAULT 'open',
+    encrypted_closing_price TEXT,
+    encrypted_closing_date TEXT,
+    closing_note TEXT,
     created_at DATETIME DEFAULT (datetime('now')),
     updated_at DATETIME DEFAULT (datetime('now')),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
