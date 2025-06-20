@@ -7,16 +7,16 @@
 	let user = $derived(data.user);
 </script>
 
-<div class="container my-4 max-w-4xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
-	{#if user}
+{#if user}
+	<div class="px-4 py-4 md:p-8 md:px-0">
 		<AssetForm />
+	</div>
+{/if}
 
-		{#if assets && assets.length > 0}
-			<AssetList {assets} />
-		{:else}
-			<p>No assets found.</p>
-		{/if}
+<div class="px-4 py-4 md:p-8 md:px-0">
+	{#if assets && assets.length > 0}
+		<AssetList {assets} />
 	{:else}
-		<p>Please <a href="/login">login</a> to manage your assets.</p>
+		<p>No assets found.</p>
 	{/if}
 </div>

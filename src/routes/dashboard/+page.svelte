@@ -164,15 +164,11 @@
 	);
 </script>
 
-<div class="container mt-4 mb-8 max-w-7xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
-	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
-		<div>
-			<div>
-				<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
-			</div>
-			<div
-				class="mb-8 flex w-full flex-col items-center justify-between gap-4 md:flex-row md:flex-wrap"
-			>
+<div class="px-4 py-4 md:px-0 md:py-8">
+	<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
+		{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
+			<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
+			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
 				<PieChart data={categoryDataCurrent} title="Categories - current value" />
 				<PieChart data={categoryDataPurchase} title="Categories - purchase cost" />
 				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
@@ -326,8 +322,8 @@
 					</table>
 				</div>
 			</div>
-		</div>
-	{:else}
-		<p>No assets found.</p>
-	{/if}
+		{:else}
+			<p>No assets found.</p>
+		{/if}
+	</div>
 </div>

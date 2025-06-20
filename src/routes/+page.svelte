@@ -27,7 +27,7 @@
 	);
 </script>
 
-<div class="fixed inset-0 -z-10 h-full w-full">
+<!-- <div class="fixed inset-0 -z-10 h-full w-full">
 	<img
 		src="/stock-chart.png"
 		alt="Stock chart background"
@@ -35,7 +35,7 @@
 		aria-hidden="true"
 	/>
 	<div class="absolute inset-0 bg-gradient-to-b from-blue-900/30 to-blue-700/20"></div>
-</div>
+</div> -->
 
 <div class="mx-auto mt-10 flex w-full max-w-xs flex-col items-center">
 	<h1 class="mt-8 mb-8 text-3xl font-bold text-white drop-shadow-lg">Portfolio Tracker</h1>
