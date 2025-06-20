@@ -1,6 +1,5 @@
 import { getSession } from '$lib/utils/auth';
 import { getUserById } from '$lib/db/user';
-import { error } from '@sveltejs/kit';
 // import rateLimit from 'express-rate-limit';
 
 // const limiter = rateLimit({
@@ -12,7 +11,7 @@ import { error } from '@sveltejs/kit';
 // });
 
 export const handle = async ({ event, resolve }) => {
-	const userId = getSession(event.cookies) || null;
+	const userId = await getSession(event.cookies);
 
 	if (userId) {
 		const user = await getUserById(userId);

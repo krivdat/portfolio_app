@@ -29,7 +29,7 @@ export const actions = {
 			return fail(401, { error: 'Invalid credentials.' });
 		}
 
-		setSession(cookies, user.id);
+		await setSession(cookies, user.id);
 		throw redirect(303, '/');
 	}
 };
