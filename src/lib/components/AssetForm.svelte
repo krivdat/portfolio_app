@@ -35,7 +35,7 @@
 	}
 </script>
 
-<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
+<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
 	<form
 		method="POST"
 		action={isUpdate ? '?/update' : '?/create'}

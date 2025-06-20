@@ -3,7 +3,7 @@
 	export let assets;
 </script>
 
-<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
+<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
 	<h2 class="mx-4 my-4 text-xl font-bold text-gray-800">Assets List</h2>
 	{#if assets && assets.length > 0}
 		<div class="overflow-x-auto">

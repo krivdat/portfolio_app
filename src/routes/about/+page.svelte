@@ -2,7 +2,7 @@
 </script>
 
 <div class="px-4 py-4 md:p-8 md:px-0">
-	<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
+	<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-8 shadow">
 		<h1 class="mb-4 text-xl font-bold text-gray-800">About Portfolio Tracker</h1>
 		<p class="mb-2 text-sm text-gray-700">
 			<strong>Portfolio Tracker</strong> is a modern web application designed to help you manage and

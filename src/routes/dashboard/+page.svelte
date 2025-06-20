@@ -165,7 +165,7 @@
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
-	<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
+	<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
 		{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 			<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
 			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
@@ -177,16 +177,130 @@
 			<div>
 				<h2 class="mb-2 font-semibold">Asset List</h2>
 				<div class="w-full">
-					<table class="w-full border-collapse text-xs">
+					<!-- Mobile-first asset list -->
+					<div class="block md:hidden">
+						{#each Object.entries(groupedAssets) as [ticker, assets]}
+							{@const summary = getSummary(assets)}
+							<div
+								class="mb-2 cursor-pointer rounded bg-blue-50 p-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+								role="button"
+								tabindex="0"
+								onclick={() => toggleTicker(ticker)}
+								onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleTicker(ticker)}
+								aria-expanded={!!expandedTickers[ticker]}
+							>
+								<div class="flex items-center justify-between">
+									<div class="w-36 max-w-36 min-w-36 font-semibold break-words">{summary.name}</div>
+									<div class="text-right">
+										<span class="text-xs text-gray-400">Qty</span>
+										<div>
+											{Number.isInteger(summary.totalQty)
+												? summary.totalQty
+												: summary.totalQty.toFixed(4)}
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-xs text-gray-400">Current</span>
+										<div>
+											{formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-xs text-gray-400">Market Value</span>
+										<div>{formatCurrency(summary.marketValue, 'en-US', summary.currency, 0)}</div>
+									</div>
+								</div>
+								<div class="mt-1 flex items-end justify-between text-xs">
+									<div class="pl-1 text-gray-500">
+										<span class="text-xs text-gray-400">Purchase @</span>
+										<div>
+											{formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-xs text-gray-400">P/L</span>
+										<div class={summary.profitLoss < 0 ? 'text-red-600' : ''}>
+											{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}
+										</div>
+										<div class={summary.profitLossPct < 0 ? 'text-red-600' : ''}>
+											{summary.profitLossPct.toFixed(1)}%
+										</div>
+									</div>
+								</div>
+								{#if expandedTickers[ticker]}
+									<div class="mt-2 space-y-1">
+										{#each [...assets].sort((a, b) => new Date(a.purchase_date) - new Date(b.purchase_date)) as asset}
+											<div class="rounded bg-gray-50 p-2 text-xs">
+												<div class="flex items-center justify-between">
+													<div class="w-32 max-w-32 min-w-32 font-medium break-words">
+														{asset.name}
+													</div>
+													<div class="text-right">
+														<span class="text-[10px] text-gray-400">Qty</span>
+														<div>
+															{Number.isInteger(asset.quantity)
+																? asset.quantity
+																: asset.quantity.toFixed(4)}
+														</div>
+													</div>
+													<div class="text-right">
+														<span class="text-[10px] text-gray-400">Current</span>
+														<div>
+															{formatCurrency(asset.current_price, 'en-US', asset.currency)}
+														</div>
+													</div>
+													<div class="text-right">
+														<span class="text-[10px] text-gray-400">Market Value</span>
+														<div>
+															{formatCurrency(
+																calculateMarketValueTotal(asset),
+																'en-US',
+																asset.currency,
+																0
+															)}
+														</div>
+													</div>
+												</div>
+												<div class="mt-1 flex items-end justify-between text-[10px]">
+													<div class="pl-1 text-gray-500">
+														<span class="text-[10px] text-gray-400">Purchase @</span>
+														<div>
+															{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}
+														</div>
+													</div>
+													<div class="text-right">
+														<span class="text-[10px] text-gray-400">P/L</span>
+														<div class={calculateProfitLoss(asset) < 0 ? 'text-red-600' : ''}>
+															{formatCurrency(
+																calculateProfitLoss(asset),
+																'en-US',
+																asset.currency,
+																0
+															)}
+														</div>
+														<div class={calculateProfitLossPct(asset) < 0 ? 'text-red-600' : ''}>
+															{(calculateProfitLossPct(asset) * 100).toFixed(1)}%
+														</div>
+													</div>
+												</div>
+											</div>
+										{/each}
+									</div>
+								{/if}
+							</div>
+						{/each}
+					</div>
+					<!-- Desktop table -->
+					<table class="hidden w-full border-collapse text-xs md:table">
 						<thead>
 							<tr>
 								<th class="px-2 py-1 text-left">Name</th>
 								<th class="px-2 py-1 text-left">Cat.</th>
 								<th class="px-2 py-1 text-right">Qty</th>
-								<th class="hidden px-2 py-1 text-right md:table-cell">Purchase <br />Date</th>
-								<th class="hidden px-2 py-1 text-right md:table-cell">Purchase<br />Price</th>
+								<th class="px-2 py-1 text-right">Purchase <br />Date</th>
+								<th class="px-2 py-1 text-right">Purchase<br />Price</th>
 								<th class="px-2 py-1 text-right">Current <br />Price</th>
-								<th class="hidden px-2 py-1 text-right md:table-cell">Purchase<br />Total</th>
+								<th class="px-2 py-1 text-right">Purchase<br />Total</th>
 								<th class="px-2 py-1 text-right">Market<br />Value</th>
 								<th class="px-2 py-1 text-right">P/L</th>
 								<th class="px-2 py-1 text-right">P/L %</th>
@@ -212,16 +326,16 @@
 											? summary.totalQty
 											: summary.totalQty.toFixed(4)}
 									</td>
-									<td class="hidden px-2 py-1 text-right md:table-cell">
+									<td class="px-2 py-1 text-right">
 										{summary.oldestPurchaseDate ? formatDate(summary.oldestPurchaseDate) : ''}
 									</td>
-									<td class="hidden px-2 py-1 text-right md:table-cell">
+									<td class="px-2 py-1 text-right">
 										{formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
 									</td>
 									<td class="px-2 py-1 text-right">
 										{formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
 									</td>
-									<td class="hidden px-2 py-1 text-right md:table-cell"
+									<td class="px-2 py-1 text-right"
 										>{formatCurrency(summary.purchaseTotal, 'en-US', summary.currency, 0)}</td
 									>
 									<td class="px-2 py-1 text-right"
@@ -244,19 +358,15 @@
 													? asset.quantity
 													: asset.quantity.toFixed(4)}
 											</td>
-											<td class="hidden px-2 py-1 text-right md:table-cell"
-												>{formatDate(asset.purchase_date)}</td
-											>
-											<td class="hidden px-2 py-1 text-right md:table-cell"
+											<td class="px-2 py-1 text-right">{formatDate(asset.purchase_date)}</td>
+											<td class="px-2 py-1 text-right"
 												>{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
 											>
 											<td class="px-2 py-1 text-right"
 												>{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
 											>
 											<td
-												class="hidden px-2 py-1 text-right md:table-cell {calculatePurchaseTotal(
-													asset
-												) < 0
+												class="px-2 py-1 text-right {calculatePurchaseTotal(asset) < 0
 													? 'text-red-600'
 													: ''}"
 												>{formatCurrency(
@@ -300,13 +410,11 @@
 								<td class="px-2 py-1">Total:</td>
 								<td></td>
 								<td></td>
-								<td class="hidden md:table-cell"></td>
-								<td class="hidden md:table-cell"></td>
 								<td></td>
-								<td
-									class="hidden px-2 py-1 text-right md:table-cell {purchaseTotal < 0
-										? 'text-red-600'
-										: ''}">{formatCurrency(purchaseTotal, 'en-US', 'EUR', 0)}</td
+								<td></td>
+								<td></td>
+								<td class="px-2 py-1 text-right"
+									>{formatCurrency(purchaseTotal, 'en-US', 'EUR', 0)}</td
 								>
 								<td class="px-2 py-1 text-right {marketValueTotal < 0 ? 'text-red-600' : ''}"
 									>{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}</td
