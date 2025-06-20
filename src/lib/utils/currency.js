@@ -6,7 +6,7 @@
  * @param {string} [currencyCode='USD'] - The currency code to use (e.g., 'USD', 'EUR', 'GBP').
  * @returns {string} The formatted currency string, or an empty string if the input is invalid.
  */
-export function formatCurrency(number, locale = 'en-US', currencyCode = 'USD', decimalPoints = 2) {
+export function formatCurrency(number, locale = 'en-US', currencyCode = 'EUR', decimalPoints = 2) {
 	try {
 		if (typeof number !== 'number') {
 			return ''; // Or throw an error, depending on your needs

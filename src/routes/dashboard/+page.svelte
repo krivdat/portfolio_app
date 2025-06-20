@@ -162,12 +162,9 @@
 			};
 		})
 	);
-
-	// Get user from data
-	let user = $derived(data.user);
 </script>
 
-<div class="container my-8 max-w-7xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
+<div class="container mt-4 mb-8 max-w-7xl rounded bg-white p-2 shadow-sm sm:mx-auto sm:p-4 sm:px-6">
 	{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 		<div>
 			<div>
@@ -176,8 +173,8 @@
 			<div
 				class="mb-8 flex w-full flex-col items-center justify-between gap-4 md:flex-row md:flex-wrap"
 			>
-				<PieChart data={categoryDataCurrent} title="Allocation - current value" />
-				<PieChart data={categoryDataPurchase} title="Allocation - purchase cost" />
+				<PieChart data={categoryDataCurrent} title="Categories - current value" />
+				<PieChart data={categoryDataPurchase} title="Categories - purchase cost" />
 				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
 				<BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
 			</div>

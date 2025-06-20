@@ -20,15 +20,16 @@
 </svelte:head>
 
 {#if !$page.url.pathname.startsWith('/login') && !$page.url.pathname.startsWith('/register')}
-	<header class="sticky top-0 left-0 z-10 w-full bg-neutral-200 text-sm font-semibold shadow-sm">
+	<header class="sticky top-0 left-0 z-10 w-full bg-neutral-200 text-sm font-semibold shadow-lg">
 		<nav>
-			<div class="tex flex w-full justify-between px-1 py-1 md:px-2 md:py-2">
+			<div class="tex flex w-full justify-between px-2 py-1 md:px-2 md:py-2">
 				<!-- Left group -->
 				<div class="flex items-center gap-2 md:gap-4">
 					<a class="hover:text-blue-600" href="/">Home</a>
 					{#if user}
 						<a class="hover:text-blue-600" href="/dashboard">Dashboard</a>
 						<a class="hover:text-blue-600" href="/assets">Assets</a>
+						<a class="hover:text-blue-600" href="/about">About</a>
 					{/if}
 				</div>
 				<!-- Right group -->

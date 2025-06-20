@@ -30,6 +30,6 @@ export const actions = {
 		}
 
 		setSession(cookies, user.id);
-		throw redirect(303, '/dashboard');
+		throw redirect(303, '/');
 	}
 };

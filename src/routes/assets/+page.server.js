@@ -1,15 +1,6 @@
-import { getAssetsByUserId, createAsset } from '$lib/db/asset';
+import { createAsset } from '$lib/db/asset';
 import { fail } from '@sveltejs/kit';
 import { parseDate } from '$lib/utils/date';
-
-export async function load({ locals }) {
-	const assets = await getAssetsByUserId(locals.user.id);
-	console.log('In file /routes/assets/page.server.js, assets: ', assets);
-
-	return {
-		assets
-	};
-}
 
 export const actions = {
 	create: async ({ request, locals }) => {
