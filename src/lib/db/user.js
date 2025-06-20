@@ -87,3 +87,8 @@ export async function updateUserById(userId, { first_name, last_name, email, pro
 	const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
 	await query(sql, values);
 }
+
+export async function updateUserPassword(userId, newPassword) {
+	const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+	await query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
+}
