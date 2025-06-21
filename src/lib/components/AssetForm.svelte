@@ -12,7 +12,7 @@
 		purchase_price: 0.0,
 		purchase_date: today,
 		quantity: 0,
-		currency: '',
+		currency: 'EUR',
 		ticker: '',
 		status: 'open',
 		closing_price: '',
@@ -67,7 +67,7 @@
 					name="category"
 					bind:value={asset.category}
 					required
-					placeholder="e.g. ETF, STOCK, CRYPTO, ..."
+					placeholder="e.g. ETF, STOCK, CRYPTO, COMMODITY, ..."
 					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
 					disabled={asset.status === 'closed'}
 				/>
@@ -92,7 +92,7 @@
 					id="ticker"
 					name="ticker"
 					bind:value={asset.ticker}
-					placeholder="e.g. AAPL, BTC"
+					placeholder="e.g. EUNL.DE, SPYL.DE, BTC-USD, ..."
 					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
 					disabled={asset.status === 'closed'}
 				/>
@@ -140,16 +140,16 @@
 			</div>
 			<div class="flex flex-col gap-0.5 md:col-span-1">
 				<label for="currency" class="text-sm font-medium text-gray-600">Currency</label>
-				<input
-					type="text"
+				<select
 					id="currency"
 					name="currency"
 					bind:value={asset.currency}
 					required
-					placeholder="e.g. USD, EUR, BTC"
-					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
+					class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
 					disabled={asset.status === 'closed'}
-				/>
+				>
+					<option value="EUR">EUR - Euro</option>
+				</select>
 			</div>
 
 			<div class="flex flex-col gap-0.5 md:col-span-1">

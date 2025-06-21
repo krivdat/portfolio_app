@@ -162,6 +162,16 @@
 			};
 		})
 	);
+
+	let assetsMarketValueData = $derived(
+		Object.entries(groupedAssets).map(([ticker, assets]) => {
+			const summary = getSummary(assets);
+			return {
+				group: ticker,
+				value: summary.marketValue
+			};
+		})
+	);
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
@@ -169,16 +179,30 @@
 		{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
 			<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
 			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
-				<PieChart data={categoryDataCurrent} title="Categories - current value" />
-				<PieChart data={categoryDataPurchase} title="Categories - purchase cost" />
+				<PieChart data={categoryDataCurrent} title="Categories - current allocation" />
+				<PieChart data={assetsMarketValueData} title="Assets - market value" />
+				<!-- <PieChart data={categoryDataPurchase} title="Categories - purchase cost" /> -->
 				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
 				<BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
 			</div>
 			<div>
-				<h2 class="mb-2 font-semibold">Asset List</h2>
 				<div class="w-full">
 					<!-- Mobile-first asset list -->
 					<div class="block md:hidden">
+						<div class="mb-2 flex items-center justify-between">
+							<h2 class="mb-2 font-semibold">Asset List</h2>
+							<div class="text-right">
+								<div class="text-sm font-bold">
+									{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
+								</div>
+								<div class={profitLossTotal < 0 ? 'text-xs text-red-600' : 'text-xs'}>
+									{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}
+									<span class={profitLossPctTotal < 0 ? 'text-red-600' : ''}>
+										({profitLossPctTotal.toFixed(1)}%)
+									</span>
+								</div>
+							</div>
+						</div>
 						{#each Object.entries(groupedAssets) as [ticker, assets]}
 							{@const summary = getSummary(assets)}
 							<div
@@ -291,6 +315,7 @@
 						{/each}
 					</div>
 					<!-- Desktop table -->
+					<h2 class="mb-2 font-semibold">Asset List</h2>
 					<table class="hidden w-full border-collapse text-xs md:table">
 						<thead>
 							<tr>
