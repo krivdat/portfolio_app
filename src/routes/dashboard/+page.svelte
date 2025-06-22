@@ -172,6 +172,14 @@
 			};
 		})
 	);
+
+	// Track which assets have missing Yahoo prices
+	let assetsWithMissingYahooPrice = $derived(
+		assetsWithCurrentPrice.filter(
+			(asset) =>
+				asset.ticker && (!currentPrices[asset.ticker] || currentPrices[asset.ticker]?.price == null)
+		)
+	);
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
@@ -225,7 +233,11 @@
 									</div>
 									<div class="text-right">
 										<span class="text-xs text-gray-400">Current</span>
-										<div>
+										<div
+											class={assetsWithMissingYahooPrice.find((a) => a.ticker === ticker)
+												? 'font-semibold text-yellow-600'
+												: ''}
+										>
 											{formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
 										</div>
 									</div>
@@ -313,6 +325,15 @@
 								{/if}
 							</div>
 						{/each}
+						{#if assetsWithMissingYahooPrice.length > 0}
+							<div
+								class="mt-4 rounded border border-yellow-200 bg-yellow-50 p-2 text-xs text-yellow-800"
+							>
+								<b>Note:</b> Current price could not be fetched for: {assetsWithMissingYahooPrice
+									.map((a) => a.name)
+									.join(', ')}. Purchase price is shown instead.
+							</div>
+						{/if}
 					</div>
 					<!-- Desktop table -->
 					<h2 class="mb-2 hidden font-semibold md:block">Asset List</h2>
@@ -357,7 +378,13 @@
 									<td class="px-2 py-1 text-right">
 										{formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
 									</td>
-									<td class="px-2 py-1 text-right">
+									<td
+										class="px-2 py-1 text-right {assetsWithMissingYahooPrice.find(
+											(a) => a.ticker === ticker
+										)
+											? 'font-semibold text-yellow-600'
+											: ''}"
+									>
 										{formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
 									</td>
 									<td class="px-2 py-1 text-right"
