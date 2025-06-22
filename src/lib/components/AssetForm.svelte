@@ -22,6 +22,7 @@
 
 	let asset = $state(assetProp ? { ...defaultAsset, ...assetProp } : { ...defaultAsset });
 	let showTickerInfo = $state(false);
+	let showDeleteConfirm = $state(false);
 
 	function handleStatusChange(e) {
 		asset.status = e.target.value;
@@ -32,18 +33,6 @@
 		} else if (asset.status === 'closed' && !asset.closing_date) {
 			// Set closing_date to today if not already set
 			asset.closing_date = today;
-		}
-	}
-
-	async function handleDelete() {
-		if (confirm('Are you sure you want to delete this asset? This action cannot be undone.')) {
-			await fetch(`?/delete`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ id: asset.id })
-			});
-			goto('/assets');
-			invalidateAll();
 		}
 	}
 </script>
@@ -271,11 +260,43 @@
 				<button
 					type="button"
 					class="flex-1 rounded bg-red-500 px-3 py-1.5 text-base font-semibold text-white shadow transition-colors duration-150 hover:bg-red-600 focus:ring-1 focus:ring-red-300 focus:outline-none"
-					onclick={handleDelete}
+					onclick={() => (showDeleteConfirm = true)}
 				>
 					Delete Asset
 				</button>
 			{/if}
 		</div>
 	</form>
+
+	{#if showDeleteConfirm}
+		<form
+			method="POST"
+			action="?/delete"
+			class="mt-4"
+			use:enhance={() => {
+				return async ({ result }) => {
+					if (result.type === 'success') {
+						await invalidateAll();
+						goto('/assets');
+					}
+				};
+			}}
+		>
+			<div class="mb-2 text-base font-semibold text-gray-800">
+				Are you sure you want to delete this asset? This action cannot be undone!
+			</div>
+			<div class="flex justify-center gap-2">
+				<button
+					type="submit"
+					class="rounded bg-red-500 px-3 py-1.5 font-semibold text-white hover:bg-red-600 focus:ring-1 focus:ring-red-300 focus:outline-none"
+					>Yes, Delete</button
+				>
+				<button
+					type="button"
+					class="rounded bg-gray-200 px-3 py-1.5 font-semibold text-gray-800 hover:bg-gray-300 focus:ring-1 focus:ring-gray-300 focus:outline-none"
+					onclick={() => (showDeleteConfirm = false)}>Cancel</button
+				>
+			</div>
+		</form>
+	{/if}
 </div>

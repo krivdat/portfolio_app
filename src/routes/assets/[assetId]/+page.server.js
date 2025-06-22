@@ -105,16 +105,16 @@ export const actions = {
 	},
 	delete: async ({ params, locals }) => {
 		if (!locals.user) {
-			return fail(401, { message: 'Unauthorized' });
+			return fail(401, { error: 'Unauthorized' });
 		}
 		try {
 			const deletedAsset = await deleteAsset(params.assetId, locals.user.id);
 			if (!deletedAsset) {
-				return fail(404, { message: 'Asset not found or unauthorized' });
+				return fail(404, { error: 'Asset not found or unauthorized' });
 			}
 		} catch (e) {
 			console.error(e);
-			return fail(500, { message: 'Could not delete asset' });
+			return fail(500, { error: 'Could not delete asset' });
 		}
 		return { success: true };
 	}
