@@ -34,6 +34,18 @@
 			asset.closing_date = today;
 		}
 	}
+
+	async function handleDelete() {
+		if (confirm('Are you sure you want to delete this asset? This action cannot be undone.')) {
+			await fetch(`?/delete`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ id: asset.id })
+			});
+			goto('/assets');
+			invalidateAll();
+		}
+	}
 </script>
 
 <div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
@@ -248,11 +260,22 @@
 			{/if}
 		</div>
 
-		<button
-			type="submit"
-			class="mt-4 w-full rounded bg-blue-200 px-3 py-1.5 text-base font-semibold text-blue-900 shadow transition-colors duration-150 hover:bg-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none"
-		>
-			{isUpdate ? 'Update Asset' : 'Add Asset'}
-		</button>
+		<div class="mt-4 flex gap-4">
+			<button
+				type="submit"
+				class="flex-1 rounded bg-blue-300 px-3 py-1.5 text-base font-semibold text-blue-900 shadow transition-colors duration-150 hover:bg-blue-400 focus:ring-1 focus:ring-blue-200 focus:outline-none"
+			>
+				{isUpdate ? 'Update Asset' : 'Add Asset'}
+			</button>
+			{#if isUpdate}
+				<button
+					type="button"
+					class="flex-1 rounded bg-red-500 px-3 py-1.5 text-base font-semibold text-white shadow transition-colors duration-150 hover:bg-red-600 focus:ring-1 focus:ring-red-300 focus:outline-none"
+					onclick={handleDelete}
+				>
+					Delete Asset
+				</button>
+			{/if}
+		</div>
 	</form>
 </div>

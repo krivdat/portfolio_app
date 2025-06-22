@@ -14,4 +14,6 @@
 	});
 </script>
 
-<AssetForm asset={formattedAsset} isUpdate={true} />
+<div class="px-4 py-4 md:p-8 md:px-0">
+	<AssetForm asset={formattedAsset} isUpdate={true} />
+</div>
