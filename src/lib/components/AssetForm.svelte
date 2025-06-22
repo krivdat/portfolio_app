@@ -21,6 +21,7 @@
 	};
 
 	let asset = $state(assetProp ? { ...defaultAsset, ...assetProp } : { ...defaultAsset });
+	let showTickerInfo = $state(false);
 
 	function handleStatusChange(e) {
 		asset.status = e.target.value;
@@ -86,13 +87,56 @@
 				/>
 			</div>
 			<div class="flex flex-col gap-0.5 md:col-span-1">
-				<label for="ticker" class="text-sm font-medium text-gray-600">Ticker</label>
+				<label for="ticker" class="flex items-center gap-1 text-sm font-medium text-gray-600">
+					Ticker
+					<button
+						type="button"
+						tabindex="0"
+						aria-label="Ticker info"
+						class="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none"
+						onclick={() => (showTickerInfo = !showTickerInfo)}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="inline h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							><circle cx="12" cy="12" r="10" stroke-width="2" /><path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 16v-4m0-4h.01"
+							/></svg
+						>
+					</button>
+				</label>
+				{#if showTickerInfo}
+					<div class="mb-1 max-w-xs rounded bg-blue-50 p-2 text-xs text-gray-700 shadow">
+						<p class="mb-1 font-semibold">Ticker info:</p>
+						<ul class="list-disc pl-4">
+							<li>
+								The ticker must exist on <a
+									href="https://finance.yahoo.com/"
+									target="_blank"
+									rel="noopener"
+									class="text-blue-600 underline">Yahoo Finance</a
+								>.
+							</li>
+							<li>For Bitcoin use <span class="font-mono">BTC-USD</span>.</li>
+							<li>
+								If the ticker does not exist on Yahoo, the purchase price will be shown instead of
+								market price in asset lists and charts.
+							</li>
+						</ul>
+					</div>
+				{/if}
 				<input
 					type="text"
 					id="ticker"
 					name="ticker"
 					bind:value={asset.ticker}
-					placeholder="e.g. EUNL.DE, SPYL.DE, BTC-USD, ..."
+					placeholder="e.g. EUNL.DE, click question mark for more info"
 					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
 					disabled={asset.status === 'closed'}
 				/>
