@@ -315,7 +315,7 @@
 						{/each}
 					</div>
 					<!-- Desktop table -->
-					<h2 class="mb-2 font-semibold">Asset List</h2>
+					<h2 class="mb-2 hidden font-semibold md:block">Asset List</h2>
 					<table class="hidden w-full border-collapse text-xs md:table">
 						<thead>
 							<tr>
