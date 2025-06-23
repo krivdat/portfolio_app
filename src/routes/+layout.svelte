@@ -47,9 +47,14 @@
 					<a class="hover:text-blue-600" href="/about">About</a>
 					{#if user}
 						<a href="/profile" class="hover:text-blue-600">
-							{user.first_name || user.last_name
-								? `${user.first_name || ''} ${user.last_name || ''}`.trim()
-								: user.username}
+							<span class="md:hidden">
+								{user.first_name ? user.first_name : user.username}
+							</span>
+							<span class="hidden md:inline">
+								{user.first_name || user.last_name
+									? `${user.first_name || ''} ${user.last_name || ''}`.trim()
+									: user.username}
+							</span>
 						</a>
 						<span class="hidden md:inline">({user.email})</span>
 						<form action="/logout" method="POST" use:enhance>
