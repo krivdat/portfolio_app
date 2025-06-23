@@ -44,13 +44,12 @@
 		use:enhance={() => {
 			return async ({ result }) => {
 				if (result.type === 'success') {
+					await invalidateAll();
 					goto('/assets');
-					asset = { ...defaultAsset };
-					invalidateAll();
+					// asset = { ...defaultAsset };
 				}
 			};
 		}}
-		class=""
 	>
 		<h2 class="mb-2 text-xl font-bold text-gray-800">
 			{isUpdate ? 'Update Asset' : 'Add Asset'}

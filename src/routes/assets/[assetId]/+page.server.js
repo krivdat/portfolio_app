@@ -97,7 +97,7 @@ export const actions = {
 				return fail(404, { error: 'Asset not found or unauthorized' });
 			}
 			console.log('Updated asset: ', updatedAsset);
-			return { success: true, asset: updatedAsset };
+			return { success: true };
 		} catch (e) {
 			console.error(e);
 			return fail(500, { error: 'Could not update asset' });

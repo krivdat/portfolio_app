@@ -39,11 +39,12 @@
 					{#if user}
 						<a class="hover:text-blue-600" href="/dashboard">Dashboard</a>
 						<a class="hover:text-blue-600" href="/assets">Assets</a>
-						<a class="hover:text-blue-600" href="/about">About</a>
+						<a class="hover:text-blue-600" href="/closed">Closed</a>
 					{/if}
 				</div>
 				<!-- Right group -->
 				<div class="flex items-center gap-2 md:gap-4">
+					<a class="hover:text-blue-600" href="/about">About</a>
 					{#if user}
 						<a href="/profile" class="hover:text-blue-600">
 							{user.first_name || user.last_name
