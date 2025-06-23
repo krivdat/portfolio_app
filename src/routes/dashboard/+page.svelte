@@ -5,9 +5,10 @@
 	import { formatCurrency } from '$lib/utils/currency';
 
 	let { data } = $props();
+	let openAssets = $derived(data.assets.filter((asset) => asset.status === 'open'));
 	let currentPrices = $derived(data.currentPrices);
 	let assetsWithCurrentPrice = $derived(
-		data.assets.map((asset) => {
+		openAssets.map((asset) => {
 			const currentPriceData = asset.ticker ? currentPrices[asset.ticker] : null;
 			return {
 				...asset,
@@ -185,7 +186,7 @@
 <div class="px-4 py-4 md:px-0 md:py-8">
 	<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
 		{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
-			<h2 class="mb-8 font-semibold">Portfolio Overview</h2>
+			<h2 class="mb-8 font-semibold">Portfolio Overview - Open Positions</h2>
 			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
 				<PieChart data={categoryDataCurrent} title="Categories - current allocation" />
 				<PieChart data={assetsMarketValueData} title="Assets - market value" />
@@ -198,7 +199,7 @@
 					<!-- Mobile-first asset list -->
 					<div class="block md:hidden">
 						<div class="mb-2 flex items-center justify-between">
-							<h2 class="mb-2 font-semibold">Asset List</h2>
+							<h2 class="mb-2 font-semibold">Assets List</h2>
 							<div class="text-right">
 								<div class="text-sm font-bold">
 									{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}

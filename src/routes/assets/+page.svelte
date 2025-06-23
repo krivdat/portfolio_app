@@ -3,7 +3,7 @@
 	import AssetList from '$lib/components/AssetList.svelte';
 
 	let { data } = $props();
-	let assets = $derived(data.assets);
+	let assets = $derived(data.assets.filter((asset) => asset.status === 'open'));
 	let user = $derived(data.user);
 </script>
 
