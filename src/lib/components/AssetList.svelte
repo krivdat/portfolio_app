@@ -1,11 +1,11 @@
 <script>
 	import { formatDate } from '$lib/utils/date';
-	export let assets;
+	let { openAssets = [] } = $props();
 </script>
 
 <div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
 	<h2 class="mx-4 my-4 text-xl font-bold text-gray-800">Assets List</h2>
-	{#if assets && assets.length > 0}
+	{#if openAssets && openAssets.length > 0}
 		<div class="overflow-x-auto">
 			<table class="border-separate border-spacing-y-1">
 				<thead class="text-sm">
@@ -15,14 +15,10 @@
 						<th class="px-4 py-2 text-left font-semibold text-gray-700">Ticker</th>
 						<th class="px-4 py-2 text-left font-semibold text-gray-700">Purchase Date</th>
 						<th class="px-4 py-2 text-left font-semibold text-gray-700">Quantity</th>
-						<th class="px-4 py-2 text-left font-semibold text-gray-700">Status</th>
-						<th class="px-4 py-2 text-left font-semibold text-gray-700">Closing Price</th>
-						<th class="px-4 py-2 text-left font-semibold text-gray-700">Closing Date</th>
-						<th class="px-4 py-2 text-left font-semibold text-gray-700">Closing Note</th>
 					</tr>
 				</thead>
 				<tbody class="text-xs">
-					{#each assets as asset (asset.id)}
+					{#each openAssets as asset (asset.id)}
 						<tr class="bg-white transition-colors hover:bg-blue-50">
 							<td class="px-4 py-1">
 								<a
@@ -36,12 +32,6 @@
 							<td class="px-4 py-1 text-gray-600">{asset.ticker}</td>
 							<td class="px-4 py-1 text-gray-600">{formatDate(asset.purchase_date)}</td>
 							<td class="px-4 py-1 text-gray-600">{asset.quantity}</td>
-							<td class="px-4 py-1 text-gray-600">{asset.status}</td>
-							<td class="px-4 py-1 text-gray-600">{asset.closing_price}</td>
-							<td class="px-4 py-1 text-gray-600"
-								>{asset.closing_date ? formatDate(asset.closing_date) : ''}</td
-							>
-							<td class="px-4 py-1 text-gray-600">{asset.closing_note}</td>
 						</tr>
 					{/each}
 				</tbody>

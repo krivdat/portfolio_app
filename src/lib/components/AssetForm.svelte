@@ -2,8 +2,6 @@
 	import { enhance } from '$app/forms';
 	import { goto, invalidateAll } from '$app/navigation';
 
-	let { asset: assetProp, isUpdate, form } = $props();
-
 	const today = new Date().toISOString().split('T')[0];
 
 	const defaultAsset = {
@@ -20,7 +18,8 @@
 		closing_note: ''
 	};
 
-	let asset = $state(assetProp ? { ...defaultAsset, ...assetProp } : { ...defaultAsset });
+	let { asset = defaultAsset, isUpdate = false, form } = $props();
+
 	let showTickerInfo = $state(false);
 	let showDeleteConfirm = $state(false);
 
@@ -31,7 +30,6 @@
 			asset.closing_date = '';
 			asset.closing_note = '';
 		} else if (asset.status === 'closed' && !asset.closing_date) {
-			// Set closing_date to today if not already set
 			asset.closing_date = today;
 		}
 	}
