@@ -223,7 +223,10 @@
 								aria-expanded={!!expandedTickers[ticker]}
 							>
 								<div class="flex items-center justify-between">
-									<div class="w-36 max-w-36 min-w-36 font-semibold break-words">{summary.name}</div>
+									<div class="w-36 max-w-36 min-w-36 font-semibold break-words">
+										{summary.name}
+										<div><span class="text-xs font-normal">[{summary.ticker}]</span></div>
+									</div>
 									<div class="text-right">
 										<span class="text-xs text-gray-400">Qty</span>
 										<div>

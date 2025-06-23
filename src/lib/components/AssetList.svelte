@@ -15,6 +15,10 @@
 						<th class="px-4 py-2 text-left font-semibold text-gray-700">Ticker</th>
 						<th class="px-4 py-2 text-left font-semibold text-gray-700">Purchase Date</th>
 						<th class="px-4 py-2 text-left font-semibold text-gray-700">Quantity</th>
+						<th class="px-4 py-2 text-left font-semibold text-gray-700">Status</th>
+						<th class="px-4 py-2 text-left font-semibold text-gray-700">Closing Price</th>
+						<th class="px-4 py-2 text-left font-semibold text-gray-700">Closing Date</th>
+						<th class="px-4 py-2 text-left font-semibold text-gray-700">Closing Note</th>
 					</tr>
 				</thead>
 				<tbody class="text-xs">
@@ -32,6 +36,12 @@
 							<td class="px-4 py-1 text-gray-600">{asset.ticker}</td>
 							<td class="px-4 py-1 text-gray-600">{formatDate(asset.purchase_date)}</td>
 							<td class="px-4 py-1 text-gray-600">{asset.quantity}</td>
+							<td class="px-4 py-1 text-gray-600">{asset.status}</td>
+							<td class="px-4 py-1 text-gray-600">{asset.closing_price}</td>
+							<td class="px-4 py-1 text-gray-600"
+								>{asset.closing_date ? formatDate(asset.closing_date) : ''}</td
+							>
+							<td class="px-4 py-1 text-gray-600">{asset.closing_note}</td>
 						</tr>
 					{/each}
 				</tbody>
