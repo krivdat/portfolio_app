@@ -10,7 +10,13 @@ export async function fetchStockPrices(tickers) {
 	const cachedStockPrices = stockPricesCache.get('stockPrices');
 	let exchangeRates = exchangeRatesCache.get('exchangeRates');
 
+	let allTickersCached = false;
 	if (cachedStockPrices) {
+		const cachedTickers = Object.keys(cachedStockPrices);
+		allTickersCached = tickers.every((ticker) => cachedTickers.includes(ticker));
+	}
+
+	if (cachedStockPrices && allTickersCached) {
 		console.log('Using cached data for stock prices');
 		return cachedStockPrices;
 	}
