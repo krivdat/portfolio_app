@@ -21,6 +21,7 @@
 	let { asset = defaultAsset, isUpdate = false, form } = $props();
 
 	let showTickerInfo = $state(false);
+	let showPurchasePriceInfo = $state(false);
 	let showDeleteConfirm = $state(false);
 
 	function handleStatusChange(e) {
@@ -134,25 +135,75 @@
 					id="ticker"
 					name="ticker"
 					bind:value={asset.ticker}
-					placeholder="e.g. EUNL.DE, click question mark for more info"
+					placeholder="e.g. AAPL, EUNL.DE,... Click question mark for more info"
 					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
 					disabled={asset.status === 'closed'}
 				/>
 			</div>
-			<div class="flex flex-col gap-0.5 md:col-span-2">
-				<label for="purchasePrice" class="text-sm font-medium text-gray-600">Purchase Price</label>
-				<input
-					type="number"
-					id="purchasePrice"
-					name="purchasePrice"
-					bind:value={asset.purchase_price}
-					step="0.01"
-					min="0"
-					required
-					placeholder="0.00"
-					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
-					disabled={asset.status === 'closed'}
-				/>
+			<!-- Purchase Price & Currency: now in a flex row for all screens -->
+			<div class="flex flex-row gap-2 md:col-span-3">
+				<div class="flex flex-1 flex-col gap-0.5">
+					<label for="purchasePrice" class="text-sm font-medium text-gray-600"
+						>Purchase Price
+						<button
+							type="button"
+							tabindex="0"
+							aria-label="Ticker info"
+							class="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none"
+							onclick={() => (showPurchasePriceInfo = !showPurchasePriceInfo)}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="inline h-4 w-4"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<circle cx="12" cy="12" r="10" stroke-width="2" />
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 16v-4m0-4h.01"
+								/>
+							</svg>
+						</button>
+					</label>
+					{#if showPurchasePriceInfo}
+						<div class="mb-1 max-w-xs rounded bg-blue-50 p-2 text-xs text-gray-700 shadow">
+							<p class="mb-1 font-semibold">
+								Currently the portfolio account's currency can only be EUR. When adding / updating
+								asset in different currency please provide its EUR price equivalent (use exchange
+								rate at the time of buying).
+							</p>
+						</div>
+					{/if}
+					<input
+						type="number"
+						id="purchasePrice"
+						name="purchasePrice"
+						bind:value={asset.purchase_price}
+						step="0.01"
+						min="0"
+						required
+						placeholder="0.00"
+						class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
+						disabled={asset.status === 'closed'}
+					/>
+				</div>
+				<div class="flex w-32 flex-col gap-0.5">
+					<label for="currency" class="text-sm font-medium text-gray-600">Currency</label>
+					<select
+						id="currency"
+						name="currency"
+						bind:value={asset.currency}
+						required
+						class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
+						disabled={asset.status === 'closed'}
+					>
+						<option value="EUR">EUR - Euro</option>
+					</select>
+				</div>
 			</div>
 			<div class="flex flex-col gap-0.5 md:col-span-2">
 				<label for="purchaseDate" class="text-sm font-medium text-gray-600">Purchase Date</label>
@@ -179,19 +230,6 @@
 					class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
 					disabled={asset.status === 'closed'}
 				/>
-			</div>
-			<div class="flex flex-col gap-0.5 md:col-span-1">
-				<label for="currency" class="text-sm font-medium text-gray-600">Currency</label>
-				<select
-					id="currency"
-					name="currency"
-					bind:value={asset.currency}
-					required
-					class="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 transition-colors duration-150 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
-					disabled={asset.status === 'closed'}
-				>
-					<option value="EUR">EUR - Euro</option>
-				</select>
 			</div>
 
 			<div class="flex flex-col gap-0.5 md:col-span-1">

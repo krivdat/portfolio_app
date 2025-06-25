@@ -11,14 +11,18 @@ export async function fetchStockPrices(tickers) {
 	let exchangeRates = exchangeRatesCache.get('exchangeRates');
 
 	if (cachedStockPrices) {
-		console.log('Using cached data');
+		console.log('Using cached data for stock prices');
 		return cachedStockPrices;
 	}
 
 	if (!exchangeRates) {
 		console.log('Fetching exchange rates');
-		const exchangeRateResults = await yahooFinance.quote(['USDEUR=X', 'EURCZK=X', 'USDCZK=X']);
-		console.log('Exchange rates fetched', exchangeRateResults);
+		const exchangeRateResults = await yahooFinance.quote([
+			'USDEUR=X',
+			'GBPEUR=X',
+			'EURCZK=X',
+			'USDCZK=X'
+		]);
 		exchangeRates = exchangeRateResults.reduce((acc, result) => {
 			acc[result.symbol.slice(0, -2)] = {
 				rate: result.regularMarketPrice
@@ -36,23 +40,48 @@ export async function fetchStockPrices(tickers) {
 		throw new Error('USDEUR exchange rate not available');
 	}
 
+	if (!exchangeRates['GBPEUR']?.rate) {
+		throw new Error('GBPEUR exchange rate not available');
+	}
+
 	const results = await yahooFinance.quote(tickers);
+	// console.log(`Fetched stock prices for ${tickers.join(', ')}`, results);
+
 	// Convert array to object with ticker as key
-	const stockPrices = results.reduce((acc, result) => {
-		if (result.symbol === 'BTC-USD') {
-			// Special handling for BTC-USD
+	const supportedCurrencies = ['USD', 'GBP', 'CZK', 'EUR'];
+	const filteredResults = results.filter((result) => supportedCurrencies.includes(result.currency));
+	const unsupportedTickers = results
+		.filter((result) => !supportedCurrencies.includes(result.currency))
+		.map((result) => result.symbol);
+
+	const stockPrices = filteredResults.reduce((acc, result) => {
+		if (result.currency === 'USD' && exchangeRates['USDEUR']?.rate) {
 			acc[result.symbol] = {
-				price: result.regularMarketPrice * (exchangeRates['USDEUR']?.rate ?? 1),
+				price: result.regularMarketPrice * exchangeRates['USDEUR'].rate,
 				currency: 'EUR'
 			};
-		} else {
+		} else if (result.currency === 'GBP' && exchangeRates['GBPEUR']?.rate) {
+			acc[result.symbol] = {
+				price: result.regularMarketPrice * exchangeRates['GBPEUR'].rate,
+				currency: 'EUR'
+			};
+		} else if (result.currency === 'CZK' && exchangeRates['EURCZK']?.rate) {
+			acc[result.symbol] = {
+				price: result.regularMarketPrice * exchangeRates['EURCZK'].rate,
+				currency: 'EUR'
+			};
+		} else if (result.currency === 'EUR') {
 			acc[result.symbol] = {
 				price: result.regularMarketPrice,
-				currency: result.currency
+				currency: 'EUR'
 			};
 		}
 		return acc;
 	}, {});
+
+	if (unsupportedTickers.length > 0) {
+		console.warn(`Unsupported currencies for tickers: ${unsupportedTickers.join(', ')}`);
+	}
 
 	stockPricesCache.set('stockPrices', stockPrices);
 	return stockPrices;
