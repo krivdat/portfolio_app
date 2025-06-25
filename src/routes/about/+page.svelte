@@ -2,8 +2,10 @@
 </script>
 
 <div class="px-4 py-4 md:p-8 md:px-0">
+	<div class="mx-auto w-full max-w-screen-md">
+		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">About Portfolio Tracker</h1>
+	</div>
 	<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-8 shadow">
-		<h1 class="mb-4 text-xl font-bold text-gray-800">About Portfolio Tracker</h1>
 		<p class="mb-2 text-sm text-gray-700">
 			<strong>Portfolio Tracker</strong> is a modern web application designed to help you manage and
 			monitor your investment assets in one place.
@@ -16,8 +18,8 @@
 			<li>Enjoy a responsive, mobile-friendly, and accessible user experience.</li>
 		</ul>
 		<p class="text-sm text-gray-700">
-			Whether you are a beginner or an experienced investor, Portfolio Tracker gives you the tools
-			to stay organized and make informed decisions about your investments.
+			Portfolio Tracker gives you the tools to stay organized and make informed decisions about your
+			investments.
 		</p>
 	</div>
 </div>

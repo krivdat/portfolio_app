@@ -4,7 +4,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
-	<h2 class="mx-4 my-4 text-xl font-bold text-gray-800">Assets List</h2>
+	<h2 class="mx-4 my-4 font-bold text-gray-800">Assets List</h2>
 	{#if openAssets && openAssets.length > 0}
 		<div class="overflow-x-auto">
 			<table class="border-separate border-spacing-y-1">

@@ -184,9 +184,13 @@
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
-	<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
-		{#if assetsWithCurrentPrice && assetsWithCurrentPrice.length > 0}
-			<h2 class="mb-8 font-semibold">Portfolio Overview - Open Positions</h2>
+	<div class="mx-auto w-full max-w-screen-md">
+		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Portfolio Overview</h1>
+	</div>
+	<div class="mx-auto mb-8 w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
+		{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
+			<p>No assets found.</p>
+		{:else}
 			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
 				<PieChart data={categoryDataCurrent} title="Categories - current allocation" />
 				<PieChart data={assetsMarketValueData} title="Assets - market value" />
@@ -194,12 +198,18 @@
 				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
 				<BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
 			</div>
+		{/if}
+	</div>
+	<div class="mx-auto mb-8 w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
+		{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
+			<p>No assets found.</p>
+		{:else}
 			<div>
 				<div class="w-full">
 					<!-- Mobile-first asset list -->
 					<div class="block md:hidden">
 						<div class="mb-2 flex items-center justify-between">
-							<h2 class="mb-2 font-semibold">Assets List</h2>
+							<h2 class="mb-2 font-bold text-gray-800">Assets List</h2>
 							<div class="text-right">
 								<div class="text-sm font-bold">
 									{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
@@ -486,8 +496,6 @@
 					</table>
 				</div>
 			</div>
-		{:else}
-			<p>No assets found.</p>
 		{/if}
 	</div>
 </div>

@@ -23,8 +23,10 @@
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
+	<div class="mx-auto w-full max-w-screen-md">
+		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Closed Positions</h1>
+	</div>
 	<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
-		<h2 class="mx-4 my-4 text-xl font-bold text-gray-800">Closed Positions</h2>
 		<div class="mx-4 mb-6 rounded bg-gray-50 p-4 shadow-sm">
 			<h3 class="mb-2 text-lg font-semibold text-gray-700">Summary</h3>
 			<p>

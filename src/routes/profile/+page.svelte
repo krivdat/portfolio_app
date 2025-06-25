@@ -37,9 +37,10 @@
 </script>
 
 <div class="px-4 py-4 md:p-8 md:px-0">
+	<div class="mx-auto w-full max-w-screen-md">
+		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">User Profile</h1>
+	</div>
 	<div class="mx-auto w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
-		<h2 class="mb-4 text-xl font-bold text-gray-800">Update Profile</h2>
-
 		{#if form?.error}
 			<p class="mb-2 text-sm text-red-600">{form.error}</p>
 		{/if}
