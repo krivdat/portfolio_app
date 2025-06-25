@@ -23,12 +23,12 @@
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
-	<div class="mx-auto w-full max-w-screen-md">
+	<div class="mx-auto w-full max-w-screen-xl">
 		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Closed Positions</h1>
 	</div>
-	<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
+	<div class="mx-auto w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
 		<div class="mx-4 mb-6 rounded bg-gray-50 p-4 shadow-sm">
-			<h3 class="mb-2 text-lg font-semibold text-gray-700">Summary</h3>
+			<h3 class="mb-2 font-bold text-gray-800">Summary</h3>
 			<p>
 				Total Profit/Loss:
 				<span

@@ -184,10 +184,10 @@
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
-	<div class="mx-auto w-full max-w-screen-md">
+	<div class="mx-auto w-full max-w-screen-xl">
 		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Portfolio Overview</h1>
 	</div>
-	<div class="mx-auto mb-8 w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
+	<div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
 		{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
 			<p>No assets found.</p>
 		{:else}
@@ -200,7 +200,7 @@
 			</div>
 		{/if}
 	</div>
-	<div class="mx-auto mb-8 w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
+	<div class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
 		{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
 			<p>No assets found.</p>
 		{:else}
@@ -350,7 +350,7 @@
 						{/if}
 					</div>
 					<!-- Desktop table -->
-					<h2 class="mb-2 hidden font-semibold md:block">Asset List</h2>
+					<h2 class="mb-2 hidden font-semibold md:block">Assets List</h2>
 					<table class="hidden w-full border-collapse text-xs md:table">
 						<thead>
 							<tr>

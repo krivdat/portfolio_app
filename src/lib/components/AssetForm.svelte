@@ -36,7 +36,7 @@
 	}
 </script>
 
-<div class="mx-auto w-full max-w-4xl rounded-md bg-white/90 p-4 shadow">
+<div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
 	<form
 		method="POST"
 		action={isUpdate ? '?/update' : '?/create'}
@@ -50,7 +50,7 @@
 			};
 		}}
 	>
-		<h2 class="mb-2 text-xl font-bold text-gray-800">
+		<h2 class="mb-2 font-bold text-gray-800">
 			{isUpdate ? 'Update Asset' : 'Add Asset'}
 		</h2>
 
