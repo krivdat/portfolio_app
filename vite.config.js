@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	server: {
-		allowedHosts: ['dev.tomaskrivda.online', 'localhost'],
+		allowedHosts: ['portfolio.krivda.it', 'dev.tomaskrivda.online', 'localhost'],
 		fs: { allow: ['static', 'src'] }
 	},
 	build: {

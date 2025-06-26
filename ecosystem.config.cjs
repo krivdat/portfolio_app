@@ -6,7 +6,7 @@ module.exports = {
 			script: './build/index.js',
 			env: {
 				NODE_ENV: 'production',
-				ORIGIN: 'https://dev.tomaskrivda.online',
+				ORIGIN: 'https://portfolio.krivda.it',
 				PORT: 3002
 			}
 		}
