@@ -212,14 +212,14 @@
 	{:else}
 		<div class="mx-auto mb-4 w-full max-w-screen-xl">
 			<div
-				class="w-full rounded-lg bg-gradient-to-br from-blue-100/90 via-white/80 to-blue-50/80 p-3 shadow-md ring-1 ring-blue-200/40 md:max-w-md"
+				class="w-full rounded bg-gradient-to-br from-blue-100/90 via-white/80 to-blue-50/80 p-2 shadow ring-1 ring-blue-200/40 md:max-w-md"
 			>
-				<h2 class="mb-2 flex items-center gap-1.5 text-base font-bold text-blue-900">
+				<h2 class="mb-1 flex items-center gap-1 text-lg font-bold text-blue-900">
 					<span
-						class="flex inline-block h-5 w-5 items-center justify-center rounded-full bg-blue-200 text-blue-700"
+						class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-blue-200 text-blue-700"
 						><svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="h-3.5 w-3.5"
+							class="h-2.5 w-2.5"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -233,35 +233,33 @@
 					>
 					Summary
 				</h2>
-				<div class="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
-					<div class="font-medium text-gray-700">Total Market Value</div>
-					<div class="text-right font-extrabold text-blue-900">
+				<div class="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+					<div class="text-sm font-medium text-gray-700">Total Market Value</div>
+					<div class="text-right text-sm font-bold text-blue-900">
 						{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
 					</div>
 					<div class="font-medium text-gray-700">Total P/L (EUR)</div>
 					<div
-						class="text-right font-extrabold {profitLossTotal < 0
-							? 'text-red-600'
-							: 'text-green-700'}"
+						class="text-right font-bold {profitLossTotal < 0 ? 'text-red-600' : 'text-green-700'}"
 					>
 						{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}
 					</div>
 					<div class="font-medium text-gray-700">Total P/L (%)</div>
 					<div
-						class="text-right font-extrabold {profitLossPctTotal < 0
+						class="text-right font-bold {profitLossPctTotal < 0
 							? 'text-red-600'
 							: 'text-green-700'}"
 					>
 						{profitLossPctTotal.toFixed(1)}%
 					</div>
-					<div class="col-span-2 my-1 border-t border-blue-200"></div>
+					<div class="col-span-2 my-0.5 border-t border-blue-200"></div>
 					<!-- Best/Worst by EUR -->
-					<div class="flex items-center gap-1 font-medium text-gray-700">
+					<div class="flex items-center gap-0.5 font-medium text-gray-700">
 						<span
-							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-green-100 text-green-700"
+							class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-green-100 text-green-700"
 							><svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-2.5 w-2.5"
+								class="h-1.5 w-1.5"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -277,17 +275,17 @@
 					</div>
 					<div class="text-right">
 						<span class="font-semibold">{bestAssetEur.name}</span>
-						<span class="ml-1 text-xs text-gray-500">[{bestAssetEur.ticker}]</span>
+						<span class="ml-1 text-[10px] text-gray-500">[{bestAssetEur.ticker}]</span>
 						<div class="font-bold text-green-700">
 							{formatCurrency(calculateProfitLoss(bestAssetEur), 'en-US', bestAssetEur.currency, 0)}
 						</div>
 					</div>
-					<div class="flex items-center gap-1 font-medium text-gray-700">
+					<div class="flex items-center gap-0.5 font-medium text-gray-700">
 						<span
-							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-red-100 text-red-700"
+							class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-red-100 text-red-700"
 							><svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-2.5 w-2.5"
+								class="h-1.5 w-1.5"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -303,7 +301,7 @@
 					</div>
 					<div class="text-right">
 						<span class="font-semibold">{worstAssetEur.name}</span>
-						<span class="ml-1 text-xs text-gray-500">[{worstAssetEur.ticker}]</span>
+						<span class="ml-1 text-[10px] text-gray-500">[{worstAssetEur.ticker}]</span>
 						<div class="font-bold text-red-600">
 							{formatCurrency(
 								calculateProfitLoss(worstAssetEur),
@@ -314,12 +312,12 @@
 						</div>
 					</div>
 					<!-- Best/Worst by % -->
-					<div class="flex items-center gap-1 font-medium text-gray-700">
+					<div class="flex items-center gap-0.5 font-medium text-gray-700">
 						<span
-							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-green-100 text-green-700"
+							class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-green-100 text-green-700"
 							><svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-2.5 w-2.5"
+								class="h-1.5 w-1.5"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -335,17 +333,17 @@
 					</div>
 					<div class="text-right">
 						<span class="font-semibold">{bestAssetPct.name}</span>
-						<span class="ml-1 text-xs text-gray-500">[{bestAssetPct.ticker}]</span>
+						<span class="ml-1 text-[10px] text-gray-500">[{bestAssetPct.ticker}]</span>
 						<div class="font-bold text-green-700">
 							{(calculateProfitLossPct(bestAssetPct) * 100).toFixed(1)}%
 						</div>
 					</div>
-					<div class="flex items-center gap-1 font-medium text-gray-700">
+					<div class="flex items-center gap-0.5 font-medium text-gray-700">
 						<span
-							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-red-100 text-red-700"
+							class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-red-100 text-red-700"
 							><svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-2.5 w-2.5"
+								class="h-1.5 w-1.5"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -361,7 +359,7 @@
 					</div>
 					<div class="text-right">
 						<span class="font-semibold">{worstAssetPct.name}</span>
-						<span class="ml-1 text-xs text-gray-500">[{worstAssetPct.ticker}]</span>
+						<span class="ml-1 text-[10px] text-gray-500">[{worstAssetPct.ticker}]</span>
 						<div class="font-bold text-red-600">
 							{(calculateProfitLossPct(worstAssetPct) * 100).toFixed(1)}%
 						</div>
