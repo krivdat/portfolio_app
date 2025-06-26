@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class="px-4 py-4 md:px-0 md:py-8">
+<div class="px-4 py-4 md:px-4 md:py-8">
 	<div class="mx-auto w-full max-w-screen-xl">
 		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Closed Positions</h1>
 	</div>

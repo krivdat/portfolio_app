@@ -202,7 +202,7 @@
 	);
 </script>
 
-<div class="px-4 py-4 md:px-0 md:py-8">
+<div class="px-4 py-4 md:px-4 md:py-8">
 	<div class="mx-auto w-full max-w-screen-xl">
 		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Portfolio Overview</h1>
 	</div>
@@ -210,30 +210,71 @@
 	{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
 		<p>No assets found.</p>
 	{:else}
-		<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
-			<div class="mb-4 w-full max-w-md rounded-lg bg-blue-100/80 p-4 shadow-md">
-				<h2 class="mb-2 text-lg font-semibold text-blue-900">Summary</h2>
-				<div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+		<div class="mx-auto mb-4 w-full max-w-screen-xl">
+			<div
+				class="w-full rounded-lg bg-gradient-to-br from-blue-100/90 via-white/80 to-blue-50/80 p-3 shadow-md ring-1 ring-blue-200/40 md:max-w-md"
+			>
+				<h2 class="mb-2 flex items-center gap-1.5 text-base font-bold text-blue-900">
+					<span
+						class="flex inline-block h-5 w-5 items-center justify-center rounded-full bg-blue-200 text-blue-700"
+						><svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-3.5 w-3.5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							><path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"
+							/></svg
+						></span
+					>
+					Summary
+				</h2>
+				<div class="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
 					<div class="font-medium text-gray-700">Total Market Value</div>
-					<div class="text-right font-bold text-blue-900">
+					<div class="text-right font-extrabold text-blue-900">
 						{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
 					</div>
 					<div class="font-medium text-gray-700">Total P/L (EUR)</div>
 					<div
-						class="text-right font-bold {profitLossTotal < 0 ? 'text-red-600' : 'text-green-700'}"
+						class="text-right font-extrabold {profitLossTotal < 0
+							? 'text-red-600'
+							: 'text-green-700'}"
 					>
 						{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}
 					</div>
 					<div class="font-medium text-gray-700">Total P/L (%)</div>
 					<div
-						class="text-right font-bold {profitLossPctTotal < 0
+						class="text-right font-extrabold {profitLossPctTotal < 0
 							? 'text-red-600'
 							: 'text-green-700'}"
 					>
 						{profitLossPctTotal.toFixed(1)}%
 					</div>
+					<div class="col-span-2 my-1 border-t border-blue-200"></div>
 					<!-- Best/Worst by EUR -->
-					<div class="font-medium text-gray-700">Best Asset (EUR)</div>
+					<div class="flex items-center gap-1 font-medium text-gray-700">
+						<span
+							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-green-100 text-green-700"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-2.5 w-2.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								><path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 13l4 4L19 7"
+								/></svg
+							></span
+						>
+						Best Asset (EUR)
+					</div>
 					<div class="text-right">
 						<span class="font-semibold">{bestAssetEur.name}</span>
 						<span class="ml-1 text-xs text-gray-500">[{bestAssetEur.ticker}]</span>
@@ -241,7 +282,25 @@
 							{formatCurrency(calculateProfitLoss(bestAssetEur), 'en-US', bestAssetEur.currency, 0)}
 						</div>
 					</div>
-					<div class="font-medium text-gray-700">Worst Asset (EUR)</div>
+					<div class="flex items-center gap-1 font-medium text-gray-700">
+						<span
+							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-red-100 text-red-700"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-2.5 w-2.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								><path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 13l-4 4-4-4"
+								/></svg
+							></span
+						>
+						Worst Asset (EUR)
+					</div>
 					<div class="text-right">
 						<span class="font-semibold">{worstAssetEur.name}</span>
 						<span class="ml-1 text-xs text-gray-500">[{worstAssetEur.ticker}]</span>
@@ -255,7 +314,25 @@
 						</div>
 					</div>
 					<!-- Best/Worst by % -->
-					<div class="font-medium text-gray-700">Best Asset (%)</div>
+					<div class="flex items-center gap-1 font-medium text-gray-700">
+						<span
+							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-green-100 text-green-700"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-2.5 w-2.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								><path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 13l4 4L19 7"
+								/></svg
+							></span
+						>
+						Best Asset (%)
+					</div>
 					<div class="text-right">
 						<span class="font-semibold">{bestAssetPct.name}</span>
 						<span class="ml-1 text-xs text-gray-500">[{bestAssetPct.ticker}]</span>
@@ -263,7 +340,25 @@
 							{(calculateProfitLossPct(bestAssetPct) * 100).toFixed(1)}%
 						</div>
 					</div>
-					<div class="font-medium text-gray-700">Worst Asset (%)</div>
+					<div class="flex items-center gap-1 font-medium text-gray-700">
+						<span
+							class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-red-100 text-red-700"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-2.5 w-2.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								><path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 13l-4 4-4-4"
+								/></svg
+							></span
+						>
+						Worst Asset (%)
+					</div>
 					<div class="text-right">
 						<span class="font-semibold">{worstAssetPct.name}</span>
 						<span class="ml-1 text-xs text-gray-500">[{worstAssetPct.ticker}]</span>
@@ -276,7 +371,7 @@
 		</div>
 
 		<div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
-			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
+			<div class="flex flex-col items-center justify-around md:flex-row md:flex-wrap">
 				<PieChart data={categoryDataCurrent} title="Categories - current allocation" />
 				<PieChart data={assetsMarketValueData} title="Assets - market value" />
 				<!-- <PieChart data={categoryDataPurchase} title="Categories - purchase cost" /> -->
@@ -343,13 +438,13 @@
 								</div>
 								<div class="mt-1 flex items-end justify-between text-xs">
 									<div class="pl-1 text-gray-500">
-										<span class="text-xs text-gray-400">Purchase @</span>
+										<span class="text-[10px] text-gray-400">Purchase @</span>
 										<div>
 											{formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
 										</div>
 									</div>
 									<div class="text-right">
-										<span class="text-xs text-gray-400">P/L</span>
+										<span class="text-[10px] text-gray-400">P/L</span>
 										<div class={summary.profitLoss < 0 ? 'text-red-600' : ''}>
 											{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}
 										</div>
