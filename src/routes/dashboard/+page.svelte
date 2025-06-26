@@ -401,15 +401,37 @@
 						{#each Object.entries(groupedAssets) as [ticker, assets]}
 							{@const summary = getSummary(assets)}
 							<div
-								class="mb-2 cursor-pointer rounded bg-blue-50 p-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+								class="relative mb-2 cursor-pointer rounded bg-blue-50 p-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
 								role="button"
 								tabindex="0"
 								onclick={() => toggleTicker(ticker)}
 								onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleTicker(ticker)}
 								aria-expanded={!!expandedTickers[ticker]}
 							>
-								<div class="flex items-center justify-between">
-									<div class="w-36 max-w-36 min-w-36 font-semibold break-words">
+								{#if assets.length > 1}
+									<span
+										class="absolute top-0.5 left-0.5 z-10 flex h-4 w-4 items-center justify-center transition-transform duration-200 {expandedTickers[
+											ticker
+										]
+											? 'rotate-90'
+											: ''}"
+									>
+										<svg
+											class="h-3 w-3 text-blue-500"
+											fill="none"
+											viewBox="0 0 20 20"
+											stroke="currentColor"
+											><path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M6 8l4 4 4-4"
+											/></svg
+										>
+									</span>
+								{/if}
+								<div class="flex w-full items-center justify-between">
+									<div class="mt-2 w-36 max-w-36 min-w-36 font-semibold break-words">
 										{summary.name}
 										<div><span class="text-xs font-normal">[{summary.ticker}]</span></div>
 									</div>
@@ -552,7 +574,29 @@
 									onclick={() => toggleTicker(ticker)}
 									onkeydown={(e) => e.key === 'Enter' && toggleTicker(ticker)}
 								>
-									<td class="px-2 py-1 font-semibold">
+									<td class="flex items-center px-2 py-1 font-semibold">
+										{#if assets.length > 1}
+											<span
+												class="mr-1 flex h-4 w-4 items-center justify-center transition-transform duration-200 {expandedTickers[
+													ticker
+												]
+													? 'rotate-90'
+													: ''}"
+											>
+												<svg
+													class="h-3 w-3 text-blue-500"
+													fill="none"
+													viewBox="0 0 20 20"
+													stroke="currentColor"
+													><path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														stroke-width="2"
+														d="M6 8l4 4 4-4"
+													/></svg
+												>
+											</span>
+										{/if}
 										{summary.name}
 										<span class="ml-1 hidden text-xs text-gray-400 md:inline">[{ticker}]</span>
 									</td>
