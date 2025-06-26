@@ -181,16 +181,101 @@
 				asset.ticker && (!currentPrices[asset.ticker] || currentPrices[asset.ticker]?.price == null)
 		)
 	);
+
+	// Best/Worst by EUR
+	let bestAssetEur = $derived(
+		[...assetsWithCurrentPrice].sort((a, b) => calculateProfitLoss(b) - calculateProfitLoss(a))[0]
+	);
+	let worstAssetEur = $derived(
+		[...assetsWithCurrentPrice].sort((a, b) => calculateProfitLoss(a) - calculateProfitLoss(b))[0]
+	);
+	// Best/Worst by %
+	let bestAssetPct = $derived(
+		[...assetsWithCurrentPrice].sort(
+			(a, b) => calculateProfitLossPct(b) - calculateProfitLossPct(a)
+		)[0]
+	);
+	let worstAssetPct = $derived(
+		[...assetsWithCurrentPrice].sort(
+			(a, b) => calculateProfitLossPct(a) - calculateProfitLossPct(b)
+		)[0]
+	);
 </script>
 
 <div class="px-4 py-4 md:px-0 md:py-8">
 	<div class="mx-auto w-full max-w-screen-xl">
 		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Portfolio Overview</h1>
 	</div>
-	<div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
-		{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
-			<p>No assets found.</p>
-		{:else}
+
+	{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
+		<p>No assets found.</p>
+	{:else}
+		<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
+			<div class="mb-4 w-full max-w-md rounded-lg bg-blue-100/80 p-4 shadow-md">
+				<h2 class="mb-2 text-lg font-semibold text-blue-900">Summary</h2>
+				<div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+					<div class="font-medium text-gray-700">Total Market Value</div>
+					<div class="text-right font-bold text-blue-900">
+						{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
+					</div>
+					<div class="font-medium text-gray-700">Total P/L (EUR)</div>
+					<div
+						class="text-right font-bold {profitLossTotal < 0 ? 'text-red-600' : 'text-green-700'}"
+					>
+						{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}
+					</div>
+					<div class="font-medium text-gray-700">Total P/L (%)</div>
+					<div
+						class="text-right font-bold {profitLossPctTotal < 0
+							? 'text-red-600'
+							: 'text-green-700'}"
+					>
+						{profitLossPctTotal.toFixed(1)}%
+					</div>
+					<!-- Best/Worst by EUR -->
+					<div class="font-medium text-gray-700">Best Asset (EUR)</div>
+					<div class="text-right">
+						<span class="font-semibold">{bestAssetEur.name}</span>
+						<span class="ml-1 text-xs text-gray-500">[{bestAssetEur.ticker}]</span>
+						<div class="font-bold text-green-700">
+							{formatCurrency(calculateProfitLoss(bestAssetEur), 'en-US', bestAssetEur.currency, 0)}
+						</div>
+					</div>
+					<div class="font-medium text-gray-700">Worst Asset (EUR)</div>
+					<div class="text-right">
+						<span class="font-semibold">{worstAssetEur.name}</span>
+						<span class="ml-1 text-xs text-gray-500">[{worstAssetEur.ticker}]</span>
+						<div class="font-bold text-red-600">
+							{formatCurrency(
+								calculateProfitLoss(worstAssetEur),
+								'en-US',
+								worstAssetEur.currency,
+								0
+							)}
+						</div>
+					</div>
+					<!-- Best/Worst by % -->
+					<div class="font-medium text-gray-700">Best Asset (%)</div>
+					<div class="text-right">
+						<span class="font-semibold">{bestAssetPct.name}</span>
+						<span class="ml-1 text-xs text-gray-500">[{bestAssetPct.ticker}]</span>
+						<div class="font-bold text-green-700">
+							{(calculateProfitLossPct(bestAssetPct) * 100).toFixed(1)}%
+						</div>
+					</div>
+					<div class="font-medium text-gray-700">Worst Asset (%)</div>
+					<div class="text-right">
+						<span class="font-semibold">{worstAssetPct.name}</span>
+						<span class="ml-1 text-xs text-gray-500">[{worstAssetPct.ticker}]</span>
+						<div class="font-bold text-red-600">
+							{(calculateProfitLossPct(worstAssetPct) * 100).toFixed(1)}%
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
 			<div class="mb-8 flex flex-col items-center justify-between md:flex-row md:flex-wrap">
 				<PieChart data={categoryDataCurrent} title="Categories - current allocation" />
 				<PieChart data={assetsMarketValueData} title="Assets - market value" />
@@ -198,12 +283,8 @@
 				<BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
 				<BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
 			</div>
-		{/if}
-	</div>
-	<div class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
-		{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
-			<p>No assets found.</p>
-		{:else}
+		</div>
+		<div class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
 			<div>
 				<div class="w-full">
 					<!-- Mobile-first asset list -->
@@ -496,6 +577,6 @@
 					</table>
 				</div>
 			</div>
-		{/if}
-	</div>
+		</div>
+	{/if}
 </div>

@@ -3,7 +3,7 @@
 	let { openAssets = [] } = $props();
 </script>
 
-<div class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
+<div class="mx-auto mb-8 w-full max-w-screen-md rounded-md bg-white/90 p-4 shadow">
 	<h2 class="mx-4 my-4 font-bold text-gray-800">Assets List</h2>
 	{#if openAssets && openAssets.length > 0}
 		<div class="overflow-x-auto">
