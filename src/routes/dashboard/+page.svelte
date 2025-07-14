@@ -388,9 +388,13 @@
 								<div class="text-sm font-bold">
 									{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
 								</div>
-								<div class={profitLossTotal < 0 ? 'text-xs text-red-600' : 'text-xs'}>
+								<div
+									class={profitLossTotal < 0
+										? 'text-xs font-semibold text-red-600'
+										: 'text-xs font-semibold text-green-700'}
+								>
 									{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}
-									<span class={profitLossPctTotal < 0 ? 'text-red-600' : ''}>
+									<span>
 										({profitLossPctTotal.toFixed(1)}%)
 									</span>
 								</div>
@@ -465,10 +469,18 @@
 									</div>
 									<div class="text-right">
 										<span class="text-[10px] text-gray-400">P/L</span>
-										<div class={summary.profitLoss < 0 ? 'text-red-600' : ''}>
+										<div
+											class={summary.profitLoss < 0
+												? 'font-semibold text-red-600'
+												: 'font-semibold text-green-700'}
+										>
 											{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}
 										</div>
-										<div class={summary.profitLossPct < 0 ? 'text-red-600' : ''}>
+										<div
+											class={summary.profitLossPct < 0
+												? 'font-semibold text-red-600'
+												: 'font-semibold text-green-700'}
+										>
 											{summary.profitLossPct.toFixed(1)}%
 										</div>
 									</div>
@@ -516,7 +528,11 @@
 													</div>
 													<div class="text-right">
 														<span class="text-[10px] text-gray-400">P/L</span>
-														<div class={calculateProfitLoss(asset) < 0 ? 'text-red-600' : ''}>
+														<div
+															class={calculateProfitLoss(asset) < 0
+																? 'text-red-600'
+																: 'text-green-700'}
+														>
 															{formatCurrency(
 																calculateProfitLoss(asset),
 																'en-US',
@@ -524,7 +540,11 @@
 																0
 															)}
 														</div>
-														<div class={calculateProfitLossPct(asset) < 0 ? 'text-red-600' : ''}>
+														<div
+															class={calculateProfitLossPct(asset) < 0
+																? 'text-red-600'
+																: 'text-green-700'}
+														>
 															{(calculateProfitLossPct(asset) * 100).toFixed(1)}%
 														</div>
 													</div>
@@ -625,11 +645,16 @@
 									<td class="px-2 py-1 text-right"
 										>{formatCurrency(summary.marketValue, 'en-US', summary.currency, 0)}</td
 									>
-									<td class="px-2 py-1 text-right {summary.profitLoss < 0 ? 'text-red-600' : ''}"
+									<td
+										class="px-2 py-1 text-right {summary.profitLoss < 0
+											? 'text-red-600'
+											: 'text-green-700'}"
 										>{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}</td
 									>
-									<td class="px-2 py-1 text-right {summary.profitLossPct < 0 ? 'text-red-600' : ''}"
-										>{summary.profitLossPct.toFixed(1)}%</td
+									<td
+										class="px-2 py-1 text-right {summary.profitLossPct < 0
+											? 'text-red-600'
+											: 'text-green-700'}">{summary.profitLossPct.toFixed(1)}%</td
 									>
 								</tr>
 								{#if expandedTickers[ticker]}
@@ -652,7 +677,7 @@
 											<td
 												class="px-2 py-1 text-right {calculatePurchaseTotal(asset) < 0
 													? 'text-red-600'
-													: ''}"
+													: 'text-green-700'}"
 												>{formatCurrency(
 													calculatePurchaseTotal(asset),
 													'en-US',
@@ -671,7 +696,7 @@
 											<td
 												class="px-2 py-1 text-right {calculateProfitLoss(asset) < 0
 													? 'text-red-600'
-													: ''}"
+													: 'text-green-700'}"
 												>{formatCurrency(
 													calculateProfitLoss(asset),
 													'en-US',
@@ -682,7 +707,8 @@
 											<td
 												class="px-2 py-1 text-right {calculateProfitLossPct(asset) < 0
 													? 'text-red-600'
-													: ''}">{(calculateProfitLossPct(asset) * 100).toFixed(1)}%</td
+													: 'text-green-700'}"
+												>{(calculateProfitLossPct(asset) * 100).toFixed(1)}%</td
 											>
 										</tr>
 									{/each}
@@ -703,11 +729,15 @@
 								<td class="px-2 py-1 text-right {marketValueTotal < 0 ? 'text-red-600' : ''}"
 									>{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}</td
 								>
-								<td class="px-2 py-1 text-right {profitLossTotal < 0 ? 'text-red-600' : ''}"
-									>{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}</td
+								<td
+									class="px-2 py-1 text-right {profitLossTotal < 0
+										? 'text-red-600'
+										: 'text-green-700'}">{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}</td
 								>
-								<td class="px-2 py-1 text-right {profitLossPctTotal < 0 ? 'text-red-600' : ''}"
-									>{profitLossPctTotal.toFixed(1)}%</td
+								<td
+									class="px-2 py-1 text-right {profitLossPctTotal < 0
+										? 'text-red-600'
+										: 'text-green-700'}">{profitLossPctTotal.toFixed(1)}%</td
 								>
 							</tr>
 						</tfoot>
