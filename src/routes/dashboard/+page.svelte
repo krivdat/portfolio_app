@@ -7,6 +7,7 @@
 	let { data } = $props();
 	let openAssets = $derived(data.assets.filter((asset) => asset.status === 'open'));
 	let currentPrices = $derived(data.currentPrices);
+	let pricesStatus = $derived(data.pricesStatus);
 	let assetsWithCurrentPrice = $derived(
 		openAssets.map((asset) => {
 			const currentPriceData = asset.ticker ? currentPrices[asset.ticker] : null;
@@ -206,6 +207,18 @@
 	<div class="mx-auto w-full max-w-screen-xl">
 		<h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Portfolio Overview</h1>
 	</div>
+
+	{#if pricesStatus === 'stale'}
+		<div class="mx-auto mb-4 w-full max-w-screen-xl">
+			<div
+				class="w-full rounded bg-yellow-100/90 p-2 text-sm text-yellow-800 shadow ring-1 ring-yellow-200/40"
+			>
+				<p>
+					<b>Warning:</b> The current market prices could not be refreshed. The data shown may be outdated.
+				</p>
+			</div>
+		</div>
+	{/if}
 
 	{#if !assetsWithCurrentPrice || assetsWithCurrentPrice.length <= 0}
 		<p>No assets found.</p>

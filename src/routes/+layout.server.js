@@ -11,17 +11,21 @@ export async function load({ locals, route }) {
 
 	let assets = [];
 	let currentPrices = {};
+	let pricesStatus = 'fresh';
 
 	assets = locals.user?.id ? await getAssetsByUserId(locals.user.id) : [];
 	if (assets && assets.length > 0) {
-		currentPrices = await fetchStockPrices(
+		const { data, status } = await fetchStockPrices(
 			assets.filter((asset) => asset.ticker).map((asset) => asset.ticker)
 		);
+		currentPrices = data;
+		pricesStatus = status;
 	}
 
 	return {
 		user: locals.user,
 		assets,
-		currentPrices
+		currentPrices,
+		pricesStatus
 	};
 }
