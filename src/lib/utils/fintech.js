@@ -2,106 +2,119 @@ import yahooFinance from 'yahoo-finance2';
 import { getCache, setCache } from '../db/cache.js';
 
 export async function fetchStockPrices(tickers) {
-	const stockPricesCacheKey = 'stockPrices';
-	const exchangeRatesCacheKey = 'exchangeRates';
+  console.log('Fetching stock prices for tickers:', tickers);
 
-	// Helper function to check if cache is valid
-	const isCacheValid = (cache) => cache && cache.timestamp > Date.now();
+  const stockPricesCacheKey = 'stockPrices';
+  const exchangeRatesCacheKey = 'exchangeRates';
 
-	// 1. Try to get fresh stock prices from cache
-	const cachedStockPrices = getCache(stockPricesCacheKey);
-	if (isCacheValid(cachedStockPrices)) {
-		const allTickersCached = tickers.every((ticker) =>
-			Object.keys(cachedStockPrices.value).includes(ticker)
-		);
-		if (allTickersCached) {
-			console.log('Using cached data for stock prices');
-			return { data: cachedStockPrices.value, status: 'cached' };
-		}
-	}
+  // Helper function to check if cache is valid
+  const isCacheValid = (cache) => cache && cache.timestamp > Date.now();
 
-	// 2. Try to get exchange rates from cache
-	let exchangeRates;
-	const cachedExchangeRates = getCache(exchangeRatesCacheKey);
-	if (isCacheValid(cachedExchangeRates)) {
-		console.log('Using cached exchange rates');
-		exchangeRates = cachedExchangeRates.value;
-	}
+  // 1. Try to get fresh stock prices from cache
+  const cachedStockPrices = getCache(stockPricesCacheKey);
+  if (isCacheValid(cachedStockPrices)) {
+    const allTickersCached = tickers.every((ticker) =>
+      Object.keys(cachedStockPrices.value).includes(ticker)
+    );
+    if (allTickersCached) {
+      console.log(
+        'Using cached data for stock prices',
+        cachedStockPrices.value
+      );
+      return { data: cachedStockPrices.value, status: 'cached' };
+    }
+  }
 
-	// 3. Fetch from Yahoo Finance if cache is stale or missing
-	try {
-		// Fetch exchange rates if they were not in the valid cache
-		if (!exchangeRates) {
-			console.log('Fetching exchange rates');
-			const exchangeRateResults = await yahooFinance.quote([
-				'USDEUR=X',
-				'GBPEUR=X',
-				'EURCZK=X',
-				'USDCZK=X'
-			]);
-			exchangeRates = exchangeRateResults.reduce((acc, result) => {
-				acc[result.symbol.slice(0, -2)] = {
-					rate: result.regularMarketPrice
-				};
-				return acc;
-			}, {});
-			setCache(exchangeRatesCacheKey, exchangeRates, 24 * 60 * 60 * 1000); // 24 hours
-			console.log('New exchange rates cached', exchangeRates);
-		}
+  // 2. Try to get exchange rates from cache
+  let exchangeRates;
+  const cachedExchangeRates = getCache(exchangeRatesCacheKey);
+  if (isCacheValid(cachedExchangeRates)) {
+    console.log('Using cached exchange rates');
+    exchangeRates = cachedExchangeRates.value;
+  }
 
-		// Fetch stock prices
-		const results = await yahooFinance.quote(tickers);
+  // 3. Fetch from Yahoo Finance if cache is stale or missing
+  try {
+    // Fetch exchange rates if they were not in the valid cache
+    if (!exchangeRates) {
+      console.log('Fetching exchange rates');
+      const exchangeRateResults = await yahooFinance.quote([
+        'USDEUR=X',
+        'GBPEUR=X',
+        'EURCZK=X',
+        'USDCZK=X'
+      ]);
+      exchangeRates = exchangeRateResults.reduce((acc, result) => {
+        acc[result.symbol.slice(0, -2)] = {
+          rate: result.regularMarketPrice
+        };
+        return acc;
+      }, {});
+      setCache(exchangeRatesCacheKey, exchangeRates, 24 * 60 * 60 * 1000); // 24 hours
+      console.log('New exchange rates cached', exchangeRates);
+    }
 
-		// Process and cache the new stock prices
-		const supportedCurrencies = ['USD', 'GBP', 'CZK', 'EUR'];
-		const filteredResults = results.filter((result) =>
-			supportedCurrencies.includes(result.currency)
-		);
-		const unsupportedTickers = results
-			.filter((result) => !supportedCurrencies.includes(result.currency))
-			.map((result) => result.symbol);
+    // Fetch stock prices
+    const results = await yahooFinance.quote(tickers);
 
-		const stockPrices = filteredResults.reduce((acc, result) => {
-			if (result.currency === 'USD' && exchangeRates['USDEUR']?.rate) {
-				acc[result.symbol] = {
-					price: result.regularMarketPrice * exchangeRates['USDEUR'].rate,
-					currency: 'EUR'
-				};
-			} else if (result.currency === 'GBP' && exchangeRates['GBPEUR']?.rate) {
-				acc[result.symbol] = {
-					price: result.regularMarketPrice * exchangeRates['GBPEUR'].rate,
-					currency: 'EUR'
-				};
-			} else if (result.currency === 'CZK' && exchangeRates['EURCZK']?.rate) {
-				acc[result.symbol] = {
-					price: result.regularMarketPrice * exchangeRates['EURCZK'].rate,
-					currency: 'EUR'
-				};
-			} else if (result.currency === 'EUR') {
-				acc[result.symbol] = {
-					price: result.regularMarketPrice,
-					currency: 'EUR'
-				};
-			}
-			return acc;
-		}, {});
+    // Process and cache the new stock prices
+    const supportedCurrencies = ['USD', 'GBP', 'CZK', 'EUR'];
+    const filteredResults = results.filter((result) =>
+      supportedCurrencies.includes(result.currency)
+    );
+    const unsupportedTickers = results
+      .filter((result) => !supportedCurrencies.includes(result.currency))
+      .map((result) => result.symbol);
 
-		if (unsupportedTickers.length > 0) {
-			console.warn(`Unsupported currencies for tickers: ${unsupportedTickers.join(', ')}`);
-		}
+    const stockPrices = filteredResults.reduce((acc, result) => {
+      if (result.currency === 'USD' && exchangeRates['USDEUR']?.rate) {
+        acc[result.symbol] = {
+          price: result.regularMarketPrice * exchangeRates['USDEUR'].rate,
+          currency: 'EUR'
+        };
+      } else if (result.currency === 'GBP' && exchangeRates['GBPEUR']?.rate) {
+        acc[result.symbol] = {
+          price: result.regularMarketPrice * exchangeRates['GBPEUR'].rate,
+          currency: 'EUR'
+        };
+      } else if (result.currency === 'CZK' && exchangeRates['EURCZK']?.rate) {
+        acc[result.symbol] = {
+          price: result.regularMarketPrice * exchangeRates['EURCZK'].rate,
+          currency: 'EUR'
+        };
+      } else if (result.currency === 'EUR') {
+        acc[result.symbol] = {
+          price: result.regularMarketPrice,
+          currency: 'EUR'
+        };
+      }
+      return acc;
+    }, {});
 
-		setCache(stockPricesCacheKey, stockPrices, 15 * 60 * 1000); // 15 minutes
-		return { data: stockPrices, status: 'fresh' };
-	} catch (error) {
-		console.error('Failed to fetch fresh data from Yahoo Finance:', error.message);
+    if (unsupportedTickers.length > 0) {
+      console.warn(
+        `Unsupported currencies for tickers: ${unsupportedTickers.join(', ')}`
+      );
+    }
 
-		// 4. Fallback to stale cache if fetching fails
-		if (cachedStockPrices) {
-			console.log('Using stale stock prices from cache');
-			return { data: cachedStockPrices.value, status: 'stale' };
-		}
+    setCache(stockPricesCacheKey, stockPrices, 15 * 60 * 1000); // 15 minutes
+    return { data: stockPrices, status: 'fresh' };
+  } catch (error) {
+    console.error(
+      'Failed to fetch fresh data from Yahoo Finance:',
+      error.message
+    );
 
-		// 5. If all else fails, throw an error
-		throw new Error('Could not fetch stock prices and no cache is available.');
-	}
+    // 4. Fallback to stale cache if fetching fails
+    if (cachedStockPrices) {
+      console.log(
+        'Using stale stock prices from cache',
+        cachedStockPrices.value
+      );
+      return { data: cachedStockPrices.value, status: 'stale' };
+    }
+
+    // 5. If all else fails, throw an error
+    throw new Error('Could not fetch stock prices and no cache is available.');
+  }
 }
