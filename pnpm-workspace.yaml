@@ -1,0 +1,11 @@
+onlyBuiltDependencies:
+  - '@carbon/charts'
+  - '@carbon/charts-svelte'
+  - '@carbon/colors'
+  - '@carbon/utils-position'
+  - '@tailwindcss/oxide'
+  - bcrypt
+  - better-sqlite3
+  - esbuild
+  - sharp
+  - sqlite3
