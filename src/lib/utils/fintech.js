@@ -29,8 +29,8 @@ export async function fetchStockPrices(tickers) {
   let exchangeRates;
   const cachedExchangeRates = getCache(exchangeRatesCacheKey);
   if (isCacheValid(cachedExchangeRates)) {
-    console.log('Using cached exchange rates');
     exchangeRates = cachedExchangeRates.value;
+    console.log('Using cached exchange rates: ', exchangeRates);
   }
 
   // 3. Fetch from Yahoo Finance if cache is stale or missing
