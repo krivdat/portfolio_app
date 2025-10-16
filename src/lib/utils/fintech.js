@@ -2,12 +2,12 @@ import yahooFinance from 'yahoo-finance2';
 import { getCache, setCache } from '../db/cache.js';
 
 export async function fetchStockPrices(tickers) {
-  console.log('Fetching stock prices for tickers:', tickers);
+  // console.log('Fetching stock prices for tickers:', tickers);
 
   const stockPricesCacheKey = 'stockPrices';
   const exchangeRatesCacheKey = 'exchangeRates';
 
-  // Helper function to check if cache is valid
+  // Helper function to check if cache is valid, timestamp = expiry time
   const isCacheValid = (cache) => cache && cache.timestamp > Date.now();
 
   // 1. Try to get fresh stock prices from cache
@@ -17,10 +17,7 @@ export async function fetchStockPrices(tickers) {
       Object.keys(cachedStockPrices.value).includes(ticker)
     );
     if (allTickersCached) {
-      console.log(
-        'Using cached data for stock prices',
-        cachedStockPrices.value
-      );
+      console.log('Using cached data for stock prices', cachedStockPrices.value);
       return { data: cachedStockPrices.value, status: 'cached' };
     }
   }
@@ -33,7 +30,7 @@ export async function fetchStockPrices(tickers) {
     console.log('Using cached exchange rates: ', exchangeRates);
   }
 
-  // 3. Fetch from Yahoo Finance if cache is stale or missing
+  // 3. Fetch from Yahoo Finance and gold-api if cache is stale or missing
   try {
     // Fetch exchange rates if they were not in the valid cache
     if (!exchangeRates) {
@@ -92,25 +89,18 @@ export async function fetchStockPrices(tickers) {
     }, {});
 
     if (unsupportedTickers.length > 0) {
-      console.warn(
-        `Unsupported currencies for tickers: ${unsupportedTickers.join(', ')}`
-      );
+      console.warn(`Unsupported currencies for tickers: ${unsupportedTickers.join(', ')}`);
     }
 
     setCache(stockPricesCacheKey, stockPrices, 15 * 60 * 1000); // 15 minutes
+    console.log('New stock prices cached', stockPrices);
     return { data: stockPrices, status: 'fresh' };
   } catch (error) {
-    console.error(
-      'Failed to fetch fresh data from Yahoo Finance:',
-      error.message
-    );
+    console.error('Failed to fetch fresh data from Yahoo Finance:', error.message);
 
     // 4. Fallback to stale cache if fetching fails
     if (cachedStockPrices) {
-      console.log(
-        'Using stale stock prices from cache',
-        cachedStockPrices.value
-      );
+      console.log('Using stale stock prices from cache', cachedStockPrices.value);
       return { data: cachedStockPrices.value, status: 'stale' };
     }
 

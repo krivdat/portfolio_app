@@ -5,16 +5,12 @@
   import { formatCurrency } from '$lib/utils/currency';
 
   let { data } = $props();
-  let openAssets = $derived(
-    data.assets.filter((asset) => asset.status === 'open')
-  );
+  let openAssets = $derived(data.assets.filter((asset) => asset.status === 'open'));
   let currentPrices = $derived(data.currentPrices);
   let pricesStatus = $derived(data.pricesStatus);
   let assetsWithCurrentPrice = $derived(
     openAssets.map((asset) => {
-      const currentPriceData = asset.ticker
-        ? currentPrices[asset.ticker]
-        : null;
+      const currentPriceData = asset.ticker ? currentPrices[asset.ticker] : null;
       return {
         ...asset,
         current_price: currentPriceData?.price || asset.purchase_price
@@ -32,24 +28,15 @@
     )
   );
   let marketValueTotal = $derived(
-    assetsWithCurrentPrice.reduce(
-      (total, asset) => total + asset.current_price * asset.quantity,
-      0
-    )
+    assetsWithCurrentPrice.reduce((total, asset) => total + asset.current_price * asset.quantity, 0)
   );
 
   let profitLossTotal = $derived(
-    assetsWithCurrentPrice.reduce(
-      (total, asset) => total + calculateProfitLoss(asset),
-      0
-    )
+    assetsWithCurrentPrice.reduce((total, asset) => total + calculateProfitLoss(asset), 0)
   );
 
   let profitLossPctTotal = $derived(
-    (assetsWithCurrentPrice.reduce(
-      (total, asset) => total + calculateProfitLoss(asset),
-      0
-    ) /
+    (assetsWithCurrentPrice.reduce((total, asset) => total + calculateProfitLoss(asset), 0) /
       assetsWithCurrentPrice.reduce(
         (total, asset) => total + asset.purchase_price * asset.quantity,
         0
@@ -81,18 +68,10 @@
   function getSummary(assets) {
     const first = assets[0];
     const totalQty = assets.reduce((sum, a) => sum + a.quantity, 0);
-    const purchaseTotal = assets.reduce(
-      (sum, a) => sum + a.purchase_price * a.quantity,
-      0
-    );
-    const marketValue = assets.reduce(
-      (sum, a) => sum + a.current_price * a.quantity,
-      0
-    );
+    const purchaseTotal = assets.reduce((sum, a) => sum + a.purchase_price * a.quantity, 0);
+    const marketValue = assets.reduce((sum, a) => sum + a.current_price * a.quantity, 0);
     const profitLoss = marketValue - purchaseTotal;
-    const profitLossPct = purchaseTotal
-      ? (profitLoss / purchaseTotal) * 100
-      : 0;
+    const profitLossPct = purchaseTotal ? (profitLoss / purchaseTotal) * 100 : 0;
     // Weighted average purchase price
     const weightedPurchasePrice = totalQty ? purchaseTotal / totalQty : 0;
     // Weighted average current price
@@ -125,8 +104,7 @@
     const categoryCounts = {};
     assetsWithCurrentPrice.forEach((asset) => {
       categoryCounts[asset.category] =
-        (categoryCounts[asset.category] || 0) +
-        asset.current_price * asset.quantity;
+        (categoryCounts[asset.category] || 0) + asset.current_price * asset.quantity;
     });
 
     let result = Object.entries(categoryCounts).map(([category, value]) => ({
@@ -142,8 +120,7 @@
     const categoryCounts = {};
     assetsWithCurrentPrice.forEach((asset) => {
       categoryCounts[asset.category] =
-        (categoryCounts[asset.category] || 0) +
-        asset.purchase_price * asset.quantity;
+        (categoryCounts[asset.category] || 0) + asset.purchase_price * asset.quantity;
     });
 
     let result = Object.entries(categoryCounts).map(([category, value]) => ({
@@ -205,22 +182,16 @@
   let assetsWithMissingYahooPrice = $derived(
     assetsWithCurrentPrice.filter(
       (asset) =>
-        asset.ticker &&
-        (!currentPrices[asset.ticker] ||
-          currentPrices[asset.ticker]?.price == null)
+        asset.ticker && (!currentPrices[asset.ticker] || currentPrices[asset.ticker]?.price == null)
     )
   );
 
   // Best/Worst by EUR
   let bestAssetEur = $derived(
-    [...assetsWithCurrentPrice].sort(
-      (a, b) => calculateProfitLoss(b) - calculateProfitLoss(a)
-    )[0]
+    [...assetsWithCurrentPrice].sort((a, b) => calculateProfitLoss(b) - calculateProfitLoss(a))[0]
   );
   let worstAssetEur = $derived(
-    [...assetsWithCurrentPrice].sort(
-      (a, b) => calculateProfitLoss(a) - calculateProfitLoss(b)
-    )[0]
+    [...assetsWithCurrentPrice].sort((a, b) => calculateProfitLoss(a) - calculateProfitLoss(b))[0]
   );
   // Best/Worst by %
   let bestAssetPct = $derived(
@@ -237,9 +208,7 @@
 
 <div class="px-4 py-4 md:px-4 md:py-8">
   <div class="mx-auto w-full max-w-screen-xl">
-    <h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">
-      Portfolio Overview
-    </h1>
+    <h1 class="mb-4 text-2xl font-bold text-white drop-shadow-lg">Portfolio Overview</h1>
   </div>
 
   {#if pricesStatus === 'stale'}
@@ -248,8 +217,7 @@
         class="w-full rounded bg-yellow-100/90 p-2 text-sm text-yellow-800 shadow ring-1 ring-yellow-200/40"
       >
         <p>
-          <b>Warning:</b> The current market prices could not be refreshed. The data
-          shown may be outdated.
+          <b>Warning:</b> The current market prices could not be refreshed. The data shown may be outdated.
         </p>
       </div>
     </div>
@@ -262,11 +230,9 @@
       <div
         class="w-full rounded bg-gradient-to-br from-blue-100/90 via-white/80 to-blue-50/80 p-2 shadow ring-1 ring-blue-200/40 md:max-w-md"
       >
-        <h2
-          class="mb-1 flex items-center gap-1 text-lg font-bold text-blue-900"
-        >
+        <h2 class="mb-1 flex items-center gap-1 text-lg font-bold text-blue-900">
           <span
-            class="flex inline-block h-4 w-4 items-center justify-center rounded-full bg-blue-200 text-blue-700"
+            class="inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-200 text-blue-700"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-2.5 w-2.5"
@@ -284,17 +250,13 @@
           Summary
         </h2>
         <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
-          <div class="text-sm font-medium text-gray-700">
-            Total Market Value
-          </div>
+          <div class="text-sm font-medium text-gray-700">Total Market Value</div>
           <div class="text-right text-sm font-bold text-blue-900">
             {formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}
           </div>
           <div class="font-medium text-gray-700">Total P/L (EUR)</div>
           <div
-            class="text-right font-bold {profitLossTotal < 0
-              ? 'text-red-600'
-              : 'text-green-700'}"
+            class="text-right font-bold {profitLossTotal < 0 ? 'text-red-600' : 'text-green-700'}"
           >
             {formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}
           </div>
@@ -310,7 +272,7 @@
           <!-- Best/Worst by EUR -->
           <div class="flex items-center gap-0.5 font-medium text-gray-700">
             <span
-              class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-green-100 text-green-700"
+              class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-green-100 text-green-700"
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-1.5 w-1.5"
@@ -325,25 +287,18 @@
                 /></svg
               ></span
             >
-            Best Asset (EUR)
+            Best Position (EUR)
           </div>
           <div class="text-right">
             <span class="font-semibold">{bestAssetEur.name}</span>
-            <span class="ml-1 text-[10px] text-gray-500"
-              >[{bestAssetEur.ticker}]</span
-            >
+            <span class="ml-1 text-[10px] text-gray-500">[{bestAssetEur.ticker}]</span>
             <div class="font-bold text-green-700">
-              {formatCurrency(
-                calculateProfitLoss(bestAssetEur),
-                'en-US',
-                bestAssetEur.currency,
-                0
-              )}
+              {formatCurrency(calculateProfitLoss(bestAssetEur), 'en-US', bestAssetEur.currency, 0)}
             </div>
           </div>
           <div class="flex items-center gap-0.5 font-medium text-gray-700">
             <span
-              class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-red-100 text-red-700"
+              class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-red-100 text-red-700"
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-1.5 w-1.5"
@@ -358,13 +313,11 @@
                 /></svg
               ></span
             >
-            Worst Asset (EUR)
+            Worst Position (EUR)
           </div>
           <div class="text-right">
             <span class="font-semibold">{worstAssetEur.name}</span>
-            <span class="ml-1 text-[10px] text-gray-500"
-              >[{worstAssetEur.ticker}]</span
-            >
+            <span class="ml-1 text-[10px] text-gray-500">[{worstAssetEur.ticker}]</span>
             <div class="font-bold text-red-600">
               {formatCurrency(
                 calculateProfitLoss(worstAssetEur),
@@ -377,7 +330,7 @@
           <!-- Best/Worst by % -->
           <div class="flex items-center gap-0.5 font-medium text-gray-700">
             <span
-              class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-green-100 text-green-700"
+              class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-green-100 text-green-700"
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-1.5 w-1.5"
@@ -392,20 +345,18 @@
                 /></svg
               ></span
             >
-            Best Asset (%)
+            Best Position (%)
           </div>
           <div class="text-right">
             <span class="font-semibold">{bestAssetPct.name}</span>
-            <span class="ml-1 text-[10px] text-gray-500"
-              >[{bestAssetPct.ticker}]</span
-            >
+            <span class="ml-1 text-[10px] text-gray-500">[{bestAssetPct.ticker}]</span>
             <div class="font-bold text-green-700">
               {(calculateProfitLossPct(bestAssetPct) * 100).toFixed(1)}%
             </div>
           </div>
           <div class="flex items-center gap-0.5 font-medium text-gray-700">
             <span
-              class="flex inline-block h-3 w-3 items-center justify-center rounded-full bg-red-100 text-red-700"
+              class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-red-100 text-red-700"
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-1.5 w-1.5"
@@ -420,13 +371,11 @@
                 /></svg
               ></span
             >
-            Worst Asset (%)
+            Worst Position (%)
           </div>
           <div class="text-right">
             <span class="font-semibold">{worstAssetPct.name}</span>
-            <span class="ml-1 text-[10px] text-gray-500"
-              >[{worstAssetPct.ticker}]</span
-            >
+            <span class="ml-1 text-[10px] text-gray-500">[{worstAssetPct.ticker}]</span>
             <div class="font-bold text-red-600">
               {(calculateProfitLossPct(worstAssetPct) * 100).toFixed(1)}%
             </div>
@@ -435,28 +384,16 @@
       </div>
     </div>
 
-    <div
-      class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow"
-    >
-      <div
-        class="flex flex-col items-center justify-around md:flex-row md:flex-wrap"
-      >
-        <PieChart
-          data={categoryDataCurrent}
-          title="Categories - current allocation"
-        />
+    <div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
+      <div class="flex flex-col items-center justify-around md:flex-row md:flex-wrap">
+        <PieChart data={categoryDataCurrent} title="Categories - current allocation" />
         <PieChart data={assetsMarketValueData} title="Assets - market value" />
         <!-- <PieChart data={categoryDataPurchase} title="Categories - purchase cost" /> -->
-        <BarChart
-          data={performanceDataSum}
-          title="Performance by Ticker (EUR)"
-        />
+        <BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
         <BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
       </div>
     </div>
-    <div
-      class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow"
-    >
+    <div class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
       <div>
         <div class="w-full">
           <!-- Mobile-first asset list -->
@@ -486,8 +423,7 @@
                 role="button"
                 tabindex="0"
                 onclick={() => toggleTicker(ticker)}
-                onkeydown={(e) =>
-                  (e.key === 'Enter' || e.key === ' ') && toggleTicker(ticker)}
+                onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleTicker(ticker)}
                 aria-expanded={!!expandedTickers[ticker]}
               >
                 {#if assets.length > 1}
@@ -513,13 +449,10 @@
                   </span>
                 {/if}
                 <div class="flex w-full items-center justify-between">
-                  <div
-                    class="mt-2 w-36 max-w-36 min-w-36 font-semibold break-words"
-                  >
+                  <div class="mt-2 w-36 max-w-36 min-w-36 font-semibold break-words">
                     {summary.name}
                     <div>
-                      <span class="text-xs font-normal">[{summary.ticker}]</span
-                      >
+                      <span class="text-xs font-normal">[{summary.ticker}]</span>
                     </div>
                   </div>
                   <div class="text-right">
@@ -533,28 +466,17 @@
                   <div class="text-right">
                     <span class="text-xs text-gray-400">Current</span>
                     <div
-                      class={assetsWithMissingYahooPrice.find(
-                        (a) => a.ticker === ticker
-                      )
+                      class={assetsWithMissingYahooPrice.find((a) => a.ticker === ticker)
                         ? 'font-semibold text-yellow-600'
                         : ''}
                     >
-                      {formatCurrency(
-                        summary.weightedCurrentPrice,
-                        'en-US',
-                        summary.currency
-                      )}
+                      {formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
                     </div>
                   </div>
                   <div class="text-right">
                     <span class="text-xs text-gray-400">Market Value</span>
                     <div>
-                      {formatCurrency(
-                        summary.marketValue,
-                        'en-US',
-                        summary.currency,
-                        0
-                      )}
+                      {formatCurrency(summary.marketValue, 'en-US', summary.currency, 0)}
                     </div>
                   </div>
                 </div>
@@ -562,11 +484,7 @@
                   <div class="pl-1 text-gray-500">
                     <span class="text-[10px] text-gray-400">Purchase @</span>
                     <div>
-                      {formatCurrency(
-                        summary.weightedPurchasePrice,
-                        'en-US',
-                        summary.currency
-                      )}
+                      {formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
                     </div>
                   </div>
                   <div class="text-right">
@@ -576,12 +494,7 @@
                         ? 'font-semibold text-red-600'
                         : 'font-semibold text-green-700'}
                     >
-                      {formatCurrency(
-                        summary.profitLoss,
-                        'en-US',
-                        summary.currency,
-                        0
-                      )}
+                      {formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}
                     </div>
                     <div
                       class={summary.profitLossPct < 0
@@ -597,9 +510,7 @@
                     {#each [...assets].sort((a, b) => new Date(a.purchase_date) - new Date(b.purchase_date)) as asset}
                       <div class="rounded bg-gray-50 p-2 text-xs">
                         <div class="flex items-center justify-between">
-                          <div
-                            class="w-32 max-w-32 min-w-32 font-medium break-words"
-                          >
+                          <div class="w-32 max-w-32 min-w-32 font-medium break-words">
                             {asset.name}
                           </div>
                           <div class="text-right">
@@ -611,21 +522,13 @@
                             </div>
                           </div>
                           <div class="text-right">
-                            <span class="text-[10px] text-gray-400"
-                              >Current</span
-                            >
+                            <span class="text-[10px] text-gray-400">Current</span>
                             <div>
-                              {formatCurrency(
-                                asset.current_price,
-                                'en-US',
-                                asset.currency
-                              )}
+                              {formatCurrency(asset.current_price, 'en-US', asset.currency)}
                             </div>
                           </div>
                           <div class="text-right">
-                            <span class="text-[10px] text-gray-400"
-                              >Market Value</span
-                            >
+                            <span class="text-[10px] text-gray-400">Market Value</span>
                             <div>
                               {formatCurrency(
                                 calculateMarketValueTotal(asset),
@@ -636,19 +539,11 @@
                             </div>
                           </div>
                         </div>
-                        <div
-                          class="mt-1 flex items-end justify-between text-[10px]"
-                        >
+                        <div class="mt-1 flex items-end justify-between text-[10px]">
                           <div class="pl-1 text-gray-500">
-                            <span class="text-[10px] text-gray-400"
-                              >Purchase @</span
-                            >
+                            <span class="text-[10px] text-gray-400">Purchase @</span>
                             <div>
-                              {formatCurrency(
-                                asset.purchase_price,
-                                'en-US',
-                                asset.currency
-                              )}
+                              {formatCurrency(asset.purchase_price, 'en-US', asset.currency)}
                             </div>
                           </div>
                           <div class="text-right">
@@ -670,9 +565,7 @@
                                 ? 'text-red-600'
                                 : 'text-green-700'}
                             >
-                              {(calculateProfitLossPct(asset) * 100).toFixed(
-                                1
-                              )}%
+                              {(calculateProfitLossPct(asset) * 100).toFixed(1)}%
                             </div>
                           </div>
                         </div>
@@ -743,9 +636,7 @@
                       </span>
                     {/if}
                     {summary.name}
-                    <span class="ml-1 hidden text-xs text-gray-400 md:inline"
-                      >[{ticker}]</span
-                    >
+                    <span class="ml-1 hidden text-xs text-gray-400 md:inline">[{ticker}]</span>
                   </td>
                   <td class="px-2 py-1">{summary.category}</td>
                   <td class="px-2 py-1 text-right">
@@ -754,16 +645,10 @@
                       : summary.totalQty.toFixed(4)}
                   </td>
                   <td class="px-2 py-1 text-right">
-                    {summary.oldestPurchaseDate
-                      ? formatDate(summary.oldestPurchaseDate)
-                      : ''}
+                    {summary.oldestPurchaseDate ? formatDate(summary.oldestPurchaseDate) : ''}
                   </td>
                   <td class="px-2 py-1 text-right">
-                    {formatCurrency(
-                      summary.weightedPurchasePrice,
-                      'en-US',
-                      summary.currency
-                    )}
+                    {formatCurrency(summary.weightedPurchasePrice, 'en-US', summary.currency)}
                   </td>
                   <td
                     class="px-2 py-1 text-right {assetsWithMissingYahooPrice.find(
@@ -772,44 +657,24 @@
                       ? 'font-semibold text-yellow-600'
                       : ''}"
                   >
-                    {formatCurrency(
-                      summary.weightedCurrentPrice,
-                      'en-US',
-                      summary.currency
-                    )}
+                    {formatCurrency(summary.weightedCurrentPrice, 'en-US', summary.currency)}
                   </td>
                   <td class="px-2 py-1 text-right"
-                    >{formatCurrency(
-                      summary.purchaseTotal,
-                      'en-US',
-                      summary.currency,
-                      0
-                    )}</td
+                    >{formatCurrency(summary.purchaseTotal, 'en-US', summary.currency, 0)}</td
                   >
                   <td class="px-2 py-1 text-right"
-                    >{formatCurrency(
-                      summary.marketValue,
-                      'en-US',
-                      summary.currency,
-                      0
-                    )}</td
+                    >{formatCurrency(summary.marketValue, 'en-US', summary.currency, 0)}</td
                   >
                   <td
                     class="px-2 py-1 text-right {summary.profitLoss < 0
                       ? 'text-red-600'
                       : 'text-green-700'}"
-                    >{formatCurrency(
-                      summary.profitLoss,
-                      'en-US',
-                      summary.currency,
-                      0
-                    )}</td
+                    >{formatCurrency(summary.profitLoss, 'en-US', summary.currency, 0)}</td
                   >
                   <td
                     class="px-2 py-1 text-right {summary.profitLossPct < 0
                       ? 'text-red-600'
-                      : 'text-green-700'}"
-                    >{summary.profitLossPct.toFixed(1)}%</td
+                      : 'text-green-700'}">{summary.profitLossPct.toFixed(1)}%</td
                   >
                 </tr>
                 {#if expandedTickers[ticker]}
@@ -817,31 +682,17 @@
                     <tr class={j % 2 === 1 ? 'bg-gray-50' : ''}>
                       <td class="px-2 py-1 pl-6">{asset.name}</td>
                       <td class="px-2 py-1">{asset.category}</td>
-                      <td
-                        class="px-2 py-1 text-right {asset.quantity < 0
-                          ? 'text-red-600'
-                          : ''}"
-                      >
+                      <td class="px-2 py-1 text-right {asset.quantity < 0 ? 'text-red-600' : ''}">
                         {Number.isInteger(asset.quantity)
                           ? asset.quantity
                           : asset.quantity.toFixed(4)}
                       </td>
+                      <td class="px-2 py-1 text-right">{formatDate(asset.purchase_date)}</td>
                       <td class="px-2 py-1 text-right"
-                        >{formatDate(asset.purchase_date)}</td
+                        >{formatCurrency(asset.purchase_price, 'en-US', asset.currency)}</td
                       >
                       <td class="px-2 py-1 text-right"
-                        >{formatCurrency(
-                          asset.purchase_price,
-                          'en-US',
-                          asset.currency
-                        )}</td
-                      >
-                      <td class="px-2 py-1 text-right"
-                        >{formatCurrency(
-                          asset.current_price,
-                          'en-US',
-                          asset.currency
-                        )}</td
+                        >{formatCurrency(asset.current_price, 'en-US', asset.currency)}</td
                       >
                       <td class="px-2 py-1 text-right"
                         >{formatCurrency(
@@ -860,9 +711,7 @@
                         )}</td
                       >
                       <td
-                        class="px-2 py-1 text-right {calculateProfitLoss(
-                          asset
-                        ) < 0
+                        class="px-2 py-1 text-right {calculateProfitLoss(asset) < 0
                           ? 'text-red-600'
                           : 'text-green-700'}"
                         >{formatCurrency(
@@ -873,9 +722,7 @@
                         )}</td
                       >
                       <td
-                        class="px-2 py-1 text-right {calculateProfitLossPct(
-                          asset
-                        ) < 0
+                        class="px-2 py-1 text-right {calculateProfitLossPct(asset) < 0
                           ? 'text-red-600'
                           : 'text-green-700'}"
                         >{(calculateProfitLossPct(asset) * 100).toFixed(1)}%</td
@@ -896,17 +743,13 @@
                 <td class="px-2 py-1 text-right"
                   >{formatCurrency(purchaseTotal, 'en-US', 'EUR', 0)}</td
                 >
-                <td
-                  class="px-2 py-1 text-right {marketValueTotal < 0
-                    ? 'text-red-600'
-                    : ''}"
+                <td class="px-2 py-1 text-right {marketValueTotal < 0 ? 'text-red-600' : ''}"
                   >{formatCurrency(marketValueTotal, 'en-US', 'EUR', 0)}</td
                 >
                 <td
                   class="px-2 py-1 text-right {profitLossTotal < 0
                     ? 'text-red-600'
-                    : 'text-green-700'}"
-                  >{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}</td
+                    : 'text-green-700'}">{formatCurrency(profitLossTotal, 'en-US', 'EUR', 0)}</td
                 >
                 <td
                   class="px-2 py-1 text-right {profitLossPctTotal < 0
