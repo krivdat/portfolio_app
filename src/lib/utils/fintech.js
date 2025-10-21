@@ -1,8 +1,10 @@
-import yahooFinance from 'yahoo-finance2';
+import YahooFinance from 'yahoo-finance2';
 import { getCache, setCache } from '../db/cache.js';
 
+const yahooFinance = new YahooFinance();
+
 export async function fetchStockPrices(tickers) {
-  // console.log('Fetching stock prices for tickers:', tickers);
+  console.log('Fetching stock prices for tickers:', tickers);
 
   const stockPricesCacheKey = 'stockPrices';
   const exchangeRatesCacheKey = 'exchangeRates';
@@ -27,14 +29,14 @@ export async function fetchStockPrices(tickers) {
   const cachedExchangeRates = getCache(exchangeRatesCacheKey);
   if (isCacheValid(cachedExchangeRates)) {
     exchangeRates = cachedExchangeRates.value;
-    console.log('Using cached exchange rates: ', exchangeRates);
+    // console.log('Using cached exchange rates: ', exchangeRates);
   }
 
   // 3. Fetch from Yahoo Finance and gold-api if cache is stale or missing
   try {
     // Fetch exchange rates if they were not in the valid cache
     if (!exchangeRates) {
-      console.log('Fetching exchange rates');
+      // console.log('Fetching exchange rates');
       const exchangeRateResults = await yahooFinance.quote([
         'USDEUR=X',
         'GBPEUR=X',
@@ -48,12 +50,12 @@ export async function fetchStockPrices(tickers) {
         return acc;
       }, {});
       setCache(exchangeRatesCacheKey, exchangeRates, 24 * 60 * 60 * 1000); // 24 hours
-      console.log('New exchange rates cached', exchangeRates);
+      // console.log('New exchange rates cached', exchangeRates);
     }
 
     // Fetch stock prices
     const results = await yahooFinance.quote(tickers);
-
+    console.log('Data returned from Yahoo Finance: ', results);
     // Process and cache the new stock prices
     const supportedCurrencies = ['USD', 'GBP', 'CZK', 'EUR'];
     const filteredResults = results.filter((result) =>
