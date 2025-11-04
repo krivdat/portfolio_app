@@ -15,8 +15,9 @@ export async function fetchStockPrices(tickers) {
   // 1. Try to get fresh stock prices from cache
   const cachedStockPrices = getCache(stockPricesCacheKey);
   if (isCacheValid(cachedStockPrices)) {
+    console.log('Found valid cached stock prices:', cachedStockPrices.value);
     const allTickersCached = tickers.every((ticker) =>
-      Object.keys(cachedStockPrices.value).includes(ticker)
+      Object.prototype.hasOwnProperty.call(cachedStockPrices.value, ticker)
     );
     if (allTickersCached) {
       console.log('Using cached data for stock prices', cachedStockPrices.value);
@@ -87,6 +88,8 @@ export async function fetchStockPrices(tickers) {
           currency: 'EUR'
         };
       }
+      console.log(`In function stockPrices:/n Result: ${result}/n, acc: ${acc}/n `);
+
       return acc;
     }, {});
 
