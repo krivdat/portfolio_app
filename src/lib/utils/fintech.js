@@ -61,6 +61,51 @@ export async function fetchStockPrices(tickers) {
     // Fetch stock prices
     const results = await yahooFinance.quote(tickers);
     console.log('Data returned from Yahoo Finance: ', results);
+
+    // Before we convert prices to EUR, make sure we have the required
+    // exchange rates. If the fresh exchange rates were missing or incomplete
+    // earlier, try to fetch them now once more. If required rates are still
+    // missing, bail out so we fall back to stale cache instead of creating
+    // a partial stockPrices object.
+    const needsRateFor = (currency) => {
+      if (currency === 'USD') return 'USDEUR';
+      if (currency === 'GBP') return 'GBPEUR';
+      if (currency === 'CZK') return 'EURCZK';
+      return null;
+    };
+
+    const requiredRates = Array.from(
+      new Set((results || []).map((r) => needsRateFor(r.currency)).filter(Boolean))
+    );
+
+    const missingRates = requiredRates.filter((r) => !exchangeRates?.[r]?.rate);
+    if (missingRates.length > 0) {
+      // Try to refresh exchange rates once more
+      try {
+        const exchangeRateResults = await yahooFinance.quote([
+          'USDEUR=X',
+          'GBPEUR=X',
+          'EURCZK=X',
+          'USDCZK=X'
+        ]);
+        exchangeRates = exchangeRateResults.reduce((acc, result) => {
+          acc[result.symbol.slice(0, -2)] = {
+            rate: result.regularMarketPrice
+          };
+          return acc;
+        }, {});
+        setCache(exchangeRatesCacheKey, exchangeRates, 24 * 60 * 60 * 1000); // 24 hours
+      } catch (err) {
+        // leave exchangeRates as-is so the check below will detect missing
+      }
+
+      const stillMissing = requiredRates.filter((r) => !exchangeRates?.[r]?.rate);
+      if (stillMissing.length > 0) {
+        // Force an error to trigger the catch block and fallback to stale cache
+        throw new Error('Missing exchange rates: ' + stillMissing.join(', '));
+      }
+    }
+
     // Process and cache the new stock prices
     const supportedCurrencies = ['USD', 'GBP', 'CZK', 'EUR'];
     const filteredResults = results.filter((result) =>
@@ -92,7 +137,7 @@ export async function fetchStockPrices(tickers) {
           currency: 'EUR'
         };
       }
-      console.log(`In function stockPrices:/n Result: ${result}/n, acc: ${acc}/n `);
+      console.log(`In function stockPrices: Result: ${result.symbol}}`);
 
       return acc;
     }, {});
