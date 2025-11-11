@@ -16,11 +16,15 @@ export async function fetchStockPrices(tickers) {
   const cachedStockPrices = getCache(stockPricesCacheKey);
   if (isCacheValid(cachedStockPrices)) {
     console.log('Found valid cached stock prices:', cachedStockPrices.value);
-    const allTickersCached = tickers.every((ticker) =>
-      Object.prototype.hasOwnProperty.call(cachedStockPrices.value, ticker)
-    );
+    const allTickersCached =
+      Array.isArray(tickers) &&
+      cachedStockPrices?.value &&
+      tickers.every((ticker) => Object.hasOwn(cachedStockPrices.value, ticker));
     if (allTickersCached) {
-      console.log('Using cached data for stock prices', cachedStockPrices.value);
+      console.log(
+        'All requested tickers were found in cache. Using cached data for stock prices',
+        cachedStockPrices.value
+      );
       return { data: cachedStockPrices.value, status: 'cached' };
     }
   }
