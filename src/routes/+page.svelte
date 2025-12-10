@@ -6,10 +6,11 @@
 
   let user = $derived(data.user);
   let assets = $derived(data.assets || []);
+  let openAssets = $derived(data.assets.filter((asset) => asset.status === 'open'));
   let currentPrices = $derived(data.currentPrices || {});
 
-  let assetsWithCurrentPrice = $derived(
-    assets.map((asset) => {
+  let openAssetsWithCurrentPrice = $derived(
+    openAssets.map((asset) => {
       const currentPriceData = asset.ticker ? currentPrices[asset.ticker] : null;
       return {
         ...asset,
@@ -18,12 +19,15 @@
     })
   );
 
-  let assetsMarketValueTotal = $derived(
-    assetsWithCurrentPrice.reduce((total, asset) => total + asset.current_price * asset.quantity, 0)
+  let openAssetsMarketValueTotal = $derived(
+    openAssetsWithCurrentPrice.reduce(
+      (total, asset) => total + asset.current_price * asset.quantity,
+      0
+    )
   );
 
-  let assetsQuantityTotal = $derived(
-    assetsWithCurrentPrice.reduce((total, asset) => total + asset.quantity, 0)
+  let openAssetsQuantityTotal = $derived(
+    openAssetsWithCurrentPrice.reduce((total, asset) => total + asset.quantity, 0)
   );
 </script>
 
@@ -43,10 +47,11 @@
   {#if user}
     <p class="text-white/90 drop-shadow">Hello, {user.first_name}!</p>
     <p class="text-center text-white/90 drop-shadow">
-      You own <span class="font-semibold text-yellow-200">{assetsQuantityTotal.toFixed(0)}</span>
+      You own <span class="font-semibold text-yellow-200">{openAssetsQuantityTotal.toFixed(0)}</span
+      >
       assets with a total market value of
       <span class="font-semibold text-yellow-200">
-        {formatCurrency(assetsMarketValueTotal, 'en-US', 'EUR', 0)}
+        {formatCurrency(openAssetsMarketValueTotal, 'en-US', 'EUR', 0)}
       </span>
     </p>
   {:else}
