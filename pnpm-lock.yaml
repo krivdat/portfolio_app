@@ -36,8 +36,8 @@ importers:
         specifier: ^5.1.7
         version: 5.1.7
       yahoo-finance2:
-        specifier: ^3.10.0
-        version: 3.10.0
+        specifier: ^3.10.2
+        version: 3.11.2
     devDependencies:
       '@carbon/charts-svelte':
         specifier: ^1.23.11
@@ -2688,8 +2688,8 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  yahoo-finance2@3.10.0:
-    resolution: {integrity: sha512-0mnvefEAapMS6M3tnqLmQlyE2W38AQqByaTS09l2dawLaVU7NNc0hJ4qI4F3qi3C7MU+ZWAb8DFVKpW6Zsj0Nw==}
+  yahoo-finance2@3.11.2:
+    resolution: {integrity: sha512-SIvMXjrOktBRD8m+qXAGCK+vR1vwBKuMgCnvmbxv29+t6LTDu0vAUxNYfbigsMRTmBzS4F9TQwbYF90g3Om4HA==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -5276,7 +5276,7 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  yahoo-finance2@3.10.0:
+  yahoo-finance2@3.11.2:
     dependencies:
       '@deno/shim-deno': 0.18.2
       fetch-mock-cache: 2.3.1

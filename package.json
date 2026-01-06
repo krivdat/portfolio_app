@@ -44,7 +44,7 @@
     "node-cache": "^5.1.2",
     "sharp": "^0.34.2",
     "sqlite3": "^5.1.7",
-    "yahoo-finance2": "^3.10.0"
+    "yahoo-finance2": "^3.10.2"
   },
   "overrides": {
     "cookie": "^0.7.2"
