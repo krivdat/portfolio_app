@@ -178,6 +178,22 @@
     })
   );
 
+  let investmentsMonthly = $derived(
+    Object.entries(
+      assetsWithCurrentPrice.reduce((acc, asset) => {
+        const date = new Date(asset.purchase_date);
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        acc[monthKey] = (acc[monthKey] || 0) + asset.purchase_price * asset.quantity;
+        return acc;
+      }, {})
+    )
+      .sort(([a], [b]) => new Date(a) - new Date(b))
+      .map(([month, value]) => ({
+        group: month,
+        value
+      }))
+  );
+
   // Track which assets have missing Yahoo prices
   let assetsWithMissingYahooPrice = $derived(
     assetsWithCurrentPrice.filter(
@@ -386,11 +402,12 @@
 
     <div class="mx-auto mb-4 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
       <div class="flex flex-col items-center justify-around md:flex-row md:flex-wrap">
-        <PieChart data={categoryDataCurrent} title="Categories - current allocation" />
-        <PieChart data={assetsMarketValueData} title="Assets - market value" />
+        <PieChart data={categoryDataCurrent} title="Categories - market value (EUR)" />
+        <PieChart data={assetsMarketValueData} title="Assets - market value (EUR)" />
         <!-- <PieChart data={categoryDataPurchase} title="Categories - purchase cost" /> -->
         <BarChart data={performanceDataSum} title="Performance by Ticker (EUR)" />
         <BarChart data={performanceDataPct} title="Performance by Ticker (%)" />
+        <BarChart data={investmentsMonthly} title="Monthly Investments (EUR)" />
       </div>
     </div>
     <div class="mx-auto mb-8 w-full max-w-screen-xl rounded-md bg-white/90 p-4 shadow">
