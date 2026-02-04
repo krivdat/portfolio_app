@@ -178,21 +178,38 @@
     })
   );
 
-  let investmentsMonthly = $derived(
-    Object.entries(
-      assetsWithCurrentPrice.reduce((acc, asset) => {
-        const date = new Date(asset.purchase_date);
-        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        acc[monthKey] = (acc[monthKey] || 0) + asset.purchase_price * asset.quantity;
-        return acc;
-      }, {})
-    )
+  let investmentsMonthly = $derived.by(() => {
+    const monthsNum = 13;
+    const today = new Date();
+    const lastMonths = [];
+    for (let i = 0; i < monthsNum; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      lastMonths.unshift(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+    }
+
+    const monthlyDataMap = lastMonths.reduce((acc, monthKey) => {
+      acc[monthKey] = 0;
+      return acc;
+    }, {});
+
+    assetsWithCurrentPrice.forEach((asset) => {
+      const date = new Date(asset.purchase_date);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      if (monthlyDataMap.hasOwnProperty(monthKey)) {
+        monthlyDataMap[monthKey] += asset.purchase_price * asset.quantity;
+      }
+    });
+
+    const sortedMonthlyData = Object.entries(monthlyDataMap)
       .sort(([a], [b]) => new Date(a) - new Date(b))
       .map(([month, value]) => ({
         group: month,
         value
-      }))
-  );
+      }));
+
+    console.log('Monthly Data:', sortedMonthlyData);
+    return sortedMonthlyData;
+  });
 
   // Track which assets have missing Yahoo prices
   let assetsWithMissingYahooPrice = $derived(
