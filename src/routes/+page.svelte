@@ -33,7 +33,7 @@
 
 <!-- <div class="fixed inset-0 -z-10 h-full w-full">
 	<img
-		src="/stock-chart.png"
+		src="/stock-chart.webp"
 		alt="Stock chart background"
 		class="h-full w-full object-cover object-center"
 		aria-hidden="true"

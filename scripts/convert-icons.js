@@ -13,12 +13,8 @@ function ensureDirectoryExists(filePath) {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-async function convertSvgToPng(svgPath, pngPath, size) {
+async function createPngIcon(pngPath, size) {
 	try {
-		if (!fs.existsSync(svgPath)) {
-			console.error(`Source SVG file not found: ${svgPath}`);
-			return;
-		}
 		ensureDirectoryExists(pngPath);
 
 		const svg = `<?xml version="1.0" encoding="UTF-8"?>
@@ -35,15 +31,10 @@ async function convertSvgToPng(svgPath, pngPath, size) {
 }
 
 // Convert favicon
-convertSvgToPng(
-	join(__dirname, '../static/favicon.svg'),
-	join(__dirname, '../static/favicon.png'),
-	32
-);
+createPngIcon(join(__dirname, '../static/favicon.png'), 32);
 
 // Convert icon-192x192
-convertSvgToPng(
-	join(__dirname, '../static/icons/icon-192x192.svg'),
-	join(__dirname, '../static/icons/icon-192x192.png'),
-	192
-);
+createPngIcon(join(__dirname, '../static/icons/icon-192x192.png'), 192);
+
+// Convert icon-512x512
+createPngIcon(join(__dirname, '../static/icons/icon-512x512.png'), 512);
